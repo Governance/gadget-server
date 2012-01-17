@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.savara.gserver</groupId>
+  <artifactId>gadget-shindig</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>Gadget Server::Shindig</name>
+
+  <parent>
+    <artifactId>parent</artifactId>
+    <groupId>org.savara.gserver</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+	<dependency>
+        <groupId>org.apache.shindig</groupId>
+        <artifactId>shindig-features</artifactId>
+        <version>${shindig.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.shindig</groupId>
+		<artifactId>shindig-common</artifactId>
+		<version>${shindig.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.shindig</groupId>
+		<artifactId>shindig-gadgets</artifactId>
+		<version>${shindig.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.shindig</groupId>
+		<artifactId>shindig-social-api</artifactId>
+		<version>${shindig.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.shindig</groupId>
+		<artifactId>shindig-extras</artifactId>
+		<version>${shindig.version}</version>
+	</dependency>
+
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+	  <version>${guice.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.0-api</artifactId>
+      <version>${persistence-api.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${hibernate.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>${javassist.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>${h2.version}</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
