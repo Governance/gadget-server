@@ -82,13 +82,18 @@
       <scope>test</scope>
     </dependency>
     
-    <!-- server dependency -->
     <dependency>
         <groupId>javax.enterprise</groupId>
         <artifactId>cdi-api</artifactId>
         <version>1.0</version>
         <scope>provided</scope>
-     </dependency>
+    </dependency>
+
+    <dependency>
+        <groupId>org.savara.gserver</groupId>
+        <artifactId>gadget-shindig</artifactId>
+        <version>${project.version}</version>
+    </dependency>
     		
   </dependencies>
 

@@ -18,42 +18,31 @@
 package org.savara.gserver;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
+import org.apache.shindig.protocol.DataCollection;
 import org.apache.shindig.protocol.ProtocolException;
-import org.apache.shindig.protocol.RestfulCollection;
-import org.apache.shindig.social.core.model.PersonImpl;
-import org.apache.shindig.social.opensocial.model.Name;
-import org.apache.shindig.social.opensocial.model.Person;
-import org.apache.shindig.social.opensocial.spi.CollectionOptions;
+import org.apache.shindig.social.opensocial.spi.AppDataService;
 import org.apache.shindig.social.opensocial.spi.GroupId;
-import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.apache.shindig.social.opensocial.spi.UserId;
-import org.savara.gserver.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 /**
  * @author: Jeff Yu
- * @date: 17/01/12
+ * @date: 18/01/12
  */
-public class DefaultPersonServiceImpl implements PersonService{
+public class DefaultAppDataServiceImpl implements AppDataService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public Future<RestfulCollection<Person>> getPeople(Set<UserId> userIds, GroupId groupId, CollectionOptions collectionOptions, Set<String> strings, SecurityToken securityToken) throws ProtocolException {
+    public Future<DataCollection> getPersonData(Set<UserId> userIds, GroupId groupId, String appId, Set<String> fields, SecurityToken token) throws ProtocolException {
         return null;
     }
 
-    public Future<Person> getPerson(UserId userId, Set<String> strings, SecurityToken securityToken) throws ProtocolException {
-        String uid = userId.getUserId();
-        User user = entityManager.find(User.class, Long.valueOf(uid));
-        Person p = new PersonImpl();
-        p.setDisplayName(user.getDisplayName());
-        p.setId(String.valueOf(user.getId()));
-        return ImmediateFuture.newInstance(p);
+    public Future<Void> deletePersonData(UserId userId, GroupId groupId, String appId, Set<String> fields, SecurityToken token) throws ProtocolException {
+        return null;
+    }
+
+    public Future<Void> updatePersonData(UserId userId, GroupId groupId, String appId, Set<String> fields, Map<String, String> values, SecurityToken token) throws ProtocolException {
+        return null;
     }
 }
