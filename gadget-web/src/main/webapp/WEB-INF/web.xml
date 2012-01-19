@@ -17,11 +17,15 @@
       org.apache.shindig.social.core.config.SocialApiGuiceModule:
       org.apache.shindig.social.sample.SampleModule:
       org.apache.shindig.gadgets.oauth.OAuthModule:
+      org.apache.shindig.gadgets.oauth2.OAuth2Module:
+      org.apache.shindig.gadgets.oauth2.OAuth2MessageModule:
+      org.apache.shindig.gadgets.oauth2.handler.OAuth2HandlerModule:
+      org.apache.shindig.gadgets.oauth2.persistence.sample.OAuth2PersistenceModule:
       org.apache.shindig.common.cache.ehcache.EhCacheModule:
       org.apache.shindig.sample.shiro.ShiroGuiceModule:
       org.apache.shindig.sample.container.SampleContainerGuiceModule:
       org.apache.shindig.extras.ShindigExtrasGuiceModule:
-      org.apache.shindig.extras.as.ActivityStreamsGuiceModule
+      org.apache.shindig.gadgets.admin.GadgetAdminModule
     </param-value>
   </context-param>
 
@@ -39,15 +43,30 @@
   Make sure you escape all HTML values for the web.xml to be parsed correctly.
   -->
    <context-param>
-  	<param-name>system.properties</param-name>
+     <param-name>system.properties</param-name>
      <param-value>
-    	shindig.host=localhost
-
-    	aKey=/shindig/gadgets/proxy?container=default&amp;url=
-    	shindig.port=
-
+     <![CDATA[
+        shindig.host=
+        shindig.port=
+        aKey=/shindig/gadgets/proxy?container=default&url=
+     ]]>
      </param-value>
   </context-param>
+
+  <filter>
+    <filter-name>hostFilter</filter-name>
+    <filter-class>org.apache.shindig.common.servlet.HostFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hostFilter</filter-name>
+    <url-pattern>/gadgets/ifr</url-pattern>
+    <url-pattern>/gadgets/js/*</url-pattern>
+    <url-pattern>/gadgets/proxy/*</url-pattern>
+    <url-pattern>/gadgets/concat</url-pattern>
+    <url-pattern>/gadgets/makeRequest</url-pattern>
+    <url-pattern>/rpc/*</url-pattern>
+    <url-pattern>/rest/*</url-pattern>
+  </filter-mapping>
 
     <filter>
         <filter-name>ShiroFilter</filter-name>
@@ -55,6 +74,7 @@
         <init-param>
             <param-name>config</param-name>
             <param-value>
+            <![CDATA[
                 # The ShiroFilter configuration is very powerful and flexible, while still remaining succinct.
                 # Please read the comprehensive example, with full comments and explanations, in the JavaDoc:
                 #
@@ -72,7 +92,8 @@
                 /login.jsp = authc
 
                 /oauth/authorize/** = authc
-
+                /oauth2/authorize/** = authc
+            ]]>
             </param-value>
         </init-param>
     </filter>
@@ -82,10 +103,20 @@
     <filter-class>org.apache.shindig.auth.AuthenticationServletFilter</filter-class>
   </filter>
 
+  <filter>
+    <filter-name>etagFilter</filter-name>
+    <filter-class>org.apache.shindig.gadgets.servlet.ETagFilter</filter-class>
+  </filter>
+
 
   <filter-mapping>
       <filter-name>ShiroFilter</filter-name>
       <url-pattern>/oauth/authorize</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+      <filter-name>ShiroFilter</filter-name>
+      <url-pattern>/oauth2/authorize</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -102,6 +133,11 @@
     <url-pattern>/gadgets/api/rest/*</url-pattern>
     <url-pattern>/rpc/*</url-pattern>
     <url-pattern>/rest/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>etagFilter</filter-name>
+    <url-pattern>*</url-pattern>
   </filter-mapping>
 
   <listener>
@@ -155,6 +191,14 @@
     </servlet-class>
   </servlet>
 
+  <!-- OAuth2 callback -->
+  <servlet>
+    <servlet-name>oauth2callback</servlet-name>
+    <servlet-class>
+      org.apache.shindig.gadgets.servlet.OAuth2CallbackServlet
+    </servlet-class>
+  </servlet>
+
   <!-- Metadata RPC -->
   <servlet>
     <servlet-name>metadata</servlet-name>
@@ -200,6 +244,21 @@
     </servlet-class>
   </servlet>
 
+  <!-- Serve OAuth 2 APIs -->
+  <servlet>
+    <servlet-name>OAuth2Servlet</servlet-name>
+    <servlet-class>
+      org.apache.shindig.social.core.oauth2.OAuth2Servlet
+    </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>rpcSwf</servlet-name>
+    <servlet-class>
+      org.apache.shindig.gadgets.servlet.RpcSwfServlet
+    </servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>js</servlet-name>
     <url-pattern>/gadgets/js/*</url-pattern>
@@ -240,6 +299,11 @@
   </servlet-mapping>
 
   <servlet-mapping>
+    <servlet-name>oauth2callback</servlet-name>
+    <url-pattern>/gadgets/oauth2callback</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>xml-to-html</servlet-name>
     <url-pattern>/gadgets/ifr</url-pattern>
   </servlet-mapping>
@@ -259,7 +323,16 @@
     <url-pattern>/oauth/*</url-pattern>
   </servlet-mapping>
 
-  <!-- Default page to serve -->
+  <servlet-mapping>
+    <servlet-name>OAuth2Servlet</servlet-name>
+    <url-pattern>/oauth2/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>rpcSwf</servlet-name>
+    <url-pattern>/xpc*</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>ApplicationModule.html</welcome-file>
   </welcome-file-list>

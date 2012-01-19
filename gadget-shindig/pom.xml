@@ -16,6 +16,12 @@
   <dependencies>
 	<dependency>
         <groupId>org.apache.shindig</groupId>
+        <artifactId>shindig-server</artifactId>
+        <version>${shindig.version}</version>
+        <type>war</type>
+	</dependency>
+	<dependency>
+        <groupId>org.apache.shindig</groupId>
         <artifactId>shindig-features</artifactId>
         <version>${shindig.version}</version>
 	</dependency>
@@ -23,6 +29,12 @@
 		<groupId>org.apache.shindig</groupId>
 		<artifactId>shindig-common</artifactId>
 		<version>${shindig.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>el-api</artifactId>
+            </exclusion>
+        </exclusions>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.shindig</groupId>
