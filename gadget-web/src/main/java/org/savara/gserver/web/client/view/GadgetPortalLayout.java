@@ -30,11 +30,11 @@ import com.smartgwt.client.widgets.layout.VStack;
  * @author Jeff Yu
  * @date Nov 16, 2011
  */
-public class ChartPortalLayout extends HLayout{
+public class GadgetPortalLayout extends HLayout{
 	
 	private List<String> portletTitles = new ArrayList<String>();
 	
-	public ChartPortalLayout(int numColumns) {
+	public GadgetPortalLayout(int numColumns) {
 		setMargin(0);
 		setWidth100();
 		setHeight100();
@@ -45,7 +45,7 @@ public class ChartPortalLayout extends HLayout{
 		}
 	}
 	
-    public void addPortlet(ChartPortlet portlet) {    
+    public void addPortlet(GadgetPortlet portlet) {
         int fewestPortlets = Integer.MAX_VALUE;  
         ChartPortalColumn fewestPortletsColumn = null;  
         for (int i = 0; i < getMembers().length; i++) {  
@@ -67,7 +67,7 @@ public class ChartPortalLayout extends HLayout{
     	for (int i = 0; i< getMembers().length; i++) {
     		ChartPortalColumn portalColumn = (ChartPortalColumn)getMember(i);
     		for (int y = 0; y < portalColumn.getMembers().length; y++) {
-    			ChartPortlet portlet = (ChartPortlet)portalColumn.getMember(y);
+    			GadgetPortlet portlet = (GadgetPortlet)portalColumn.getMember(y);
     			if (title.equals(portlet.getTitle())) {
     				portalColumn.removeMember(portlet);
     			}
@@ -75,22 +75,17 @@ public class ChartPortalLayout extends HLayout{
     	}
     }
     
-    public ChartPortlet getChartPortlet(String title) {
+    public GadgetPortlet getGadgetPortlet(String title) {
     	for (int i = 0; i< getMembers().length; i++) {
     		ChartPortalColumn portalColumn = (ChartPortalColumn)getMember(i);
     		for (int y = 0; y < portalColumn.getMembers().length; y++) {
-    			ChartPortlet portlet = (ChartPortlet) portalColumn.getMember(y);
+    			GadgetPortlet portlet = (GadgetPortlet) portalColumn.getMember(y);
 	    			if (title.equals(portlet.getTitle())) {
 	    				return portlet;
 	    			}
     		}
     	}
     	return null;
-    }
-    
-    public ChartPortlet createPortlet(String title, ClickHandler refreshHandler, ClickHandler maximizeHandler,
-			DragRepositionStopHandler dsHandler) {
-    	return new ChartPortlet(title, refreshHandler, maximizeHandler, dsHandler);       
     }
 	
 	
@@ -120,57 +115,6 @@ public class ChartPortalLayout extends HLayout{
             setPlaceHolderProperties(placeHolderProperties);		
 		}
 	
-	}
-	
-	/**
-	 *
-	 * Portlet title should be unique.
-	 *
-	 */
-	public  class ChartPortlet extends Portlet {
-		
-		private VLayout chartPanel;
-				
-		public ChartPortlet(final String title, ClickHandler refreshHandler, ClickHandler maximizeHandler,
-				DragRepositionStopHandler dsHandler) {
-			super();
-	        setTitle(title);  
-	        setShowShadow(false);
-	        setDragAppearance(DragAppearance.OUTLINE);
-	        setHeaderControls(HeaderControls.MINIMIZE_BUTTON, HeaderControls.HEADER_LABEL,
-	        		new HeaderControl(HeaderControl.REFRESH, refreshHandler), new HeaderControl(HeaderControl.MAXIMIZE, maximizeHandler), HeaderControls.CLOSE_BUTTON);
-	        
-	        setVPolicy(LayoutPolicy.NONE);
-	        setOverflow(Overflow.VISIBLE);
-	        setAnimateMinimize(true);
-	        setCanDrop(true);
-	        
-	        setWidth(300);
-	        setHeight(250);
-	        setCanDragResize(false);
-	        
-	        //TODO: how to add a confirmation box before closing the porlet?
-	        setCloseConfirmationMessage("Are you going to close the " + title + " portlet ?");
-	        setShowCloseConfirmationMessage(true);
-	        
-	        addCloseClickHandler(new CloseClickHandler(){
-				public void onCloseClick(CloseClientEvent event) {					
-					removePortlet(title);
-				}	        	
-	        });
-	        
-	        addDragRepositionStopHandler(dsHandler);
-	        
-	        
-	        chartPanel = new VLayout();
-	        chartPanel.setMargin(25);
-	        addChild(chartPanel);
-		}
-		
-		public VLayout getChartPanel() {
-			return chartPanel;
-		}
-		
 	}
 
 }

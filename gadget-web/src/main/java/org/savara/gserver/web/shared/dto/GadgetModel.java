@@ -15,16 +15,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gserver.web.client;
+package org.savara.gserver.web.shared.dto;
 
 /**
  * @author: Jeff Yu
- * @date: 11/05/11
+ * @date: 9/02/12
  */
-public class NameTokens {
+public class GadgetModel {
 
-    public static final String LOGIN_VIEW = "login";
-    
-    public static final String MAIN_VIEW = "main";
+    private String url;
 
+    private String name;
+
+    private boolean configurable;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(boolean configurable) {
+        this.configurable = configurable;
+    }
 }
