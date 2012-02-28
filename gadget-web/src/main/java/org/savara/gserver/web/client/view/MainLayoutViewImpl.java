@@ -3,7 +3,6 @@
  */
 package org.savara.gserver.web.client.view;
 
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.corechart.PieChart;
@@ -19,7 +18,6 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import org.savara.gserver.web.client.presenter.MainLayoutPresenter;
 import org.savara.gserver.web.client.presenter.MainLayoutPresenter.MainLayoutView;
-import org.savara.gserver.web.client.view.GadgetPortlet;
 import org.savara.gserver.web.shared.dto.GadgetModel;
 
 import java.util.ArrayList;
@@ -82,19 +80,29 @@ public class MainLayoutViewImpl extends ViewImpl implements MainLayoutView{
 
         GadgetModel samGadget = new GadgetModel();
         samGadget.setName("SAM Gadget");
-        samGadget.setUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+        samGadget.setSpecUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
                
         portal.addPortlet(createPortlet(samGadget));
 
-/*        GadgetModel googleTranslate = new GadgetModel();
+        GadgetModel googleTranslate = new GadgetModel();
         googleTranslate.setName("Google Translate");
-        googleTranslate.setUrl("http://www.gstatic.com/ig/modules/dictionary/kennedy/dictionary.xml");
+        googleTranslate.setSpecUrl("http://www.gstatic.com/ig/modules/dictionary/kennedy/dictionary.xml");
         portal.addPortlet(createPortlet(googleTranslate));
 
         GadgetModel todoList = new GadgetModel();
         todoList.setName("To-do List");
-        todoList.setUrl("http://www.labpixies.com/campaigns/todo/todo.xml");
-        portal.addPortlet(createPortlet(todoList));*/
+        todoList.setSpecUrl("http://www.labpixies.com/campaigns/todo/todo.xml");
+        portal.addPortlet(createPortlet(todoList));
+
+        GadgetModel hw = new GadgetModel();
+        hw.setName("Hello World");
+        hw.setSpecUrl("http://www.google.com/ig/modules/hello.xml");
+        portal.addPortlet(createPortlet(hw));
+
+        GadgetModel worldTime = new GadgetModel();
+        worldTime.setName("World Time");
+        worldTime.setSpecUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
+        portal.addPortlet(createPortlet(worldTime));
         
 		panel.addMember(LayoutUtil.getFooterLayout());
 		panel.draw();
@@ -119,14 +127,6 @@ public class MainLayoutViewImpl extends ViewImpl implements MainLayoutView{
 		window.setIsModal(true);
 		window.setShowModalMask(true);
 		window.centerInPage();
-		
-		window.addCloseClickHandler(new CloseClickHandler(){
-
-			public void onCloseClick(CloseClientEvent event) {
-				window.destroy();
-			}
-			
-		});
 
 		window.addChild(chartLayout);
 		window.show();

@@ -29,6 +29,7 @@ import com.google.inject.Provider;
 import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import org.savara.gserver.web.client.presenter.PortletPresenter;
 
 /**
  * @author: Jeff Yu
@@ -46,6 +47,7 @@ public interface ApplicationUI extends Ginjector {
     Provider<LoginPresenter> getLoginPresenter();
     
     AsyncProvider<MainLayoutPresenter> getMainLayoutPresenter();
+    AsyncProvider<PortletPresenter> getPortletPresenter();
 
     @DefaultGatekeeper
     Gatekeeper getLoggedInGateKeeper();

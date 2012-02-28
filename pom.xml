@@ -133,6 +133,16 @@
 	</reporting>
 	
 	<repositories>
+        <repository>
+            <id>smartgwt</id>
+            <name>smartgwt-repo</name>
+            <url>http://www.smartclient.com/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+
 	    <repository>
 	        <id>jboss-developer-repository-group</id>
 	        <name>JBoss Developer Maven Repository Group</name>
@@ -146,6 +156,7 @@
 		  <updatePolicy>never</updatePolicy>
 		</snapshots>
 	    </repository>
+
 	</repositories>
 
 	<distributionManagement>

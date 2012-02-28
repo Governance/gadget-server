@@ -21,6 +21,7 @@ import org.savara.gserver.web.client.auth.CurrentUser;
 import org.savara.gserver.web.client.auth.LoggedInGateKeeper;
 import org.savara.gserver.web.client.presenter.LoginPresenter;
 import org.savara.gserver.web.client.presenter.MainLayoutPresenter;
+import org.savara.gserver.web.client.presenter.PortletPresenter;
 import org.savara.gserver.web.client.view.LoginPageView;
 import org.savara.gserver.web.client.view.MainLayoutViewImpl;
 
@@ -33,6 +34,7 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import org.savara.gserver.web.client.view.PortletViewImpl;
 
 /**
  * @author: Jeff Yu
@@ -57,5 +59,7 @@ public class ApplicationModule extends AbstractPresenterModule {
                 LoginPresenter.LoginProxy.class);
         bindPresenter(MainLayoutPresenter.class, MainLayoutPresenter.MainLayoutView.class, MainLayoutViewImpl.class,
         		MainLayoutPresenter.MainLayoutProxy.class);
+        bindPresenter(PortletPresenter.class, PortletPresenter.PortletView.class, PortletViewImpl.class,
+                PortletPresenter.PortletProxy.class);
     }
 }

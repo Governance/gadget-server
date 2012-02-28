@@ -23,18 +23,18 @@ package org.savara.gserver.web.shared.dto;
  */
 public class GadgetModel {
 
-    private String url;
+    private String specUrl;
 
     private String name;
 
     private boolean configurable;
 
-    public String getUrl() {
-        return url;
+    public String getSpecUrl() {
+        return specUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setSpecUrl(String specUrl) {
+        this.specUrl = specUrl;
     }
 
     public String getName() {

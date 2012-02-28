@@ -92,7 +92,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         currentUser.setUserName(name);
         currentUser.setLoggedIn(true);
         
-        PlaceRequest mainPlace = new PlaceRequest(NameTokens.MAIN_VIEW);
+        PlaceRequest mainPlace = new PlaceRequest(NameTokens.PORTLET_VIEW);
         placeManager.revealPlace(mainPlace);
     }
 

@@ -17,13 +17,11 @@
  */
 package org.savara.gserver.web.client.view;
 
-import com.smartgwt.client.types.DragAppearance;
-import com.smartgwt.client.types.HeaderControls;
-import com.smartgwt.client.types.LayoutPolicy;
-import com.smartgwt.client.types.Overflow;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Frame;
+import com.smartgwt.client.types.*;
 import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.events.CloseClickHandler;
-import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.layout.Portlet;
 import com.smartgwt.client.widgets.layout.VLayout;
 import org.savara.gserver.web.shared.dto.GadgetModel;
@@ -35,8 +33,6 @@ import org.savara.gserver.web.shared.dto.GadgetModel;
 	public  class GadgetPortlet extends Portlet {
 
         private VLayout configurePanel;
-
-		private HTMLPane gadgetContent;
 
 		public GadgetPortlet(final GadgetModel model) {
 			super();
@@ -58,20 +54,28 @@ import org.savara.gserver.web.shared.dto.GadgetModel;
 	        setCloseConfirmationMessage("Are you sure to close the " + model.getName() + " portlet ?");
 	        setShowCloseConfirmationMessage(true);
 
-	        addCloseClickHandler(new CloseClickHandler(){
-				public void onCloseClick(CloseClientEvent event) {
-					//removePortlet(title);
-				}
-	        });
-
 	        //addDragRepositionStopHandler(dsHandler);
 
-	       gadgetContent = new HTMLPane();
-           //gadgetContent.setContentsURL(model.getUrl());
-           //gadgetContent.setShowEdges(true);
-           //gadgetContent.setContentsType(ContentsType.FRAGMENT);
+/*           Frame gadgetContent = new Frame();
+           gadgetContent.setWidth("100%");
+           gadgetContent.setHeight("100%");
+           
 
-           addChild(gadgetContent);
+           gadgetContent.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl()
+                   + "&view=canvas&lang=EN&type=js");*/
+           HTMLPane gadgetContent = new HTMLPane();
+           gadgetContent.setIFrameURL("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl()
+                   + "&view=canvas&lang=EN&type=js");
+           gadgetContent.setWidth100();
+           gadgetContent.setHeight100();
+
+           VLayout contentPanel = new VLayout();
+           contentPanel.setMargin(5);
+           contentPanel.setHeight100();
+           contentPanel.setWidth100();
+           contentPanel.addChild(gadgetContent);
+            
+           addChild(contentPanel);
 
 		}
 
