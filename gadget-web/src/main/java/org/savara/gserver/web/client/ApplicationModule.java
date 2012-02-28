@@ -30,6 +30,8 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import org.savara.gserver.web.client.view.Footer;
+import org.savara.gserver.web.client.view.Header;
 import org.savara.gserver.web.client.view.IndexViewImpl;
 
 /**
@@ -49,7 +51,10 @@ public class ApplicationModule extends AbstractPresenterModule {
         bind(CurrentUser.class).in(Singleton.class);
         bind(BootstrapContext.class).in(Singleton.class);
         bind(ApplicationProperties.class).to(BootstrapContext.class).in(Singleton.class);
-
+        
+        bind(Footer.class).in(Singleton.class);
+        bind(Header.class).in(Singleton.class);
+        
         //Presenters
         bindPresenter(IndexPresenter.class, IndexPresenter.IndexView.class, IndexViewImpl.class,
                 IndexPresenter.IndexProxy.class);

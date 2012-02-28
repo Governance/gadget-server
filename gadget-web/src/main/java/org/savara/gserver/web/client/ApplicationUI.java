@@ -27,6 +27,8 @@ import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import org.savara.gserver.web.client.presenter.IndexPresenter;
+import org.savara.gserver.web.client.view.Footer;
+import org.savara.gserver.web.client.view.Header;
 
 /**
  * @author: Jeff Yu
@@ -41,7 +43,10 @@ public interface ApplicationUI extends Ginjector {
 
     EventBus getEventBus();
 
-    AsyncProvider<IndexPresenter> getPortletPresenter();
+    AsyncProvider<IndexPresenter> getIndexPresenter();
+    
+    Footer getFooter();
+    Header getHeader();
 
     @DefaultGatekeeper
     Gatekeeper getLoggedInGateKeeper();

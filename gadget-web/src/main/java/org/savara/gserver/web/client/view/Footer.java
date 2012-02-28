@@ -15,43 +15,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gserver.web.client.presenter;
+package org.savara.gserver.web.client.view;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.Presenter;
-import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.annotations.NameToken;
-import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
-import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
-import org.savara.gserver.web.client.NameTokens;
 
 /**
  * @author: Jeff Yu
- * @date: 20/02/12
+ * @date: 28/02/12
  */
-public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
-        IndexPresenter.IndexProxy>{
+public class Footer {
 
     @Inject
-    public IndexPresenter(EventBus bus, IndexView view, IndexProxy proxy){
-         super(bus, view, proxy);
-    }
-
-    @Override
-    protected void revealInParent() {
-        RevealRootLayoutContentEvent.fire(this, this);
-    }
-
-    public interface IndexView extends View {
+    public Footer(EventBus bus) {
 
     }
 
-    @ProxyCodeSplit
-    @NameToken(NameTokens.INDEX_VIEW)
-    @NoGatekeeper
-    public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
+    public Widget asWidget() {
 
+        LayoutPanel layout = new LayoutPanel();
+        layout.setStyleName("footer-panel");
+
+        HTML version = new HTML("Version: 1.0.0-SNAPSHOT");
+        version.getElement().setAttribute("style", "color:#ffffff;font-size:10px; align:left");
+        layout.add(version);
+
+        layout.setWidgetLeftWidth(version, 20, Style.Unit.PX, 200, Style.Unit.PX);
+        layout.setWidgetTopHeight(version, 3, Style.Unit.PX, 16, Style.Unit.PX);
+
+        return layout;
+    }
 }
+

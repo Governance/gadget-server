@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2008-12, Red Hat Middleware LLC, and others contributors as indicated
+ * Copyright 2008-11, Red Hat Middleware LLC, and others contributors as indicated
  * by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
@@ -15,14 +15,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gserver.web.client;
+package org.savara.gserver.web.client.view;
+
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 
 /**
  * @author: Jeff Yu
- * @date: 11/05/11
+ * @date: 28/02/12
  */
-public class NameTokens {
+public class Header {
 
-    public static final String INDEX_VIEW = "index";
+    @Inject
+    public Header() {
+
+    }
+
+    public Widget asWidget() {
+        LayoutPanel header = new LayoutPanel();
+        header.setStyleName("header-panel");
+
+        return header;
+    }
 
 }

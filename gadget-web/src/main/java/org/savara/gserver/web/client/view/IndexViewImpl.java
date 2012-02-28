@@ -17,9 +17,13 @@
  */
 package org.savara.gserver.web.client.view;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import org.savara.gserver.web.client.ApplicationEntryPoint;
 import org.savara.gserver.web.client.presenter.IndexPresenter;
 
 /**
@@ -28,14 +32,45 @@ import org.savara.gserver.web.client.presenter.IndexPresenter;
  */
 public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView {
 
+    private LayoutPanel headerPanel;
+    private LayoutPanel mainContentPanel;
+    private LayoutPanel footerPanel;
+
+    private DockLayoutPanel panel;
 
     @Inject
     public IndexViewImpl() {
+        mainContentPanel = new LayoutPanel();
+        mainContentPanel.setStyleName("main-content-panel");
+
+        headerPanel = new LayoutPanel();
+        headerPanel.setStyleName("header-panel");
+
+        footerPanel = new LayoutPanel();
+        footerPanel.setStyleName("footer-panel");
+
+        panel = new DockLayoutPanel(Style.Unit.PX);
+        panel.getElement().setAttribute("id", "container");
+
+        panel.addNorth(headerPanel, 110);
+        panel.addSouth(footerPanel, 25);
+        panel.add(mainContentPanel);
+
+        getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
+        getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
 
     }
 
     public Widget asWidget() {
-        return null;
+        return panel;
+    }
+
+    public LayoutPanel getHeaderPanel() {
+        return headerPanel;
+    }
+
+    public LayoutPanel getFooterPanel() {
+        return footerPanel;
     }
 
 }

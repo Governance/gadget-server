@@ -35,6 +35,6 @@ public class ApplicationPlaceManager extends PlaceManagerImpl {
     }
 
     public void revealDefaultPlace() {
-        revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
+        revealPlace(new PlaceRequest(NameTokens.INDEX_VIEW));
     }
 }
