@@ -32,11 +32,11 @@ import org.savara.gserver.web.client.NameTokens;
  * @author: Jeff Yu
  * @date: 20/02/12
  */
-public class PortletPresenter extends Presenter<PortletPresenter.PortletView,
-        PortletPresenter.PortletProxy>{
+public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
+        IndexPresenter.IndexProxy>{
 
     @Inject
-    public PortletPresenter(EventBus bus, PortletView view, PortletProxy proxy ){
+    public IndexPresenter(EventBus bus, IndexView view, IndexProxy proxy){
          super(bus, view, proxy);
     }
 
@@ -45,13 +45,13 @@ public class PortletPresenter extends Presenter<PortletPresenter.PortletView,
         RevealRootLayoutContentEvent.fire(this, this);
     }
 
-    public interface PortletView extends View {
+    public interface IndexView extends View {
 
     }
 
     @ProxyCodeSplit
     @NameToken(NameTokens.PORTLET_VIEW)
     @NoGatekeeper
-    public interface PortletProxy extends ProxyPlace<PortletPresenter> {}
+    public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
 }

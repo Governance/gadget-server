@@ -19,11 +19,7 @@ package org.savara.gserver.web.client;
 
 import org.savara.gserver.web.client.auth.CurrentUser;
 import org.savara.gserver.web.client.auth.LoggedInGateKeeper;
-import org.savara.gserver.web.client.presenter.LoginPresenter;
-import org.savara.gserver.web.client.presenter.MainLayoutPresenter;
-import org.savara.gserver.web.client.presenter.PortletPresenter;
-import org.savara.gserver.web.client.view.LoginPageView;
-import org.savara.gserver.web.client.view.MainLayoutViewImpl;
+import org.savara.gserver.web.client.presenter.IndexPresenter;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -34,7 +30,7 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-import org.savara.gserver.web.client.view.PortletViewImpl;
+import org.savara.gserver.web.client.view.IndexViewImpl;
 
 /**
  * @author: Jeff Yu
@@ -55,11 +51,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         bind(ApplicationProperties.class).to(BootstrapContext.class).in(Singleton.class);
 
         //Presenters
-        bindPresenter(LoginPresenter.class, LoginPresenter.LoginView.class, LoginPageView.class,
-                LoginPresenter.LoginProxy.class);
-        bindPresenter(MainLayoutPresenter.class, MainLayoutPresenter.MainLayoutView.class, MainLayoutViewImpl.class,
-        		MainLayoutPresenter.MainLayoutProxy.class);
-        bindPresenter(PortletPresenter.class, PortletPresenter.PortletView.class, PortletViewImpl.class,
-                PortletPresenter.PortletProxy.class);
+        bindPresenter(IndexPresenter.class, IndexPresenter.IndexView.class, IndexViewImpl.class,
+                IndexPresenter.IndexProxy.class);
     }
 }

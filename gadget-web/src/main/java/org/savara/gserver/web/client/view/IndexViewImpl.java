@@ -15,23 +15,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gserver.web.client;
+package org.savara.gserver.web.client.view;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
+import org.savara.gserver.web.client.presenter.IndexPresenter;
 
 /**
  * @author: Jeff Yu
- * @date: 6/06/11
+ * @date: 20/02/12
  */
-public class ApplicationImages {
+public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView {
 
-    private static final String IMAGE_FOLDER = GWT.getModuleBaseURL() + "images/";
 
-    public static final String CONSOLE_ICON = IMAGE_FOLDER + "console.png";
+    @Inject
+    public IndexViewImpl() {
 
-    public static final String LOGOUT_ICON = IMAGE_FOLDER + "logout.png";
+    }
 
-    public static final String SEARCH_ICON = IMAGE_FOLDER + "search.png";
+    public Widget asWidget() {
+        return null;
+    }
 
-    public static final String SAVARA_ICON = IMAGE_FOLDER + "savara_icon.png";
 }

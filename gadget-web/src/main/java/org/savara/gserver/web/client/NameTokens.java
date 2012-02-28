@@ -26,6 +26,8 @@ public class NameTokens {
     public static final String LOGIN_VIEW = "login";
     
     public static final String MAIN_VIEW = "main";
+
+    public static final String INDEX_VIEW = "index";
     
     public static final String PORTLET_VIEW = "portlet";
 
