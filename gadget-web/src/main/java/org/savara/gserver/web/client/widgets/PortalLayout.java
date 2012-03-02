@@ -17,9 +17,6 @@
  */
 package org.savara.gserver.web.client.widgets;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,7 +28,7 @@ import java.util.List;
  * @author: Jeff Yu
  * @date: 28/02/12
  */
-public class Portal extends Composite {
+public class PortalLayout extends Composite {
 
     private int m_column;
 
@@ -39,13 +36,13 @@ public class Portal extends Composite {
     
     private List<FlowPanel> columnPanel;
 
-    public Portal() {
+    public PortalLayout() {
         portalPanel = new FlowPanel();
         portalPanel.getElement().addClassName("portal");
         initWidget(portalPanel);
     }
 
-    public Portal(int column) {
+    public PortalLayout(int column) {
         this();
         this.m_column = column;
         columnPanel = new ArrayList<FlowPanel>(column);

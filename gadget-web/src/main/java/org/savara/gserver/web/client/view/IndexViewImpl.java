@@ -18,15 +18,14 @@
 package org.savara.gserver.web.client.view;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gserver.web.client.ApplicationEntryPoint;
 import org.savara.gserver.web.client.presenter.IndexPresenter;
-import org.savara.gserver.web.client.widgets.Portal;
+import org.savara.gserver.web.client.widgets.PortalLayout;
 import org.savara.gserver.web.client.widgets.Portlet;
+import org.savara.gserver.web.client.widgets.PortletLayout;
 import org.savara.gserver.web.client.widgets.ProgressBar;
 
 /**
@@ -46,17 +45,14 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         mainContentPanel = new TabLayoutPanel(2.5, Style.Unit.EM);
 
         
-        Portal portal = new Portal(3);
+        PortalLayout portalLayout = new PortalLayout(3);
         
-        Portlet portlet = new Portlet("Sam-Gadget", "This is the Sam Gadget");
-        Portlet moreInfo = new Portlet("Links", "This is a More Info...This is a More Info...This is a More Info..." +
-                "This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info..." +
-                "This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info..." +
-                "This is a More Info...This is a More Info...This is a More Info...");
-        portal.addPortlet(0, portlet);
-        portal.addPortlet(1, moreInfo);
+        Portlet portlet = new Portlet("SAM-Gadget");
+        PortletLayout moreInfo = new PortletLayout("Links", "InformationTest");
+        portalLayout.addPortlet(0, portlet);
+        portalLayout.addPortlet(1, moreInfo);
         
-        mainContentPanel.add(portal, "Home");
+        mainContentPanel.add(portalLayout, "Home");
         
         ProgressBar pb = new ProgressBar();
         pb.setValue(10);
