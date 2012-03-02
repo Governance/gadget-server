@@ -16,16 +16,7 @@
          </g:FlowPanel>
          <g:FlowPanel styleName="portlet-content">
               <!--iframe ui:field="gadgetSpecUrl" scrolling="no" marginwidth="0" frameborder="0"></iframe-->
-             <g:Label>
-             At heart, a GWT application is a web page. And when you're laying out a web page, writing HTML and CSS is
-             the most natural way to get the job done. The UiBinder framework allows you to do exactly that:
-             build your apps as HTML pages with GWT widgets sprinkled throughout them.
-             Besides being a more natural and concise way to build your UI than doing it through code,
-             UiBinder can also make your app more efficient. Browsers are better at building DOM structures
-             by cramming big strings of HTML into innerHTML attributes than by a bunch of API calls.
-             UiBinder naturally takes advantage of this, and the result is that the most pleasant way
-             to build your app is also the best way to build it.
-             </g:Label>
+             <g:Frame width="300" ui:field="gadgetSpec" styleName="portlet-iframe"></g:Frame>
          </g:FlowPanel>
     </g:FlowPanel>
 

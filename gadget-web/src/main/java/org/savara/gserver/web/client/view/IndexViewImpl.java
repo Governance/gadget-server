@@ -47,10 +47,12 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         
         PortalLayout portalLayout = new PortalLayout(3);
         
-        Portlet portlet = new Portlet("SAM-Gadget");
+        Portlet samGadget = new Portlet("SAM-Gadget", "http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+        Portlet ccGadget = new Portlet("Currency-Converter", "http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
         PortletLayout moreInfo = new PortletLayout("Links", "InformationTest");
-        portalLayout.addPortlet(0, portlet);
+        portalLayout.addPortlet(0, samGadget);
         portalLayout.addPortlet(1, moreInfo);
+        portalLayout.addPortlet(2, ccGadget);
         
         mainContentPanel.add(portalLayout, "Home");
         

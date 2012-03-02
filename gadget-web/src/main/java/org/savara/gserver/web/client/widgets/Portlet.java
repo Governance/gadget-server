@@ -18,12 +18,11 @@
 package org.savara.gserver.web.client.widgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.*;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import org.savara.gserver.web.client.util.UUID;
 
@@ -43,6 +42,7 @@ public class Portlet extends Composite {
     @UiField InlineLabel title;
     @UiField InlineLabel settingsBtn;
     @UiField FlowPanel userPreference;
+    @UiField Frame gadgetSpec;
 
 //    @UiField IFrameElement gadgetSpecUrl;
 
@@ -65,9 +65,12 @@ public class Portlet extends Composite {
 
     }
     
-    public Portlet(String titleString) {
+    public Portlet(String titleString, String gadgetSpecUrl) {
         this();
         title.setText(titleString);
+        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url="+gadgetSpecUrl);
+        gadgetSpec.getElement().setAttribute("scrolling", "no");
+        gadgetSpec.getElement().setAttribute("frameborder", "0");
     }
 
     @Override
