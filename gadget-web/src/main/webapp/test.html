@@ -18,6 +18,8 @@
 
 </head>
 <body>
+<div>
+<div>
 	<script>
 	$(function() {
 		$( ".column" ).sortable({
@@ -38,17 +40,18 @@
 
 		$( ".column" ).disableSelection();
 	});
-	</script>
+	</script>	
 <div class="demo">
 
 <div class="column">
 
 	<div class="portlet">
 		<div class="portlet-header">Feeds</div>
-		<div> This is the userRef</div>
 		<div class="portlet-content">
+			<div class="test">
 			Google Web Toolkit contains two powerful tools for creating optimized web applications. The GWT compiler performs comprehensive optimizations across your codebase — in-lining methods, removing dead code, optimizing strings, and more. By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
-			 By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.			
+			 By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
+			</div>			
 		</div>
 	</div>
 	
@@ -71,7 +74,7 @@
 <div class="column">
 
 	<div class="portlet">
-		<div class="portlet-header">Links</div>
+		<div class="portlet-header"><span>Links</span></div>
 		<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
 	</div>
 	
@@ -83,15 +86,7 @@
 </div>
 
 </div><!-- End demo -->
-
-
-
-<div class="demo-description">
-<p>
-	Enable portlets (styled divs) as sortables and use the <code>connectWith</code>
-	option to allow sorting between columns.
-</p>
-</div><!-- End demo-description -->
-
+</div>
+</div>
 </body>
 </html>

@@ -20,23 +20,61 @@ package org.savara.gserver.web.client.widgets;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: Jeff Yu
  * @date: 28/02/12
  */
-public class Portal extends Widget {
+public class Portal extends Composite {
 
     private int m_column;
 
-    public Portal(int column) {
-        m_column = column;
-        Element divEle = DOM.createDiv();
-        setElement(divEle);
+    private FlowPanel portalPanel;
+    
+    private List<FlowPanel> columnPanel;
 
+    public Portal() {
+        portalPanel = new FlowPanel();
+        portalPanel.getElement().addClassName("portal");
+        initWidget(portalPanel);
+    }
+
+    public Portal(int column) {
+        this();
+        this.m_column = column;
+        columnPanel = new ArrayList<FlowPanel>(column);
+        
+        for (int i = 0; i < column; i++) {
+           FlowPanel cpanel = new FlowPanel();
+           cpanel.getElement().addClassName("column");
+           columnPanel.add(cpanel);
+           portalPanel.add(cpanel);
+        }
     }
 
 
+    public void addPortlet(int i, Widget portlet) {
+        columnPanel.get(i).add(portlet);
+    }
 
+    @Override
+    public void onAttach() {
+        super.onAttach();
+        sortableScript();
+    }
+
+    /**
+     * JSNI methods
+     */
+    private static native void sortableScript() /*-{
+        $wnd.$(".column").sortable({
+            connectWith: ".column"
+        });
+    }-*/;
 }

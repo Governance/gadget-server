@@ -28,9 +28,13 @@ body {
 }
 
 
-/** css for the portal. */
-
-
-
-
-/** css for the portlet. */
+/** css for the portal and portlet */
+.portal {width:100%; background: white;}
+.column { width: 340px; float: left; padding-bottom: 100px; height:200px;}
+.portlet { margin: 0 1em 1em 0;}
+.portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em;}
+.portlet-header .ui-icon { float: left; }
+.portlet-header .ui-icon .portlet-close{float:right;}
+.portlet-content { padding: 0.4em;}
+.ui-sortable-placeholder { border: 1px dashed black; visibility: visible !important; }
+.ui-sortable-placeholder * { visibility: hidden; }

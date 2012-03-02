@@ -17,14 +17,95 @@
  */
 package org.savara.gserver.web.client.widgets;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.*;
+import org.savara.gserver.web.client.util.UUID;
 
 /**
  * @author: Jeff Yu
  * @date: 28/02/12
  */
-public class Portlet extends Widget {
+public class Portlet extends Composite {
+    
+    private FlowPanel portlet;
+    private String id;
+    private FlowPanel header;
+    private FlowPanel content;
 
+    public Portlet() {
+        portlet = new FlowPanel();
+        id = "portlet-" + UUID.uuid(4);
+        portlet.getElement().setId(id);
+        portlet.getElement().addClassName("portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
 
+        header = new FlowPanel();
+        header.getElement().addClassName("portlet-header ui-widget-header ui-corner-all");
+        portlet.add(header);
+
+        InlineHTML minIcon = new InlineHTML("min");
+        minIcon.getElement().setClassName("ui-icon ui-icon-minusthick portlet-min");
+        minIcon.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent clickEvent) {
+                toggle(id);
+            }
+        });
+
+        InlineHTML closeIcon = new InlineHTML("close");
+        closeIcon.getElement().setClassName("portlet-close ui-icon ui-icon-closethick ");
+        
+        //header.add(closeIcon);
+        header.add(minIcon);
+
+        content = new FlowPanel();
+        content.getElement().addClassName("portlet-content");
+        portlet.add(content);
+        
+        initWidget(portlet);
+    }
+    
+    public Portlet(String title, String info) {
+        this();
+        Label label = new Label();
+        label.setText(title);
+        header.add(label);
+
+        HTML html = new HTML();
+        html.setHTML(info);
+        content.add(html);
+
+       }
+
+    @Override
+    public void onAttach() {
+        super.onAttach();
+    }
+
+    /**
+     * JSNI methods
+     */
+    private static native void addMinimiseBtn(String id) /*-{
+        $wnd.$('#' + id).find(".portlet-header")
+                .prepend("<span class='ui-icon ui-icon-minusthick portlet-min'>Min</span>")
+                .prepend("<span class='ui-icon ui-icon-closethick portlet-close'>Close</span>")
+                .end();
+    }-*/;
+
+    private static native void toggle(String id) /*-{
+        $wnd.$('#' + id).find(".portlet-min")
+            .toggleClass( "ui-icon-minusthick" )
+            .toggleClass( "ui-icon-plusthick" );
+
+        $wnd.$('#' + id).find(".portlet-content").toggle();
+    }-*/;
+
+    private static native void remove(String id) /*-{
+        $wnd.$('#' + id).remove();
+    }-*/;
 
 }

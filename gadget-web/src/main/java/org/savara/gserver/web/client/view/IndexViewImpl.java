@@ -25,6 +25,9 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gserver.web.client.ApplicationEntryPoint;
 import org.savara.gserver.web.client.presenter.IndexPresenter;
+import org.savara.gserver.web.client.widgets.Portal;
+import org.savara.gserver.web.client.widgets.Portlet;
+import org.savara.gserver.web.client.widgets.ProgressBar;
 
 /**
  * @author: Jeff Yu
@@ -42,23 +45,24 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     public IndexViewImpl() {
         mainContentPanel = new TabLayoutPanel(2.5, Style.Unit.EM);
 
-        mainContentPanel.add(new HTML("Tabs are generally used to break content into multiple sections that can be swapped to save space, much like an accordion.\n" +
-                "\n" +
-                "By default a tab widget will swap between tabbed sections onClick, but the events can be changed to onHover through an option. Tab content can be loaded via Ajax by setting an href on a tab.\n" +
-                "\n" +
-                "NOTE: Tabs created dynamically using .tabs( \"add\", ... ) are given an id of ui-tabs-NUM, where NUM is an auto-incrementing id. If you use this naming convention for your own elements, you may encounter problems."), " Home ");
-
-        mainContentPanel.add(new HTML("The jQuery UI Tabs plugin uses the jQuery UI CSS Framework to style its look and feel, including colors and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.\n" +
-                "\n" +
-                "If a deeper level of customization is needed, there are widget-specific classes referenced within the jquery.ui.tabs.css stylesheet that can be modified. These classes are highlighed in bold below."), " Finance ");
-
-        Button addTabBtn = new Button("Add Tab");
-        addTabBtn.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent clickEvent) {
-
-            }
-        });
-        mainContentPanel.add(addTabBtn);
+        
+        Portal portal = new Portal(3);
+        
+        Portlet portlet = new Portlet("Sam-Gadget", "This is the Sam Gadget");
+        Portlet moreInfo = new Portlet("Links", "This is a More Info...This is a More Info...This is a More Info..." +
+                "This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info..." +
+                "This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info...This is a More Info..." +
+                "This is a More Info...This is a More Info...This is a More Info...");
+        portal.addPortlet(0, portlet);
+        portal.addPortlet(1, moreInfo);
+        
+        mainContentPanel.add(portal, "Home");
+        
+        ProgressBar pb = new ProgressBar();
+        pb.setValue(10);
+        mainContentPanel.add(pb, "ProgressBar");
+        
+        
 
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
