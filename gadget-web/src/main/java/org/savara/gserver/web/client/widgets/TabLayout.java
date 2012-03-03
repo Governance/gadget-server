@@ -119,7 +119,6 @@ public class TabLayout extends Composite {
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$("li", theTabs).index($wnd.$(this).parent());
-            $wnd.alert(index);
             theTabs.tabs('remove', index-1);
         });
     }-*/;

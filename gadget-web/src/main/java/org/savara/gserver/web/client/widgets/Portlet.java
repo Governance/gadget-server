@@ -68,7 +68,7 @@ public class Portlet extends Composite {
     public Portlet(String titleString, String gadgetSpecUrl) {
         this();
         title.setText(titleString);
-        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url="+gadgetSpecUrl);
+        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url="+gadgetSpecUrl+"&container=default&view=home");
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
     }
