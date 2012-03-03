@@ -44,7 +44,7 @@ public class PortletLayout extends Composite {
         portlet.add(header);
 
         InlineHTML minIcon = new InlineHTML("min");
-        minIcon.getElement().setClassName("ui-icon ui-icon-minusthick portlet-min");
+        minIcon.getElement().setClassName("ui-icon ui-icon-triangle-1-s portlet-min");
         minIcon.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
                 toggle(id);
@@ -86,8 +86,8 @@ public class PortletLayout extends Composite {
      */
     private static native void toggle(String id) /*-{
         $wnd.$('#' + id).find(".portlet-min")
-            .toggleClass( "ui-icon-minusthick" )
-            .toggleClass( "ui-icon-plusthick" );
+            .toggleClass( "ui-icon-triangle-1-s" )
+            .toggleClass( "ui-icon-triangle-1-n" );
 
         $wnd.$('#' + id).find(".portlet-content").toggle();
     }-*/;

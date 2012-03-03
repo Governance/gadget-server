@@ -59,7 +59,7 @@ public class Portlet extends Composite {
 
         settingsBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
-
+                 showUserPreference(id);
             }
         });
 
@@ -83,8 +83,8 @@ public class Portlet extends Composite {
      */
     private static native void toggle(String id) /*-{
         $wnd.$('#' + id).find(".portlet-min")
-                .toggleClass( "ui-icon-minusthick" )
-                .toggleClass( "ui-icon-plusthick" );
+                .toggleClass( "ui-icon-triangle-1-s" )
+                .toggleClass( "ui-icon-triangle-1-n" );
 
         $wnd.$('#' + id).find(".portlet-content").toggle();
     }-*/;

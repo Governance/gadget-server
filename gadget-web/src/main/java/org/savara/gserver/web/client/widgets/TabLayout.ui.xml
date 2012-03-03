@@ -1,0 +1,16 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+  <g:HTMLPanel>
+      <div style="height:100%" ui:field="tabs">
+          <ul ui:field="tabsBar">
+              <li id="li-add-Btn">
+                  <g:Anchor ui:field="addBtn">Add a tab</g:Anchor>
+              </li>
+          </ul>
+          <g:FlowPanel ui:field="tabsContent">
+          </g:FlowPanel>
+      </div>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

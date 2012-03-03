@@ -23,10 +23,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gserver.web.client.ApplicationEntryPoint;
 import org.savara.gserver.web.client.presenter.IndexPresenter;
-import org.savara.gserver.web.client.widgets.PortalLayout;
-import org.savara.gserver.web.client.widgets.Portlet;
-import org.savara.gserver.web.client.widgets.PortletLayout;
-import org.savara.gserver.web.client.widgets.ProgressBar;
+import org.savara.gserver.web.client.widgets.*;
 
 /**
  * @author: Jeff Yu
@@ -35,16 +32,15 @@ import org.savara.gserver.web.client.widgets.ProgressBar;
 public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView {
 
     private LayoutPanel headerPanel;
-    private TabLayoutPanel mainContentPanel;
+    private TabLayout mainContentPanel;
     private LayoutPanel footerPanel;
 
     private DockLayoutPanel panel;
 
     @Inject
     public IndexViewImpl() {
-        mainContentPanel = new TabLayoutPanel(2.5, Style.Unit.EM);
+        mainContentPanel = new TabLayout();
 
-        
         PortalLayout portalLayout = new PortalLayout(3);
         
         Portlet samGadget = new Portlet("SAM-Gadget", "http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
@@ -53,14 +49,14 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         portalLayout.addPortlet(0, samGadget);
         portalLayout.addPortlet(1, moreInfo);
         portalLayout.addPortlet(2, ccGadget);
+
+        mainContentPanel.addTab("Home", portalLayout);
         
-        mainContentPanel.add(portalLayout, "Home");
-        
-        ProgressBar pb = new ProgressBar();
-        pb.setValue(10);
-        mainContentPanel.add(pb, "ProgressBar");
-        
-        
+        PortalLayout sndLayout = new PortalLayout(2);
+        PortletLayout helloWorld = new PortletLayout("HelloWorld", "Hello World Portlet");
+        sndLayout.addPortlet(0, helloWorld);
+
+        mainContentPanel.addTab("Finance", sndLayout);
 
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
