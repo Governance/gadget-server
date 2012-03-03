@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>parent</artifactId>
-    <groupId>org.savara.gserver</groupId>
+    <groupId>org.guvnor.sam.gadget</groupId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.savara.gserver</groupId>
+  <groupId>org.guvnor.sam.gadget</groupId>
   <artifactId>gadget-web</artifactId>
   <packaging>war</packaging>
   <version>1.0.0-SNAPSHOT</version>
@@ -80,7 +80,7 @@
     </dependency>
 
     <dependency>
-        <groupId>org.savara.gserver</groupId>
+        <groupId>org.guvnor.sam.gadget</groupId>
         <artifactId>gadget-shindig</artifactId>
         <version>${project.version}</version>
     </dependency>
@@ -107,7 +107,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>ApplicationModule.html</runTarget>
+          <runTarget>Application.html</runTarget>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
         </configuration>
       </plugin>
