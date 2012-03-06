@@ -18,6 +18,8 @@
 package org.guvnor.sam.gadget.web.client.view;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -33,6 +35,7 @@ import org.guvnor.sam.gadget.web.client.widgets.*;
 public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView {
 
     private LayoutPanel headerPanel;
+    private LayoutPanel mainPanel;
     private TabLayout mainContentPanel;
     private LayoutPanel footerPanel;
 
@@ -51,12 +54,21 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         portalLayout.addPortlet(1, gnews);
         portalLayout.addPortlet(2, ccGadget);
 
-        mainContentPanel.addTab("Home", portalLayout);
-        
         PortalLayout sndLayout = new PortalLayout(2);
         PortletLayout helloWorld = new PortletLayout("HelloWorld", "Hello World Portlet");
         sndLayout.addPortlet(0, helloWorld);
 
+        final AddTabForm addTabForm = new AddTabForm(mainContentPanel);
+
+        Anchor anchor = new Anchor();
+        anchor.setText("Add a tab");
+        anchor.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent clickEvent) {
+                addTabForm.show();
+            }
+        });
+        mainContentPanel.addTabAnchor(anchor);
+        mainContentPanel.addTab("Home", portalLayout);
         mainContentPanel.addTab("Finance", sndLayout);
 
         headerPanel = new LayoutPanel();
@@ -68,9 +80,13 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         panel = new DockLayoutPanel(Style.Unit.PX);
         panel.getElement().setAttribute("id", "container");
 
-        panel.addNorth(headerPanel, 110);
+        mainPanel = new LayoutPanel();
+        mainPanel.add(addTabForm);
+        mainPanel.add(mainContentPanel);
+
+        panel.addNorth(headerPanel, 70);
         panel.addSouth(footerPanel, 25);
-        panel.add(mainContentPanel);
+        panel.add(mainPanel);
 
         getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());

@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
 
 import org.guvnor.sam.gadget.web.client.util.UUID;
@@ -45,9 +46,7 @@ public class TabLayout extends Composite {
 
     private String id;
 
-    @UiField Anchor addBtn;
-
-    @UiField UListElement tabsBar;
+    @UiField UnorderedList tabsBar;
     
     @UiField FlowPanel tabsContent;
 
@@ -59,12 +58,7 @@ public class TabLayout extends Composite {
         id = "tabs-" + UUID.uuid(4);
         initWidget(uiBinder.createAndBindUi(this));
         tabs.setId(id);
-        
-        addBtn.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent clickEvent) {
-                System.out.println("Add Btn Event");
-            }
-        });
+
     }
     
     
@@ -82,21 +76,39 @@ public class TabLayout extends Composite {
 
     }
 
+    public void addTabAnchor(Anchor anchor) {
+        ListItem li = new ListItem();
+        li.add(anchor);
+        tabsBar.add(li);
+    }
+
     private void addTabTitle(String tabTitle, String tabContentId) {
-        Element li = Document.get().createLIElement().cast();
-        
+        ListItem li = new ListItem();
+        li.getElement().setClassName("ui-state-default ui-corner-top");
         Anchor anchor = new Anchor();
         anchor.setHref("#" + tabContentId);
         anchor.setText(tabTitle);
-        li.appendChild(anchor.getElement());
+        li.add(anchor);
 
         InlineLabel removeBtn = new InlineLabel();
         removeBtn.setText("remove");
         removeBtn.setStyleName("ui-icon ui-icon-close");
-        li.appendChild(removeBtn.getElement());
+        li.add(removeBtn);
         
-        tabsBar.appendChild(li);
+        tabsBar.add(li);
 
+    }
+    
+    public void insertTab(String tabTitle, Widget widget) {
+        String idSuffix = UUID.uuid(4);
+        String tabContentId = "tab-content-" + idSuffix;
+
+        FlowPanel theContent = new FlowPanel();
+        theContent.getElement().setId(tabContentId);
+        theContent.add(widget);
+        tabsContent.add(theContent);
+
+        addNewTab(id, tabContentId, tabTitle);
     }
 
     public void onAttach() {
@@ -110,7 +122,15 @@ public class TabLayout extends Composite {
      */
 
     private static native void initTabs(String id) /*-{
-        $wnd.$('#'+id).tabs().find(".ui-tabs-nav").sortable({axis: "x" });
+        $wnd.$('#'+id).tabs({
+            tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>remove</span></li>"
+        });
+    }-*/;
+
+    private static native void addNewTab(String id, String tabContentId, String tabTitle) /*-{
+        var theTabs = $wnd.$('#'+id).tabs();
+        $wnd.$('#'+id).tabs("add", "#"+tabContentId, tabTitle);
+        theTabs.tabs("select","#"+tabContentId);
     }-*/;
 
     /**
@@ -120,7 +140,7 @@ public class TabLayout extends Composite {
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$("li", theTabs).index($wnd.$(this).parent());
-            theTabs.tabs('remove', index-1);
+            theTabs.tabs('remove', index - 1);
         });
     }-*/;
 

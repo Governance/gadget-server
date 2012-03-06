@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <g:HTMLPanel>
+        <div ui:field="dialog" title="Add a Tab">
+             <table>
+                 <tr>
+                     <td>Tab Name:</td>
+                     <td><g:TextBox ui:field="tabName"></g:TextBox> </td>
+                 </tr>
+                 <tr>
+                     <td>Portal Columns:</td>
+                     <td><g:ListBox ui:field="layoutColumns"></g:ListBox> </td>
+                 </tr>
+             </table>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

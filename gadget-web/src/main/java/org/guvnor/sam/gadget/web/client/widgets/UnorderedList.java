@@ -17,14 +17,22 @@
  */
 package org.guvnor.sam.gadget.web.client.widgets;
 
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author: Jeff Yu
- * @date: 3/03/12
+ * @date: 5/03/12
  */
-public class DialogWindow extends Composite {
+public class UnorderedList extends ComplexPanel{
 
+    public UnorderedList() {
+        setElement(DOM.createElement("UL"));
+    }
 
+    public void add(Widget w) {
+        super.add(w, getElement());
+    }
 
 }
