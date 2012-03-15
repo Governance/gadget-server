@@ -14,8 +14,7 @@
          </g:FlowPanel>
          <g:FlowPanel ui:field="userPreference">
          </g:FlowPanel>
-         <g:FlowPanel styleName="portlet-content">
-              <!--iframe ui:field="gadgetSpecUrl" scrolling="no" marginwidth="0" frameborder="0"></iframe-->
+         <g:FlowPanel styleName="portlet-content" ui:field="portletContent">
              <g:Frame width="300" ui:field="gadgetSpec" styleName="portlet-iframe"></g:Frame>
          </g:FlowPanel>
     </g:FlowPanel>

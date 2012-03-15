@@ -26,6 +26,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 
 import org.guvnor.sam.gadget.web.client.util.UUID;
+import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 
 /**
  * @author: Jeff Yu
@@ -39,16 +40,18 @@ public class Portlet extends Composite {
     
     private String id;
 
+    private String widgetId;
+
     @UiField InlineLabel minBtn;
     @UiField InlineLabel title;
     @UiField InlineLabel settingsBtn;
     @UiField FlowPanel userPreference;
+    @UiField FlowPanel portletContent;
     @UiField Frame gadgetSpec;
 
-//    @UiField IFrameElement gadgetSpecUrl;
-
     public Portlet() {
-        id = "portlet-" + UUID.uuid(4);
+        String uuid = UUID.uuid(4);
+        id = "portlet-" + uuid;
         initWidget(uiBinder.createAndBindUi(this));
         getElement().setId(id);
 
@@ -64,14 +67,17 @@ public class Portlet extends Composite {
             }
         });
 
+        widgetId = "widgetId-" + uuid;
+        gadgetSpec.getElement().setId(widgetId);
     }
-    
-    public Portlet(String titleString, String gadgetSpecUrl) {
+
+    public Portlet(GadgetModel model) {
         this();
-        title.setText(titleString);
-        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url="+gadgetSpecUrl+"&container=default&view=home");
+        title.setText(model.getName());
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
+        gadgetSpec.setHeight("250px");
+        gadgetSpec.setUrl(GWT.getHostPageBaseURL() + "/gadgets/ifr?url="+model.getSpecUrl()+"&container=default&view=home");
     }
 
     @Override

@@ -28,6 +28,8 @@ public class GadgetModel {
     private String name;
 
     private boolean configurable;
+    
+    private String height;
 
     public String getSpecUrl() {
         return specUrl;
@@ -51,5 +53,13 @@ public class GadgetModel {
 
     public void setConfigurable(boolean configurable) {
         this.configurable = configurable;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
     }
 }
