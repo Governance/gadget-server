@@ -20,6 +20,8 @@ package org.guvnor.sam.gadget.server;
 import org.apache.shindig.social.core.config.SocialApiGuiceModule;
 import org.apache.shindig.social.opensocial.spi.AppDataService;
 import org.apache.shindig.social.opensocial.spi.PersonService;
+import org.guvnor.sam.gadget.server.service.UserManager;
+import org.guvnor.sam.gadget.server.service.UserManagerImpl;
 
 /**
  * @author: Jeff Yu
@@ -32,6 +34,7 @@ public class ApplicationBind extends SocialApiGuiceModule{
         super.configure();
         bind(PersonService.class).to(DefaultPersonServiceImpl.class);
         bind(AppDataService.class).to(DefaultAppDataServiceImpl.class);
+        bind(UserManager.class).to(UserManagerImpl.class);
     }
 
 }

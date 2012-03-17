@@ -127,7 +127,7 @@
         </executions>
         <configuration>
           <webappDirectory>${webappDirectory}</webappDirectory>
-          <packagingExcludes>WEB-INF/lib/gadget-shindig-*.jar,</packagingExcludes>
+          <!--packagingExcludes>WEB-INF/lib/gadget-shindig-*.jar,</packagingExcludes-->
         </configuration>
       </plugin>
 
