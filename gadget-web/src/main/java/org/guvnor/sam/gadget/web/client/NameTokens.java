@@ -24,5 +24,9 @@ package org.guvnor.sam.gadget.web.client;
 public class NameTokens {
 
     public static final String INDEX_VIEW = "index";
+    
+    public static final String LOGIN_VIEW = "login";
+    
+    public static final String SIGNUP_VIEW = "signup";
 
 }

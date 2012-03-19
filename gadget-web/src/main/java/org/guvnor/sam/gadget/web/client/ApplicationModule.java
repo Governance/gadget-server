@@ -20,6 +20,7 @@ package org.guvnor.sam.gadget.web.client;
 import org.guvnor.sam.gadget.web.client.auth.CurrentUser;
 import org.guvnor.sam.gadget.web.client.auth.LoggedInGateKeeper;
 import org.guvnor.sam.gadget.web.client.presenter.IndexPresenter;
+import org.guvnor.sam.gadget.web.client.presenter.LoginPresenter;
 import org.guvnor.sam.gadget.web.client.view.Footer;
 import org.guvnor.sam.gadget.web.client.view.Header;
 import org.guvnor.sam.gadget.web.client.view.IndexViewImpl;
@@ -33,6 +34,7 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import org.guvnor.sam.gadget.web.client.view.LoginViewImpl;
 
 /**
  * @author: Jeff Yu
@@ -58,5 +60,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         //Presenters
         bindPresenter(IndexPresenter.class, IndexPresenter.IndexView.class, IndexViewImpl.class,
                 IndexPresenter.IndexProxy.class);
+        bindPresenter(LoginPresenter.class, LoginPresenter.LoginView.class, LoginViewImpl.class,
+                LoginPresenter.LoginProxy.class);
     }
 }

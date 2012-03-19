@@ -18,10 +18,8 @@
 package org.guvnor.sam.gadget.server;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.CreationException;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
-import org.apache.shindig.social.core.config.SocialApiGuiceModule;
 import org.apache.shindig.social.opensocial.spi.AppDataService;
 import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.guvnor.sam.gadget.server.service.UserManager;
@@ -30,7 +28,6 @@ import org.guvnor.sam.gadget.server.service.UserManagerImpl;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -94,6 +91,7 @@ public class JPASocialModule extends AbstractModule{
         bind(PersonService.class).to(DefaultPersonServiceImpl.class).in(Scopes.SINGLETON);
         bind(AppDataService.class).to(DefaultAppDataServiceImpl.class).in(Scopes.SINGLETON);
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
+
     }
 
 }

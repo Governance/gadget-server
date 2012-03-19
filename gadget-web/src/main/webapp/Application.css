@@ -14,6 +14,10 @@ body {
     margin:0 auto;
 }
 
+#mainpanel {
+    background: white;
+}
+
 .header-panel {
     min-height:70px;
     height:70px;

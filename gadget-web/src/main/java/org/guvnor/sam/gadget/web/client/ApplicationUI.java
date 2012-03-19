@@ -19,6 +19,7 @@ package org.guvnor.sam.gadget.web.client;
 
 import org.guvnor.sam.gadget.web.client.auth.CurrentUser;
 import org.guvnor.sam.gadget.web.client.presenter.IndexPresenter;
+import org.guvnor.sam.gadget.web.client.presenter.LoginPresenter;
 import org.guvnor.sam.gadget.web.client.view.Footer;
 import org.guvnor.sam.gadget.web.client.view.Header;
 
@@ -44,6 +45,7 @@ public interface ApplicationUI extends Ginjector {
     EventBus getEventBus();
 
     AsyncProvider<IndexPresenter> getIndexPresenter();
+    AsyncProvider<LoginPresenter> getLoginPresenter();
     
     Footer getFooter();
     Header getHeader();
