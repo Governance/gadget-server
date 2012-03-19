@@ -17,6 +17,7 @@
  */
 package org.guvnor.sam.gadget.server;
 
+import com.google.inject.Inject;
 import org.apache.shindig.auth.SecurityToken;
 import org.apache.shindig.protocol.DataCollection;
 import org.apache.shindig.protocol.ProtocolException;
@@ -24,6 +25,7 @@ import org.apache.shindig.social.opensocial.spi.AppDataService;
 import org.apache.shindig.social.opensocial.spi.GroupId;
 import org.apache.shindig.social.opensocial.spi.UserId;
 
+import javax.persistence.EntityManager;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -34,6 +36,13 @@ import java.util.concurrent.Future;
  */
 public class DefaultAppDataServiceImpl implements AppDataService {
 
+    private EntityManager entityManager;
+
+    @Inject
+    public DefaultAppDataServiceImpl(EntityManager manager) {
+        this.entityManager = manager;
+    }
+    
     public Future<DataCollection> getPersonData(Set<UserId> userIds, GroupId groupId, String appId, Set<String> fields, SecurityToken token) throws ProtocolException {
         return null;
     }

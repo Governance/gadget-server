@@ -4,14 +4,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
   version="2.0">
-  <persistence-unit name="Gadget-Shindig" transaction-type="JTA">
+  <persistence-unit name="Gadget-Shindig" transaction-type="RESOURCE_LOCAL">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
-      <jta-data-source>jboss/datasources/ExampleDS</jta-data-source>
+
       <class>org.guvnor.sam.gadget.server.model.User</class>
       <class>org.guvnor.sam.gadget.server.model.ApplicationData</class>
       <properties>
-          <property name="dialect" value="org.hibernate.dialect.H2Dialect" />
-          <property name="hbm2ddl.auto" value="create-drop" />
+          <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
       </properties>
   </persistence-unit>
 

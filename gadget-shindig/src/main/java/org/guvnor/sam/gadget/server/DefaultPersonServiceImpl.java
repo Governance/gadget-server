@@ -17,12 +17,12 @@
  */
 package org.guvnor.sam.gadget.server;
 
+import com.google.inject.Inject;
 import org.apache.shindig.auth.SecurityToken;
 import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.social.core.model.PersonImpl;
-import org.apache.shindig.social.opensocial.model.Name;
 import org.apache.shindig.social.opensocial.model.Person;
 import org.apache.shindig.social.opensocial.spi.CollectionOptions;
 import org.apache.shindig.social.opensocial.spi.GroupId;
@@ -31,7 +31,6 @@ import org.apache.shindig.social.opensocial.spi.UserId;
 import org.guvnor.sam.gadget.server.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -41,8 +40,12 @@ import java.util.concurrent.Future;
  */
 public class DefaultPersonServiceImpl implements PersonService{
 
-    @PersistenceContext
     private EntityManager entityManager;
+
+    @Inject
+    public DefaultPersonServiceImpl(EntityManager manager) {
+        this.entityManager = manager;
+    }
 
     public Future<RestfulCollection<Person>> getPeople(Set<UserId> userIds, GroupId groupId, CollectionOptions collectionOptions, Set<String> strings, SecurityToken securityToken) throws ProtocolException {
         return null;

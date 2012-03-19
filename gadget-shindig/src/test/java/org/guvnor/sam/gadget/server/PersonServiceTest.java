@@ -17,7 +17,10 @@
  */
 package org.guvnor.sam.gadget.server;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.guvnor.sam.gadget.server.model.User;
+import org.guvnor.sam.gadget.server.service.UserManager;
 import org.guvnor.sam.gadget.server.service.UserManagerImpl;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -34,18 +37,15 @@ import java.sql.DriverManager;
  */
 public class PersonServiceTest {
 
-    private static UserManagerImpl userManager;
+    private static UserManager userManager;
     
     @BeforeClass
     public static void setUp() throws Exception{
         Class.forName("org.h2.Driver");
         DriverManager.getConnection("jdbc:h2:target/db/h2", "sa", "");
 
-        userManager = new UserManagerImpl();
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Gadget-Shindig-ut");
-        EntityManager em = emf.createEntityManager();
-        userManager.setEm(em);
+        Injector injector = Guice.createInjector(new JPASocialModule());
+        userManager = injector.getInstance(UserManager.class);
 
     }
 
@@ -59,7 +59,7 @@ public class PersonServiceTest {
         
         userManager.createUser(user);
 
-        Assert.assertNotNull(user.getId());
+        Assert.assertTrue(user.getId() > 0);
     }
 
 

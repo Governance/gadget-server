@@ -17,10 +17,10 @@
  */
 package org.guvnor.sam.gadget.server.service;
 
+import com.google.inject.Inject;
 import org.guvnor.sam.gadget.server.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  * @author: Jeff Yu
@@ -28,27 +28,36 @@ import javax.persistence.PersistenceContext;
  */
 public class UserManagerImpl implements UserManager{
 
-    @PersistenceContext
-    EntityManager em;
+    EntityManager entityManager;
+
+    @Inject
+    public UserManagerImpl(EntityManager manager) {
+        this.entityManager = manager;
+    }
 
     public User createUser(User user) {
-        em.persist(user);
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        entityManager.persist(user);
+        entityManager.getTransaction().commit();
         return user;
     }
 
     public void updateUser(User user) {
-        em.merge(user);
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
     }
 
     public void removeUser(User user) {
-        em.remove(user);
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        entityManager.remove(user);
+        entityManager.getTransaction().commit();
     }
 
-    public EntityManager getEm() {
-        return em;
-    }
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
 }
