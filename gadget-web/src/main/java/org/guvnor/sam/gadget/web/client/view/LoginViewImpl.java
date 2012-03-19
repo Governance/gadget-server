@@ -37,6 +37,10 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
     private DockLayoutPanel panel;
     private LayoutPanel footerPanel;
     private LayoutPanel mainPanel;
+    
+    private LoginPresenter presenter;
+    
+    private LoginForm loginForm;
 
     @Inject
     public LoginViewImpl() {
@@ -54,7 +58,7 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         mainPanel.setHeight("800px");
         mainPanel.getElement().setId("mainpanel");
 
-        LoginForm loginForm = new LoginForm();
+        loginForm = new LoginForm();
         mainPanel.add(loginForm);
 
         panel.addNorth(headerPanel, 70);
@@ -64,8 +68,14 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         headerPanel.add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         footerPanel.add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
 
+
     }
-    
+
+    public void setPresenter(LoginPresenter presenter) {
+        this.presenter = presenter;
+        loginForm.setPresenter(presenter);
+    }
+
     public Widget asWidget() {
         return panel;
     }

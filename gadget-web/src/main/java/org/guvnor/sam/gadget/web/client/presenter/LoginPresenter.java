@@ -24,6 +24,8 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.guvnor.sam.gadget.web.client.NameTokens;
@@ -34,9 +36,12 @@ import org.guvnor.sam.gadget.web.client.NameTokens;
 public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         LoginPresenter.LoginProxy>{
 
+    private PlaceManager placeManager;
+    
     @Inject
-    public LoginPresenter(EventBus bus, LoginView view, LoginProxy proxy){
+    public LoginPresenter(EventBus bus, LoginView view, LoginProxy proxy, PlaceManager manager){
          super(bus, view, proxy);
+         this.placeManager = manager;
     }
 
     @Override
@@ -46,6 +51,8 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
 
     public interface LoginView extends View {
 
+        void setPresenter(LoginPresenter presenter);
+        
     }
 
     @ProxyCodeSplit
@@ -53,4 +60,14 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
     @NoGatekeeper
     public interface LoginProxy extends ProxyPlace<LoginPresenter> {}
 
+    @Override
+    public void onBind() {
+        super.onBind();
+        getView().setPresenter(this);
+    }
+
+    public void forwardToIndex() {
+        placeManager.revealPlace(new PlaceRequest(NameTokens.INDEX_VIEW));
+    }
+    
 }

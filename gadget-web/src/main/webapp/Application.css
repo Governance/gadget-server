@@ -31,6 +31,8 @@ body {
     width:100%;
 }
 
+.red-error {color:red}
+
 
 /** css for the portal and portlet */
 .portal {width:100%; background: white;}

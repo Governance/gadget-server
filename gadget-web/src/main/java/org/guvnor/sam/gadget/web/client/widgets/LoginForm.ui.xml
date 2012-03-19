@@ -4,6 +4,9 @@
         <div ui:field="loginForm" title="Gadget Server">
              <table>
                  <tr>
+                     <td colspan="2"><g:Label ui:field="loginError" styleName="red-error"></g:Label></td>
+                 </tr>
+                 <tr>
                      <td>Username:</td>
                      <td><g:TextBox ui:field="username"></g:TextBox> </td>
                  </tr>
@@ -15,6 +18,9 @@
         </div>
         <div ui:field="signupForm" title="Signup">
             <table>
+                <tr>
+                    <td colspan="2"><g:Label ui:field="signupError" styleName="red-error"></g:Label></td>
+                </tr>
                 <tr>
                     <td>Username:</td>
                     <td><g:TextBox ui:field="signupUsername"></g:TextBox> </td>

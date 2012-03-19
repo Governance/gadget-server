@@ -21,10 +21,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import org.guvnor.sam.gadget.web.client.presenter.LoginPresenter;
 import org.guvnor.sam.gadget.web.client.util.UUID;
 
 /**
@@ -49,9 +47,12 @@ public class LoginForm extends Composite {
     
     @UiField
     TextBox username;
-    
     @UiField
     PasswordTextBox password;
+    @UiField
+    Label loginError;
+    @UiField
+    Label signupError;
 
     @UiField
     TextBox signupUsername;
@@ -64,6 +65,8 @@ public class LoginForm extends Composite {
     TextBox email;
     @UiField
     TextBox displayName;
+
+    private LoginPresenter presenter;
 
     public LoginForm() {
         String suffix = UUID.uuid(4);
@@ -81,56 +84,75 @@ public class LoginForm extends Composite {
     public void onAttach() {
         super.onAttach();
         initializeLoginForm(this, loginId, signupId);
-        initializeSignupForm(this, signupId);
+        initializeSignupForm(this, loginId, signupId);
     }
-    
-    public void openSignupForm() {
-        
+
+
+    public void doLogin() {
+        if (username.getValue().equals("admin") && password.getValue().trim().equals("admin")) {
+            loginError.setText("");
+            username.setValue("");
+            password.setValue("");
+            closeWindow(loginId);
+            presenter.forwardToIndex();
+        } else {
+            loginError.setText("Authentication failed, try admin/admin .");
+        }
     }
+
+    public void doSignup(){
+
+    }
+
+    public void setPresenter(LoginPresenter loginPresenter) {
+        this.presenter = loginPresenter;
+    }
+
 
     /**
      * JSNI methods
      */
-    private static native void initializeLoginForm(final LoginForm form, String id, String signupId) /*-{
-        $wnd.$('#' + id).dialog({
+    private static native void initializeLoginForm(final LoginForm form, String loginId, String signupId) /*-{
+        $wnd.$('#' + loginId).dialog({
             autoOpen:true,
             modal:false,
             width:300,
             height:200,
+            closeOnEscape: false,
+            open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },
             buttons:{
                 Login: function(){
-                    //form.@org.guvnor.sam.gadget.web.client.widgets.AddTabForm::addNewTab()();
-                    $wnd.$(this).dialog("close");
+                    form.@org.guvnor.sam.gadget.web.client.widgets.LoginForm::doLogin()();
                 },
                 Signup: function() {
                     $wnd.$(this).dialog("close");
                     $wnd.$('#' + signupId).dialog("open");
                 }
-            },
-            close:function(){
-
             }
         });
     }-*/;
 
-    private static native void initializeSignupForm(final LoginForm form, String id) /*-{
-        $wnd.$('#' + id).dialog({
+    private static native void initializeSignupForm(final LoginForm form, String loginId, String signupId) /*-{
+        $wnd.$('#' + signupId).dialog({
             autoOpen:false,
             modal:false,
             width:300,
             height:300,
+            closeOnEscape: false,
+            open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },
             buttons:{
                 Signup: function(){
-                    //form.@org.guvnor.sam.gadget.web.client.widgets.AddTabForm::addNewTab()();
-                    $wnd.$(this).dialog("close");
+                    form.@org.guvnor.sam.gadget.web.client.widgets.LoginForm::doSignup()();
                 },
                 Cancel: function() {
-
+                    $wnd.$('#'+signupId).dialog("close");
+                    $wnd.$('#'+loginId).dialog("open");
                 }
-            },
-            close:function(){
-
             }
         });
+    }-*/;
+
+    private static native void closeWindow(String id) /*-{
+        $wnd.$('#' + id).dialog("close");
     }-*/;
 }
