@@ -15,26 +15,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.server.service;
+package org.guvnor.sam.gadget.web.client;
 
-import org.guvnor.sam.gadget.server.model.User;
-
-import java.util.List;
+import com.google.gwt.core.client.GWT;
 
 /**
  * @author: Jeff Yu
- * @date: 16/03/12
+ * @date: 20/03/12
  */
-public interface UserManager {
+public class URLBuilder {
     
-    User createUser(User user);
-    
-    void updateUser(User user);
-    
-    void removeUser(User user);
+    private final static String urlBase = GWT.getHostPageBaseURL();
 
-    List<User> getAllUser();
-
-    User getUser(String username, String password);
+    public static String getAllUsersURL() {
+        return urlBase + "rs/users/all";
+    }
     
+    public static String getRegisterUserURL() {
+        return urlBase + "rs/users/user";
+    }
+    
+    public static String getAuthenticationURL() {
+        return urlBase + "rs/users/user";
+    }
 }

@@ -88,8 +88,8 @@ public class JPASocialModule extends AbstractModule{
             bind(EntityManager.class).toInstance(this.entityManager);
         }
 
-        bind(PersonService.class).to(DefaultPersonServiceImpl.class).in(Scopes.SINGLETON);
-        bind(AppDataService.class).to(DefaultAppDataServiceImpl.class).in(Scopes.SINGLETON);
+//        bind(PersonService.class).to(DefaultPersonServiceImpl.class).in(Scopes.SINGLETON);
+//        bind(AppDataService.class).to(DefaultAppDataServiceImpl.class).in(Scopes.SINGLETON);
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
 
     }

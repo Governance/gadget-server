@@ -54,6 +54,16 @@
         </param-value>
     </context-param>
 
+    <context-param>
+        <param-name>javax.ws.rs.Application</param-name>
+        <param-value>org.guvnor.sam.gadget.web.server.RestApplication</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/rs</param-value>
+    </context-param>
+
     <filter>
         <filter-name>hostFilter</filter-name>
         <filter-class>org.apache.shindig.common.servlet.HostFilter</filter-class>
@@ -144,6 +154,24 @@
     <listener>
         <listener-class>org.apache.shindig.common.servlet.GuiceServletContextListener</listener-class>
     </listener>
+
+    <listener>
+        <listener-class>
+            org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+        </listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>
+            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/rs/*</url-pattern>
+    </servlet-mapping>
 
     <!-- Render a Gadget -->
     <servlet>

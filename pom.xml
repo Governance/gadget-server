@@ -57,6 +57,7 @@
         <hibernate.version>4.0.0.Final</hibernate.version>
         <javassist.version>3.12.1.GA</javassist.version>
         <h2.version>1.2.131</h2.version>
+        <resteasy.version>2.2.1.GA</resteasy.version>
 	</properties>
 
 	<modules>

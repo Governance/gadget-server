@@ -41,8 +41,8 @@ public class PersonServiceTest {
     
     @BeforeClass
     public static void setUp() throws Exception{
-        Class.forName("org.h2.Driver");
-        DriverManager.getConnection("jdbc:h2:target/db/h2", "sa", "");
+        //Class.forName("org.h2.Driver");
+        //DriverManager.getConnection("jdbc:h2:mem:gadget-server;DB_CLOSE_DELAY=-1", "sa", "");
 
         Injector injector = Guice.createInjector(new JPASocialModule());
         userManager = injector.getInstance(UserManager.class);

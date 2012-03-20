@@ -15,26 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.server.service;
+package org.guvnor.sam.gadget.web.server;
 
-import org.guvnor.sam.gadget.server.model.User;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
- * @author: Jeff Yu
- * @date: 16/03/12
+ * @author Heiko.Braun <heiko.braun@jboss.com>
  */
-public interface UserManager {
-    
-    User createUser(User user);
-    
-    void updateUser(User user);
-    
-    void removeUser(User user);
-
-    List<User> getAllUser();
-
-    User getUser(String username, String password);
-    
+public class GsonFactory
+{
+    public static Gson createInstance()
+    {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(java.sql.Timestamp.class, new SQLDateTypeAdapter())
+                .create();
+        return gson;
+    }
 }

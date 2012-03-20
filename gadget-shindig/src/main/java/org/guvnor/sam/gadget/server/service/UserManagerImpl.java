@@ -21,12 +21,14 @@ import com.google.inject.Inject;
 import org.guvnor.sam.gadget.server.model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * @author: Jeff Yu
  * @date: 16/03/12
  */
-public class UserManagerImpl implements UserManager{
+public class UserManagerImpl implements UserManager {
 
     EntityManager entityManager;
 
@@ -58,6 +60,33 @@ public class UserManagerImpl implements UserManager{
         }
         entityManager.remove(user);
         entityManager.getTransaction().commit();
+    }
+
+    public List<User> getAllUser() {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Query query = entityManager.createQuery("select user from User user");
+        List<User> users = query.getResultList();
+        entityManager.getTransaction().commit();
+        return users;
+    }
+
+    public User getUser(String username, String password) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Query query = entityManager.createQuery("select user from User user where user.name = :username and user.password = :password");
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        
+        List<User> users = query.getResultList();
+        entityManager.getTransaction().commit();
+
+        if (users.size() > 0) {
+            return users.get(0);
+        }
+        return null;
     }
 
 }

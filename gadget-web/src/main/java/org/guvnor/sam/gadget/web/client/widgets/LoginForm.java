@@ -19,6 +19,9 @@ package org.guvnor.sam.gadget.web.client.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -89,19 +92,38 @@ public class LoginForm extends Composite {
 
 
     public void doLogin() {
-        if (username.getValue().equals("admin") && password.getValue().trim().equals("admin")) {
-            loginError.setText("");
-            username.setValue("");
-            password.setValue("");
-            closeWindow(loginId);
-            presenter.forwardToIndex();
-        } else {
-            loginError.setText("Authentication failed, try admin/admin .");
-        }
+
+        presenter.authenticateUser(username.getValue(), password.getValue(), new RequestCallback() {
+            public void onResponseReceived(Request request, Response response) {
+                println(response.getText());
+                loginError.setText("");
+                username.setValue("");
+                password.setValue("");
+                closeWindow(loginId);
+                presenter.forwardToIndex();
+            }
+
+            public void onError(Request request, Throwable throwable) {
+                loginError.setText("Authentication failed, try admin/admin .");
+            }
+        });
+
     }
 
     public void doSignup(){
 
+        presenter.registerUser(signupUsername.getValue(),
+                signupPassword.getValue(), email.getValue(),
+                displayName.getValue(), new RequestCallback() {
+            public void onResponseReceived(Request request, Response response) {
+                System.out.println("=== result ->: " + response.getText());
+                println(response.getText());
+            }
+
+            public void onError(Request request, Throwable throwable) {
+                println(throwable.getMessage());
+            }
+        });
     }
 
     public void setPresenter(LoginPresenter loginPresenter) {
@@ -141,7 +163,7 @@ public class LoginForm extends Composite {
             closeOnEscape: false,
             open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },
             buttons:{
-                Signup: function(){
+                Submit: function(){
                     form.@org.guvnor.sam.gadget.web.client.widgets.LoginForm::doSignup()();
                 },
                 Cancel: function() {
@@ -154,5 +176,9 @@ public class LoginForm extends Composite {
 
     private static native void closeWindow(String id) /*-{
         $wnd.$('#' + id).dialog("close");
+    }-*/;
+    
+    private static native void println(String msg) /*-{
+        $wnd.alert(msg);
     }-*/;
 }

@@ -18,6 +18,7 @@
 package org.guvnor.sam.gadget.web.client.presenter;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -29,6 +30,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.guvnor.sam.gadget.web.client.NameTokens;
+import org.guvnor.sam.gadget.web.client.URLBuilder;
 
 /**
  *
@@ -68,6 +70,27 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
 
     public void forwardToIndex() {
         placeManager.revealPlace(new PlaceRequest(NameTokens.INDEX_VIEW));
+    }
+    
+    public void authenticateUser(String username, String password, RequestCallback callback) {
+
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URLBuilder.getAuthenticationURL());
+        try {
+            builder.sendRequest("username=" + username + "&password="+ password, callback);
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void registerUser(String username, String password, String email,
+                             String displayName, RequestCallback callback) {
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URLBuilder.getRegisterUserURL());
+        try {
+            builder.sendRequest("username=" + username + "&password="+ password
+                    + "&email="+email + "&displayName=" + displayName, callback);
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
     }
     
 }

@@ -15,26 +15,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.server.service;
+package org.guvnor.sam.gadget.web.server;
 
-import org.guvnor.sam.gadget.server.model.User;
-
-import java.util.List;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author: Jeff Yu
- * @date: 16/03/12
+ * @date: 20/03/12
  */
-public interface UserManager {
-    
-    User createUser(User user);
-    
-    void updateUser(User user);
-    
-    void removeUser(User user);
+public class RestApplication extends Application {
 
-    List<User> getAllUser();
+    HashSet<Object> singletons = new HashSet<Object>();
 
-    User getUser(String username, String password);
-    
+    public RestApplication() {
+        singletons.add(new UserController());
+    }
+
+    @Override
+    public Set<Class<?>> getClasses()
+    {
+        HashSet<Class<?>> set = new HashSet<Class<?>>();
+        return set;
+    }
+
+    @Override
+    public Set<Object> getSingletons()
+    {
+        return singletons;
+    }
+
 }
