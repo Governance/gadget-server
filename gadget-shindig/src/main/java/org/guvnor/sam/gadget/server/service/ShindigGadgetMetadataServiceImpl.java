@@ -17,15 +17,50 @@
  */
 package org.guvnor.sam.gadget.server.service;
 
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.ClientResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.MediaType;
+import java.util.Iterator;
 
 /**
  * @author: Jeff Yu
  * @date: 9/02/12
  */
 public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService{
+
+    private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataServiceImpl.class);
+    
+    public static final String USER_PREFS = "userPrefs";
+    public static final String DATA_TYPE = "dataType";
+
+    public static final String HAS_PREFS_TO_EDIT = "hasPrefsToEdit";
+
+    /*
+    * enum representing all of the valid OpenSocial preference data types
+    */
+    public static enum PrefDataTypes {
+        STRING("STRING"),
+        BOOLEAN("BOOL"),
+        ENUM("ENUM"),
+        LIST("LIST"),
+        HIDDEN("HIDDEN");
+
+        private final String dataType;
+        private PrefDataTypes(String dataType) {
+            this.dataType = dataType;
+        }
+
+        @Override
+        public String toString() {
+            return dataType;
+        }
+    }
 
     public String getGadgetMetadata(String gadgetUrl) {
 
@@ -57,8 +92,64 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService{
             throw new IllegalArgumentException("Error occurred while generating data for shindig metadata call", e);
         }
 
+        //convert the json object to a string
+        String postData = rpcArray.toString();
+        System.out.println(postData);
+        if (logger.isDebugEnabled()) {
+            logger.debug("requestContent: {}", postData);
+        }
+
+        ClientRequest request = new ClientRequest("http://localhost:8080/rpc");
+        request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
+
+        String responseString = null;
+        try {
+            responseString = request.postTarget(String.class);
+            System.out.println("result ==> " + responseString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-        return null;
+        //now trim back the response to just the metadata for the single gadget
+        try {
+            JSONObject responseObject = new JSONArray(responseString).
+                    getJSONObject(0).
+                    getJSONObject("result").
+                    getJSONObject(gadgetUrl);
+
+            // check to see if this gadget has at least one non-hidden user pref
+            // to determine if we should display the edit prefs button
+            boolean hasPrefsToEdit = false;
+            if (responseObject.has(USER_PREFS)) {
+                JSONObject userPrefs = responseObject.getJSONObject(USER_PREFS);
+                Iterator keys = userPrefs.keys();
+                while(keys.hasNext()) {
+                    String userPrefName = (String) keys.next();
+                    JSONObject userPref = userPrefs.getJSONObject(userPrefName);
+                    if (!PrefDataTypes.HIDDEN.toString().equals(userPref.getString(DATA_TYPE))) {
+                        hasPrefsToEdit = true;
+                        break;
+                    }
+                }
+            }
+
+            responseObject.put(HAS_PREFS_TO_EDIT, hasPrefsToEdit);
+            responseString = responseObject.toString();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("shindig metadata trimmed response: {}", responseString);
+            }
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
+        }
+
+        return responseString;
+    }
+    
+    
+    public static void main(String[] args) throws Exception {
+        ShindigGadgetMetadataServiceImpl svc = new ShindigGadgetMetadataServiceImpl();
+        svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
     }
 }
