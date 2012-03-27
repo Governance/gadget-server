@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.guvnor.sam.gadget</groupId>
   <artifactId>gadget-shindig</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>Gadget Server::Shindig</name>
 
@@ -51,6 +51,12 @@
 		<artifactId>shindig-extras</artifactId>
 		<version>${shindig.version}</version>
 	</dependency>
+
+    <dependency>
+        <groupId>org.guvnor.sam.gadget</groupId>
+        <artifactId>gadget-core</artifactId>
+        <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -136,7 +142,10 @@
               </exclusion>
           </exclusions>
       </dependency>
-
   </dependencies>
+
+  <build>
+      <finalName>gadget-server</finalName>
+  </build>
 
 </project>

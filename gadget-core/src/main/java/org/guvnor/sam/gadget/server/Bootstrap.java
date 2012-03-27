@@ -18,13 +18,13 @@
 
 package org.guvnor.sam.gadget.server;
 
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,8 +45,8 @@ public class Bootstrap {
     
   @Inject
   public Bootstrap(@Named(DB_DRIVER) String dbDriver,
-      @Named(DB_URL) String dbUrl, @Named(DB_USER) String dbUser,
-      @Named(DB_PASSWORD) String dbPassword) {
+                   @Named(DB_URL) String dbUrl, @Named(DB_USER) String dbUser,
+                   @Named(DB_PASSWORD) String dbPassword) {
       
       this.dbDriver = dbDriver;
       this.dbUrl = dbUrl;
@@ -61,7 +61,7 @@ public class Bootstrap {
 
   public void init(String unitName) {
 
-    Map<String, String> properties = Maps.newHashMap();
+    Map<String, String> properties = new HashMap<String, String>();
 
     properties.put("hibernate.connection.driver_class", dbDriver);
     properties.put("hibernate.connection.url", dbUrl);

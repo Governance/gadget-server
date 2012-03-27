@@ -20,8 +20,6 @@ package org.guvnor.sam.gadget.server;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
-import org.apache.shindig.social.opensocial.spi.AppDataService;
-import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.guvnor.sam.gadget.server.service.UserManager;
 import org.guvnor.sam.gadget.server.service.UserManagerImpl;
 
@@ -34,21 +32,21 @@ import java.util.Properties;
  * @author: Jeff Yu
  * @date: 18/01/12
  */
-public class JPASocialModule extends AbstractModule{
-    
+public class CoreModule extends AbstractModule{
+
     private final static String DEFAULT_PROPERTIES = "gadget-server.properties";
     private Properties properties;
     private EntityManager entityManager;
 
-    
-    public JPASocialModule() {
+
+    public CoreModule() {
         this(null);
     }
 
     /**
      *
      */
-    public JPASocialModule(EntityManager entityManager) {
+    public CoreModule(EntityManager entityManager) {
         this.entityManager = entityManager;
         InputStream is = null;
         try {
@@ -88,8 +86,6 @@ public class JPASocialModule extends AbstractModule{
             bind(EntityManager.class).toInstance(this.entityManager);
         }
 
-//        bind(PersonService.class).to(DefaultPersonServiceImpl.class).in(Scopes.SINGLETON);
-//        bind(AppDataService.class).to(DefaultAppDataServiceImpl.class).in(Scopes.SINGLETON);
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
 
     }

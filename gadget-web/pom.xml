@@ -81,7 +81,7 @@
 
     <dependency>
         <groupId>org.guvnor.sam.gadget</groupId>
-        <artifactId>gadget-shindig</artifactId>
+        <artifactId>gadget-core</artifactId>
         <version>${project.version}</version>
     </dependency>
 
@@ -140,7 +140,7 @@
   <build>
     <!-- Generate compiled stuff in the folder used for developing mode -->
     <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-    <finalName>gadget-server</finalName>
+    <finalName>gadget-web</finalName>
     <plugins>
 
       <!-- GWT Maven Plugin -->

@@ -21,30 +21,21 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.guvnor.sam.gadget.server.model.User;
 import org.guvnor.sam.gadget.server.service.UserManager;
-import org.guvnor.sam.gadget.server.service.UserManagerImpl;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.sql.DriverManager;
 
 /**
  * @author: Jeff Yu
  * @date: 15/03/12
  */
-public class PersonServiceTest {
+public class UserManagerTest {
 
     private static UserManager userManager;
     
     @BeforeClass
     public static void setUp() throws Exception{
-        //Class.forName("org.h2.Driver");
-        //DriverManager.getConnection("jdbc:h2:mem:gadget-server;DB_CLOSE_DELAY=-1", "sa", "");
-
-        Injector injector = Guice.createInjector(new JPASocialModule());
+        Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
 
     }
@@ -59,6 +50,7 @@ public class PersonServiceTest {
         
         userManager.createUser(user);
 
+        System.out.println(user.getId());
         Assert.assertTrue(user.getId() > 0);
     }
 

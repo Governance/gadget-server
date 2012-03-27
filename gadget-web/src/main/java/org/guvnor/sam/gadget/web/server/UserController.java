@@ -20,7 +20,7 @@ package org.guvnor.sam.gadget.web.server;
 import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.guvnor.sam.gadget.server.JPASocialModule;
+import org.guvnor.sam.gadget.server.CoreModule;
 import org.guvnor.sam.gadget.server.model.User;
 import org.guvnor.sam.gadget.server.service.UserManager;
 
@@ -38,7 +38,7 @@ public class UserController {
 
     public UserController() {
 
-        Injector injector = Guice.createInjector(new JPASocialModule());
+        Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
     }
 
