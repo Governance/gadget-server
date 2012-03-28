@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 import org.guvnor.sam.gadget.web.client.ApplicationEntryPoint;
+import org.guvnor.sam.gadget.web.client.BootstrapContext;
 import org.guvnor.sam.gadget.web.client.presenter.IndexPresenter;
 import org.guvnor.sam.gadget.web.client.widgets.*;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
@@ -42,8 +43,11 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
     private DockLayoutPanel panel;
 
+    private BootstrapContext context;
+
     @Inject
-    public IndexViewImpl() {
+    public IndexViewImpl(BootstrapContext ctx) {
+        context = ctx;
         mainContentPanel = new TabLayout();
 
         PortalLayout portalLayout = new PortalLayout(3);
@@ -51,16 +55,19 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         GadgetModel sgModel = new GadgetModel();
         sgModel.setSpecUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
         sgModel.setName("SAM Gadget");
+        sgModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet samGadget = new Portlet(sgModel);
         
         GadgetModel ccModel = new GadgetModel();
         ccModel.setSpecUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
         ccModel.setName("Currency Converter");
+        ccModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet ccGadget = new Portlet(ccModel);
         
         GadgetModel gModel = new GadgetModel();
         gModel.setName("Google News");
         gModel.setSpecUrl("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml");
+        gModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet gnews = new Portlet(gModel);
         
         portalLayout.addPortlet(0, samGadget);

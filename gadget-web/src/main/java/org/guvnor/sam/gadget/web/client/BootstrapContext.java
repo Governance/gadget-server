@@ -18,6 +18,7 @@
 package org.guvnor.sam.gadget.web.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.Dictionary;
 import com.google.inject.Inject;
 
 import java.util.HashMap;
@@ -31,10 +32,14 @@ public class BootstrapContext implements ApplicationProperties{
 
     private Map<String, String> ctx = new HashMap<String, String>();
 
+    private String gadgetServerUrl;
+    
     @Inject
     public BootstrapContext() {
-         String svcUrl = GWT.isScript() ? getBaseUrl() + "sam-web-server" : "http://127.0.0.1:8888/app/proxy";
-         setProperty(SERVICE_URL, svcUrl);
+        String svcUrl = GWT.isScript() ? getBaseUrl() + "sam-web-server" : "http://127.0.0.1:8888/app/proxy";
+        setProperty(SERVICE_URL, svcUrl);
+        Dictionary props = Dictionary.getDictionary("gadgetWebConfig");
+        gadgetServerUrl = props.get("gadgetServerUrl");
     }
 
 
@@ -66,6 +71,10 @@ public class BootstrapContext implements ApplicationProperties{
 
     public void removeProperty(String key) {
         ctx.remove(key);
+    }
+
+    public String getGadgetServerUrl() {
+        return gadgetServerUrl;
     }
     
 }
