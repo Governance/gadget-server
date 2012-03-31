@@ -17,6 +17,7 @@
  */
 package org.guvnor.sam.gadget.web.client.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
@@ -34,6 +35,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.guvnor.sam.gadget.web.client.NameTokens;
 import org.guvnor.sam.gadget.web.client.URLBuilder;
+import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
 
 /**
  *
@@ -79,40 +81,27 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         placeManager.revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
     }
     
-    public void authenticateUser(String username, String password, RequestCallback callback) {
+    public void authenticateUser(String username, String password, RestfulInvoker.Response callback) {
 
-        RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URLBuilder.getAuthenticationURL());
-        builder.setHeader("content-type", "application/x-www-form-urlencoded");
-        StringBuffer postData = new StringBuffer();
-        postData.append(URL.encode("username")).append("=").append(URL.encode(username))
-                .append("&").append("password").append("=").append(URL.encode(password));
-        try {
-            builder.sendRequest(postData.toString(), callback);
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
+        JSONObject postData = new JSONObject();
+        postData.put("name", new JSONString(username));
+        postData.put("password", new JSONString(password));
+
+        RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getAuthenticationURL(),
+                postData.toString(), callback);
     }
     
     public void registerUser(String username, String password, String email,
-                             String displayName, RequestCallback callback) {
-        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(URLBuilder.getRegisterUserURL()));
-        builder.setHeader("content-type", "application/json");
+                             String displayName, RestfulInvoker.Response callback) {
+
         JSONObject postData = new JSONObject();
-        postData.put("username", new JSONString(username));
+        postData.put("name", new JSONString(username));
         postData.put("password", new JSONString(password));
         postData.put("email", new JSONString(email));
-/*        StringBuffer postData = new StringBuffer();
-        postData.append(URL.encode("username")).append("=").append(URL.encode(username))
-                .append("&").append("password").append("=").append(URL.encode(password))
-                .append("&").append("email").append("=").append(URL.encode(email));*/
-        try {
-
-            builder.setRequestData(postData.toString());
-            builder.setCallback(callback);
-            builder.send();
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
+        postData.put("displayName", new JSONString(displayName));
+        
+        RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRegisterUserURL(),
+                postData.toString(), callback);
     }
     
 }

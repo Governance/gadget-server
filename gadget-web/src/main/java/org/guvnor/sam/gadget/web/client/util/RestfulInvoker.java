@@ -15,27 +15,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.web.client;
+package org.guvnor.sam.gadget.web.client.util;
 
-import com.google.gwt.core.client.GWT;
+import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.http.client.*;
 
 /**
  * @author: Jeff Yu
- * @date: 20/03/12
+ * @date: 31/03/12
  */
-public class URLBuilder {
+public class RestfulInvoker {
     
-    private final static String urlBase = GWT.getHostPageBaseURL();
+    public static abstract class Response implements RequestCallback {
 
-    public static String getAllUsersURL() {
-        return urlBase + "rs/users/all";
+        //Global error handler
+        public void onError(Request request, Throwable throwable) {
+            Log.error(throwable.toString());
+        }
     }
     
-    public static String getRegisterUserURL() {
-        return urlBase + "rs/users/user";
+    public static void invoke(RequestBuilder.Method method, String url,
+                              String data, Response callback) {
+        RequestBuilder builder = new RequestBuilder(method, url);
+        builder.setHeader("content-type", "application/json");
+        try {
+            builder.sendRequest(data, callback);
+        } catch (RequestException e) {
+            Log.error("Error on invoking the service at [" + url + "], detailed info: " + e);
+        }
     }
     
-    public static String getAuthenticationURL() {
-        return urlBase + "rs/users/authentication";
-    }
 }

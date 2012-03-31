@@ -26,6 +26,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.guvnor.sam.gadget.web.client.presenter.LoginPresenter;
+import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
 import org.guvnor.sam.gadget.web.client.util.UUID;
 
 /**
@@ -92,44 +93,48 @@ public class LoginForm extends Composite {
 
 
     public void doLogin() {
-
-        presenter.authenticateUser(username.getValue(), password.getValue(), new RequestCallback() {
+        presenter.authenticateUser(username.getValue(), password.getValue(), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
-                println(response.getText());
-                loginError.setText("");
-                username.setValue("");
-                password.setValue("");
-                closeWindow(loginId);
-                presenter.forwardToIndex();
-            }
-
-            public void onError(Request request, Throwable throwable) {
-                loginError.setText("Authentication failed, try admin/admin .");
+                if ("true".equals(response.getText())) {
+                    loginError.setText("");
+                    username.setValue("");
+                    password.setValue("");
+                    closeWindow(loginId);
+                    presenter.forwardToIndex();
+                } else {
+                    loginError.setText("Authentication failed.");
+                    password.setValue("");
+                }
             }
         });
 
     }
 
     public void doSignup(){
+        if (!signupConfirmPassword.getValue().equals(signupPassword.getValue())) {
+            signupError.setText("Password and Confirm Password do not match");
+            signupConfirmPassword.setValue("");
+            signupPassword.setValue("");
+            return;
+        }
 
         presenter.registerUser(signupUsername.getValue(),
                 signupPassword.getValue(), email.getValue(),
-                displayName.getValue(), new RequestCallback() {
+                displayName.getValue(), new RestfulInvoker.Response() {
+
             public void onResponseReceived(Request request, Response response) {
-                System.out.println("=== result ->: " + response.getText());
-                println(response.getText());
-
-                signupUsername.setText("");
-                signupPassword.setText("");
-                signupConfirmPassword.setText("");
-                email.setText("");
-                displayName.setText("");
-                presenter.forwardToLogin();
+                signupUsername.setValue("");
+                signupPassword.setValue("");
+                signupConfirmPassword.setValue("");
+                email.setValue("");
+                displayName.setValue("");
+                signupError.setText("");
+                username.setValue("");
+                password.setValue("");
+                closeWindow(signupId);
+                openWindow(loginId);
             }
 
-            public void onError(Request request, Throwable throwable) {
-                println(throwable.getMessage());
-            }
         });
     }
 
@@ -145,7 +150,7 @@ public class LoginForm extends Composite {
         $wnd.$('#' + loginId).dialog({
             autoOpen:true,
             modal:false,
-            width:300,
+            width:400,
             height:200,
             closeOnEscape: false,
             open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },
@@ -165,7 +170,7 @@ public class LoginForm extends Composite {
         $wnd.$('#' + signupId).dialog({
             autoOpen:false,
             modal:false,
-            width:300,
+            width:350,
             height:300,
             closeOnEscape: false,
             open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },
@@ -183,6 +188,10 @@ public class LoginForm extends Composite {
 
     private static native void closeWindow(String id) /*-{
         $wnd.$('#' + id).dialog("close");
+    }-*/;
+
+    private static native void openWindow(String id) /*-{
+        $wnd.$('#' + id).dialog("open");
     }-*/;
     
     private static native void println(String msg) /*-{

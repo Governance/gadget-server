@@ -30,7 +30,7 @@
                     <td><g:PasswordTextBox ui:field="signupPassword"></g:PasswordTextBox></td>
                 </tr>
                 <tr>
-                    <td>Password:</td>
+                    <td>Confirm Password:</td>
                     <td><g:PasswordTextBox ui:field="signupConfirmPassword"></g:PasswordTextBox></td>
                 </tr>
                 <tr>

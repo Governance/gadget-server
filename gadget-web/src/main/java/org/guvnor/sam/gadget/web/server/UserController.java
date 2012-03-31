@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -40,7 +41,6 @@ public class UserController {
     private UserManager userManager;
 
     public UserController() {
-        System.out.println("===> UserController .... <=======");
         Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
     }
@@ -50,9 +50,6 @@ public class UserController {
     @Produces("application/json")
     public List<User> getAllUsers() {
         List<User> users = userManager.getAllUser();
-        for (User user : users) {
-            System.out.println("User email is: " + user.getEmail() + "->" + user.getName());
-        }
         return users;
     }
     
@@ -60,32 +57,19 @@ public class UserController {
     @Path("user")
     @Produces("application/json")
     @Consumes("application/json")
-    public User createUser(@Context HttpServletRequest request,
-                               @FormParam("username") String username,
-                               @QueryParam("password") String password,
-                               @QueryParam("email") String email){
-        System.out.println("create user...");
-        User user = new User();
-        System.out.println(request.getParameterMap().size());
-        user.setName(username);
-        request.getParameterMap();
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setDisplayName(username);
-        
+    public User createUser(User user){
         userManager.createUser(user);
         return user;
     }
 
-    @GET
-    @Path("user")
+    @POST
+    @Path("authentication")
+    @Consumes("application/json")
     @Produces("application/json")
-    public Response getUser(@Context HttpServletRequest request,
-                            @QueryParam("username") String username,
-                               @QueryParam("password") String password){
+    public Response getUser(User user){
         boolean result = false;
-        User user = userManager.getUser(username, password);
-        if (user != null) {
+        User theUser = userManager.getUser(user.getName(), user.getPassword());
+        if (theUser != null) {
             result = true;
         }
         return createJsonResponse(result);
