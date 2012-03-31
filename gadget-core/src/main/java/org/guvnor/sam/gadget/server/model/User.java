@@ -18,6 +18,7 @@
 package org.guvnor.sam.gadget.server.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
@@ -26,6 +27,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "GS_USER")
+@XmlRootElement(name="user")
 public class User implements Serializable{
 
     @Id

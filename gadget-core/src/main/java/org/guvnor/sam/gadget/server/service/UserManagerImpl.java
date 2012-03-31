@@ -68,6 +68,9 @@ public class UserManagerImpl implements UserManager {
         }
         Query query = entityManager.createQuery("select user from User user");
         List<User> users = query.getResultList();
+        for (User user : users) {
+            System.out.println("User is: " + user.getEmail() + "->" + user.getName());
+        }
         entityManager.getTransaction().commit();
         return users;
     }

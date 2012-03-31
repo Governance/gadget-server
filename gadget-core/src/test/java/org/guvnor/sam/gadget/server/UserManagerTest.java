@@ -23,7 +23,10 @@ import org.guvnor.sam.gadget.server.model.User;
 import org.guvnor.sam.gadget.server.service.UserManager;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -52,6 +55,14 @@ public class UserManagerTest {
 
         System.out.println(user.getId());
         Assert.assertTrue(user.getId() > 0);
+    }
+    
+    @Test
+    public void testGetAllUsers() throws Exception {
+        List<User> users = userManager.getAllUser();
+        for (User theUser : users) {
+            System.out.println("User email2 is: " + theUser.getEmail() + "->" + theUser.getName());
+        }
     }
 
 

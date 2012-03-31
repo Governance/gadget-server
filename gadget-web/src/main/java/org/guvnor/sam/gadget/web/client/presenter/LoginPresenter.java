@@ -17,8 +17,11 @@
  */
 package org.guvnor.sam.gadget.web.client.presenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -71,12 +74,20 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
     public void forwardToIndex() {
         placeManager.revealPlace(new PlaceRequest(NameTokens.INDEX_VIEW));
     }
+
+    public void forwardToLogin() {
+        placeManager.revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
+    }
     
     public void authenticateUser(String username, String password, RequestCallback callback) {
 
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URLBuilder.getAuthenticationURL());
+        builder.setHeader("content-type", "application/x-www-form-urlencoded");
+        StringBuffer postData = new StringBuffer();
+        postData.append(URL.encode("username")).append("=").append(URL.encode(username))
+                .append("&").append("password").append("=").append(URL.encode(password));
         try {
-            builder.sendRequest("username=" + username + "&password="+ password, callback);
+            builder.sendRequest(postData.toString(), callback);
         } catch (RequestException e) {
             e.printStackTrace();
         }
@@ -84,10 +95,21 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
     
     public void registerUser(String username, String password, String email,
                              String displayName, RequestCallback callback) {
-        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URLBuilder.getRegisterUserURL());
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(URLBuilder.getRegisterUserURL()));
+        builder.setHeader("content-type", "application/json");
+        JSONObject postData = new JSONObject();
+        postData.put("username", new JSONString(username));
+        postData.put("password", new JSONString(password));
+        postData.put("email", new JSONString(email));
+/*        StringBuffer postData = new StringBuffer();
+        postData.append(URL.encode("username")).append("=").append(URL.encode(username))
+                .append("&").append("password").append("=").append(URL.encode(password))
+                .append("&").append("email").append("=").append(URL.encode(email));*/
         try {
-            builder.sendRequest("username=" + username + "&password="+ password
-                    + "&email="+email + "&displayName=" + displayName, callback);
+
+            builder.setRequestData(postData.toString());
+            builder.setCallback(callback);
+            builder.send();
         } catch (RequestException e) {
             e.printStackTrace();
         }

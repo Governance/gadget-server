@@ -118,6 +118,13 @@ public class LoginForm extends Composite {
             public void onResponseReceived(Request request, Response response) {
                 System.out.println("=== result ->: " + response.getText());
                 println(response.getText());
+
+                signupUsername.setText("");
+                signupPassword.setText("");
+                signupConfirmPassword.setText("");
+                email.setText("");
+                displayName.setText("");
+                presenter.forwardToLogin();
             }
 
             public void onError(Request request, Throwable throwable) {

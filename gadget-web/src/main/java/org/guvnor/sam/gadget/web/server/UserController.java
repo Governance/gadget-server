@@ -24,8 +24,11 @@ import org.guvnor.sam.gadget.server.CoreModule;
 import org.guvnor.sam.gadget.server.model.User;
 import org.guvnor.sam.gadget.server.service.UserManager;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -37,7 +40,7 @@ public class UserController {
     private UserManager userManager;
 
     public UserController() {
-
+        System.out.println("===> UserController .... <=======");
         Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
     }
@@ -45,30 +48,40 @@ public class UserController {
     @GET
     @Path("all")
     @Produces("application/json")
-    public Response getAllUsers() {
-        return createJsonResponse(userManager.getAllUser());
+    public List<User> getAllUsers() {
+        List<User> users = userManager.getAllUser();
+        for (User user : users) {
+            System.out.println("User email is: " + user.getEmail() + "->" + user.getName());
+        }
+        return users;
     }
     
     @POST
     @Path("user")
     @Produces("application/json")
-    public Response createUser(@QueryParam("username") String username,
+    @Consumes("application/json")
+    public User createUser(@Context HttpServletRequest request,
+                               @FormParam("username") String username,
                                @QueryParam("password") String password,
                                @QueryParam("email") String email){
+        System.out.println("create user...");
         User user = new User();
+        System.out.println(request.getParameterMap().size());
         user.setName(username);
+        request.getParameterMap();
         user.setPassword(password);
         user.setEmail(email);
         user.setDisplayName(username);
         
-        User registered = userManager.createUser(user);
-        return createJsonResponse(registered);
+        userManager.createUser(user);
+        return user;
     }
 
     @GET
     @Path("user")
     @Produces("application/json")
-    public Response getUser(@QueryParam("username") String username,
+    public Response getUser(@Context HttpServletRequest request,
+                            @QueryParam("username") String username,
                                @QueryParam("password") String password){
         boolean result = false;
         User user = userManager.getUser(username, password);

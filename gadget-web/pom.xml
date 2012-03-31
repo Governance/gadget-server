@@ -92,42 +92,8 @@
       </dependency>
       <dependency>
           <groupId>org.jboss.resteasy</groupId>
-          <artifactId>resteasy-multipart-provider</artifactId>
+          <artifactId>resteasy-jackson-provider</artifactId>
           <version>${resteasy.version}</version>
-          <exclusions>
-              <exclusion>
-                  <groupId>javax.servlet</groupId>
-                  <artifactId>servlet-api</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>javax.activation</groupId>
-                  <artifactId>activation</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>commons-httpclient</groupId>
-                  <artifactId>commons-httpclient</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>javax.mail</groupId>
-                  <artifactId>mail</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>tjws</groupId>
-                  <artifactId>webserver</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>com.sun.xml.bind</groupId>
-                  <artifactId>jaxb-impl</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>javax.xml.bind</groupId>
-                  <artifactId>jaxb-api</artifactId>
-              </exclusion>
-              <exclusion>
-                  <groupId>javax.xml.stream</groupId>
-                  <artifactId>stax-api</artifactId>
-              </exclusion>
-          </exclusions>
       </dependency>
       <dependency>
           <groupId>com.google.code.gson</groupId>
@@ -177,7 +143,6 @@
         </executions>
         <configuration>
           <webappDirectory>${webappDirectory}</webappDirectory>
-          <!--packagingExcludes>WEB-INF/lib/gadget-shindig-*.jar,</packagingExcludes-->
         </configuration>
       </plugin>
 
