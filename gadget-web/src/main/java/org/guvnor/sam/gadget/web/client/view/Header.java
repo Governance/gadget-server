@@ -17,9 +17,19 @@
  */
 package org.guvnor.sam.gadget.web.client.view;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import org.guvnor.sam.gadget.web.client.ApplicationEntryPoint;
+import org.guvnor.sam.gadget.web.client.ApplicationModule;
+import org.guvnor.sam.gadget.web.client.NameTokens;
 
 /**
  * @author: Jeff Yu
@@ -33,10 +43,51 @@ public class Header {
     }
 
     public Widget asWidget() {
-        LayoutPanel header = new LayoutPanel();
-        header.setStyleName("header-panel");
+        LayoutPanel headerLayout = new LayoutPanel();
+        headerLayout.addStyleName("header-panel");
 
-        return header;
+        HTML home = new HTML("Home");
+        home.addStyleName("header-link");
+        home.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+                        new PlaceRequest(NameTokens.INDEX_VIEW)
+                );
+            }
+        });
+
+        HTML store = new HTML("Widget Store");
+        store.addStyleName("header-link");
+        store.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+
+            }
+        });
+
+        HTML logout = new HTML("Logout");
+        logout.addStyleName("header-link");
+        logout.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+                        new PlaceRequest(NameTokens.LOGIN_VIEW)
+                );
+            }
+        });
+
+        headerLayout.add(home);
+        headerLayout.add(store);
+        headerLayout.add(logout);
+
+        headerLayout.setWidgetRightWidth(home, 100, Style.Unit.PX, 60, Style.Unit.PX);
+        headerLayout.setWidgetTopHeight(home, 45, Style.Unit.PX, 28, Style.Unit.PX);
+
+        headerLayout.setWidgetRightWidth(store, 5, Style.Unit.PX, 110, Style.Unit.PX);
+        headerLayout.setWidgetTopHeight(store, 45, Style.Unit.PX, 28, Style.Unit.PX);
+
+        headerLayout.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
+        headerLayout.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
+
+        return headerLayout;
     }
 
 }

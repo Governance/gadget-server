@@ -55,7 +55,6 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         panel.getElement().setAttribute("id", "container");
 
         mainPanel = new LayoutPanel();
-        mainPanel.setHeight("800px");
         mainPanel.getElement().setId("mainpanel");
 
         loginForm = new LoginForm();
@@ -65,7 +64,6 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 
-        headerPanel.add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         footerPanel.add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
 
 

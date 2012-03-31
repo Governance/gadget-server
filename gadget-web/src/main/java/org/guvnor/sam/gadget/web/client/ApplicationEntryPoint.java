@@ -30,11 +30,5 @@ public class ApplicationEntryPoint implements EntryPoint {
         DelayedBindRegistry.bind(MODULES);
         MODULES.getPlaceManager().revealCurrentPlace();
 
-        Log.debug("This is a 'DEBUG' test message");
-        Log.info("This is a 'INFO' test message");
-        Log.warn("This is a 'WARN' test message");
-        Log.error("This is a 'ERROR' test message");
-        Log.fatal("This is a 'FATAL' test message");
-
     }
 }
