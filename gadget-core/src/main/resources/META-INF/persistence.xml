@@ -9,6 +9,7 @@
 
       <class>org.guvnor.sam.gadget.server.model.User</class>
       <class>org.guvnor.sam.gadget.server.model.ApplicationData</class>
+      <class>org.guvnor.sam.gadget.server.model.Page</class>
       <properties>
           <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
       </properties>

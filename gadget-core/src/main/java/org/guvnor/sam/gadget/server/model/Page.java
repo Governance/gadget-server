@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2008-12, Red Hat Middleware LLC, and others contributors as indicated
+ * Copyright 2008-11, Red Hat Middleware LLC, and others contributors as indicated
  * by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
@@ -15,28 +15,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.web.shared.dto;
+package org.guvnor.sam.gadget.server.model;
+
+import javax.persistence.*;
 
 /**
  * @author: Jeff Yu
- * @date: 9/02/12
+ * @date: 4/04/12
  */
-public class GadgetModel {
+@Entity
+@Table(name="GS_PAGE")
+public class Page {
 
-    private String specUrl;
+    @Id
+    @GeneratedValue
+    @Column(name="PAGE_ID")
+    private long id;
 
+    @Column(name="PAGE_COLUMNS")
+    private long columns;
+
+    @Column(name="PAGE_NAME")
     private String name;
 
-    private String iframeUrl;
-
-    private UserPreference userPreference;
-
-    public String getSpecUrl() {
-        return specUrl;
+    public long getId() {
+        return id;
     }
 
-    public void setSpecUrl(String specUrl) {
-        this.specUrl = specUrl;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getColumns() {
+        return columns;
+    }
+
+    public void setColumns(long columns) {
+        this.columns = columns;
     }
 
     public String getName() {
@@ -45,30 +60,5 @@ public class GadgetModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIframeUrl() {
-        return iframeUrl;
-    }
-
-    public void setIframeUrl(String iframeUrl) {
-        this.iframeUrl = iframeUrl;
-    }
-
-    public UserPreference getUserPreference() {
-        return userPreference;
-    }
-
-    public void setUserPreference(UserPreference userPreference) {
-        this.userPreference = userPreference;
-    }
-
-    public String toString() {
-        StringBuilder sbuffer = new StringBuilder();
-        sbuffer.append("[");
-        sbuffer.append(" name => " + name);
-        sbuffer.append(" iframUrl =>" + iframeUrl);
-        sbuffer.append("]");
-        return sbuffer.toString();
     }
 }

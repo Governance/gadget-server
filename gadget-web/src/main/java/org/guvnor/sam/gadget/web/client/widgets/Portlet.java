@@ -76,7 +76,7 @@ public class Portlet extends Composite {
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setHeight("250px");
-        gadgetSpec.setUrl(model.getGadgetServerUrl()+ "?url="+model.getSpecUrl()+"&container=default&view=home");
+        gadgetSpec.setUrl(model.getIframeUrl());
     }
 
     @Override

@@ -21,8 +21,11 @@ import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.guvnor.sam.gadget.server.CoreModule;
+import org.guvnor.sam.gadget.server.model.ApplicationData;
 import org.guvnor.sam.gadget.server.model.User;
+import org.guvnor.sam.gadget.server.service.ApplicationDataManager;
 import org.guvnor.sam.gadget.server.service.UserManager;
+import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -39,10 +42,12 @@ import java.util.List;
 public class UserController {
 
     private UserManager userManager;
+    private ApplicationDataManager applicationDataManager;
 
     public UserController() {
         Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
+        applicationDataManager = injector.getInstance(ApplicationDataManager.class);
     }
 
     @GET
@@ -73,6 +78,14 @@ public class UserController {
             result = true;
         }
         return createJsonResponse(result);
+    }
+
+    @GET
+    @Path("user/{userId}/gadgets")
+    @Produces("application/json")
+    public List<GadgetModel> getGadgetModels(@PathParam("userId") long userId) {
+        List<ApplicationData> gadgets = applicationDataManager.getApplicationData(userId);
+        return null;
     }
     
     

@@ -53,21 +53,12 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         PortalLayout portalLayout = new PortalLayout(3);
 
         GadgetModel sgModel = new GadgetModel();
-        sgModel.setSpecUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
-        sgModel.setName("SAM Gadget");
-        sgModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet samGadget = new Portlet(sgModel);
         
         GadgetModel ccModel = new GadgetModel();
-        ccModel.setSpecUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
-        ccModel.setName("Currency Converter");
-        ccModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet ccGadget = new Portlet(ccModel);
         
         GadgetModel gModel = new GadgetModel();
-        gModel.setName("Google News");
-        gModel.setSpecUrl("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml");
-        gModel.setGadgetServerUrl(ctx.getGadgetServerUrl());
         Portlet gnews = new Portlet(gModel);
         
         portalLayout.addPortlet(0, samGadget);

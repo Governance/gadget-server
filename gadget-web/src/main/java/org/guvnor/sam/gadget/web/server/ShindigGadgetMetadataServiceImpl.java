@@ -15,8 +15,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.guvnor.sam.gadget.server.service;
+package org.guvnor.sam.gadget.web.server;
 
+import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
+import org.guvnor.sam.gadget.web.shared.dto.UserPreference;
 import org.jboss.resteasy.client.ClientRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,37 +33,15 @@ import java.util.Iterator;
  * @author: Jeff Yu
  * @date: 9/02/12
  */
-public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService{
+public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
 
     private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataServiceImpl.class);
     
     public static final String USER_PREFS = "userPrefs";
     public static final String DATA_TYPE = "dataType";
 
-    public static final String HAS_PREFS_TO_EDIT = "hasPrefsToEdit";
 
-    /*
-    * enum representing all of the valid OpenSocial preference data types
-    */
-    public static enum PrefDataTypes {
-        STRING("STRING"),
-        BOOLEAN("BOOL"),
-        ENUM("ENUM"),
-        LIST("LIST"),
-        HIDDEN("HIDDEN");
-
-        private final String dataType;
-        private PrefDataTypes(String dataType) {
-            this.dataType = dataType;
-        }
-
-        @Override
-        public String toString() {
-            return dataType;
-        }
-    }
-
-    public String getGadgetMetadata(String gadgetUrl) {
+    public GadgetModel getGadgetMetadata(String gadgetUrl) {
 
         JSONArray rpcArray = new JSONArray();
         try {
@@ -98,13 +78,12 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService{
             logger.debug("requestContent: {}", postData);
         }
 
-        ClientRequest request = new ClientRequest("http://localhost:8080/rpc");
+        ClientRequest request = new ClientRequest(ConfigurationUtil.SHINDIG_RPC_URL);
         request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
 
         String responseString = null;
         try {
             responseString = request.postTarget(String.class);
-            System.out.println("result ==> " + responseString);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,38 +96,61 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService{
                     getJSONObject("result").
                     getJSONObject(gadgetUrl);
 
+            GadgetModel model = new GadgetModel();
+            model.setIframeUrl("http:" + responseObject.getString("iframeUrl"));
+            model.setName(responseObject.getJSONObject("modulePrefs").getString("title"));
+            model.setSpecUrl(gadgetUrl);
+            
+            
             // check to see if this gadget has at least one non-hidden user pref
             // to determine if we should display the edit prefs button
             boolean hasPrefsToEdit = false;
+
             if (responseObject.has(USER_PREFS)) {
+                UserPreference userPref = new UserPreference();
                 JSONObject userPrefs = responseObject.getJSONObject(USER_PREFS);
                 Iterator keys = userPrefs.keys();
                 while(keys.hasNext()) {
-                    String userPrefName = (String) keys.next();
-                    JSONObject userPref = userPrefs.getJSONObject(userPrefName);
-                    if (!PrefDataTypes.HIDDEN.toString().equals(userPref.getString(DATA_TYPE))) {
+                    String settingName = (String) keys.next();
+                    UserPreference.UserPreferenceSetting theSetting = new UserPreference.UserPreferenceSetting();
+                    JSONObject setting = userPrefs.getJSONObject(settingName);
+                    String theType = setting.getString(DATA_TYPE);
+                    if (!UserPreference.Type.HIDDEN.toString().equals(theType)) {
                         hasPrefsToEdit = true;
-                        break;
+                    }
+
+                    theSetting.setName(setting.getString("name"));
+                    theSetting.setDefaultValue(setting.getString("defaultValue"));
+                    theSetting.setDisplayName(setting.getString("displayName"));
+                    theSetting.setRequired(Boolean.valueOf(setting.getString("required")));
+                    theSetting.setType(UserPreference.Type.valueOf(theType));
+
+
+                    if (responseObject.has("orderedEnumValues")) {
+                        JSONObject enumValues = setting.getJSONObject("orderedEnumValues");
+
                     }
                 }
+                userPref.setNeedToEdit(hasPrefsToEdit);
+
+                model.setUserPreference(userPref);
             }
 
-            responseObject.put(HAS_PREFS_TO_EDIT, hasPrefsToEdit);
             responseString = responseObject.toString();
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("shindig metadata trimmed response: {}", responseString);
-            }
+
+            System.out.println(model);
+
+            return model;
         } catch (JSONException e) {
             throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
         }
 
-        return responseString;
     }
     
     
     public static void main(String[] args) throws Exception {
         ShindigGadgetMetadataServiceImpl svc = new ShindigGadgetMetadataServiceImpl();
-        svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+        svc.getGadgetMetadata("http://www.google.com/ig/modules/finance_portfolios.xml");
     }
 }

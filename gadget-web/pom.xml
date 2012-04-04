@@ -100,6 +100,18 @@
           <artifactId>gson</artifactId>
           <version>1.2.2</version>
       </dependency>
+      <!-- JSON Support -->
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20090211</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.6.1</version>
+      </dependency>
 
   </dependencies>
 
