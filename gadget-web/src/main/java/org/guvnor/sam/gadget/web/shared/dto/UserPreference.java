@@ -45,18 +45,32 @@ public class UserPreference {
     public void setNeedToEdit(boolean needToEdit) {
         this.needToEdit = needToEdit;
     }
+    
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("UserPreference[")
+               .append("needToEdit=>" + needToEdit);
+        builder.append("{");
+        for (UserPreferenceSetting setting : data) {
+            builder.append(setting);
+        }
+        builder.append("}");
+        builder.append("]");
+        return builder.toString();
+    }
 
     /*
     * enum representing all of the valid OpenSocial preference data types
     */
     public static enum Type {
         STRING("STRING"),
-        BOOLEAN("BOOL"),
+        BOOL("BOOL"),
         ENUM("ENUM"),
         LIST("LIST"),
         HIDDEN("HIDDEN");
 
         private final String dataType;
+
         private Type(String dataType) {
             this.dataType = dataType;
         }
@@ -68,16 +82,8 @@ public class UserPreference {
     }
     
     public static class Option {        
-        private String displayName;
+        private String displayValue;
         private String value;
-
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
 
         public String getValue() {
             return value;
@@ -85,6 +91,14 @@ public class UserPreference {
 
         public void setValue(String value) {
             this.value = value;
+        }
+
+        public String getDisplayValue() {
+            return displayValue;
+        }
+
+        public void setDisplayValue(String displayValue) {
+            this.displayValue = displayValue;
         }
     }
     
@@ -94,7 +108,7 @@ public class UserPreference {
         
         private String name;
         
-        private List<Option> enumOptions;
+        private List<Option> enumOptions = new ArrayList<Option>();
 
         private String defaultValue;
         
@@ -122,6 +136,10 @@ public class UserPreference {
             return enumOptions;
         }
 
+        public void addEnumOption(Option option) {
+            this.enumOptions.add(option);
+        }
+        
         public void setEnumOptions(List<Option> enumOptions) {
             this.enumOptions = enumOptions;
         }
@@ -149,6 +167,20 @@ public class UserPreference {
         public void setDisplayName(String displayName) {
             this.displayName = displayName;
         }
+        
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("UserPreferenceSetting[")
+                   .append(" type=>" + type)
+                   .append(" name=>" + name)
+                   .append(" defaultValue=>" + defaultValue)
+                   .append(" displayName=>" + displayName)
+                   .append(" isRequired=>" + isRequired)
+                   .append(" enumOption size => " + enumOptions.size())
+                   .append("]");
+            return builder.toString();
+        }
+        
     }
     
     

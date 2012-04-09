@@ -22,15 +22,20 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.guvnor.sam.gadget.server.CoreModule;
 import org.guvnor.sam.gadget.server.model.ApplicationData;
+import org.guvnor.sam.gadget.server.model.Page;
 import org.guvnor.sam.gadget.server.model.User;
+import org.guvnor.sam.gadget.server.model.Widget;
 import org.guvnor.sam.gadget.server.service.ApplicationDataManager;
+import org.guvnor.sam.gadget.server.service.PageManager;
 import org.guvnor.sam.gadget.server.service.UserManager;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
+import org.guvnor.sam.gadget.web.shared.dto.PageModel;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -43,11 +48,15 @@ public class UserController {
 
     private UserManager userManager;
     private ApplicationDataManager applicationDataManager;
+    private PageManager pageManager;
+    private GadgetMetadataService metadataService;
 
     public UserController() {
         Injector injector = Guice.createInjector(new CoreModule());
         userManager = injector.getInstance(UserManager.class);
         applicationDataManager = injector.getInstance(ApplicationDataManager.class);
+        pageManager = injector.getInstance(PageManager.class);
+        metadataService = new ShindigGadgetMetadataService();
     }
 
     @GET
@@ -79,13 +88,29 @@ public class UserController {
         }
         return createJsonResponse(result);
     }
-
+    
     @GET
-    @Path("user/{userId}/gadgets")
+    @Path("user/{userId}/pages")
     @Produces("application/json")
-    public List<GadgetModel> getGadgetModels(@PathParam("userId") long userId) {
-        List<ApplicationData> gadgets = applicationDataManager.getApplicationData(userId);
-        return null;
+    public List<PageModel> getPageModels(@PathParam("userId") long userId) {
+        List<Page> pages = pageManager.getPages(userId);
+        
+        List<PageModel> pageModels = new ArrayList<PageModel>();
+        
+        for (Page page : pages) {
+            PageModel pageModel = new PageModel();
+            pageModel.setName(page.getName());
+            pageModel.setOrder(page.getPageOrder());
+
+            for (Widget widget :page.getWidgets()) {
+                GadgetModel gadgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
+                pageModel.addModel(gadgetModel);
+            }
+
+            pageModels.add(pageModel);
+        }
+        
+        return pageModels;
     }
     
     

@@ -33,9 +33,9 @@ import java.util.Iterator;
  * @author: Jeff Yu
  * @date: 9/02/12
  */
-public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
+public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
-    private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataService.class);
     
     public static final String USER_PREFS = "userPrefs";
     public static final String DATA_TYPE = "dataType";
@@ -73,7 +73,7 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
 
         //convert the json object to a string
         String postData = rpcArray.toString();
-        System.out.println(postData);
+
         if (logger.isDebugEnabled()) {
             logger.debug("requestContent: {}", postData);
         }
@@ -100,7 +100,8 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
             model.setIframeUrl("http:" + responseObject.getString("iframeUrl"));
             model.setName(responseObject.getJSONObject("modulePrefs").getString("title"));
             model.setSpecUrl(gadgetUrl);
-            
+
+            System.out.println(responseObject.toString());
             
             // check to see if this gadget has at least one non-hidden user pref
             // to determine if we should display the edit prefs button
@@ -125,21 +126,21 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
                     theSetting.setRequired(Boolean.valueOf(setting.getString("required")));
                     theSetting.setType(UserPreference.Type.valueOf(theType));
 
-
                     if (responseObject.has("orderedEnumValues")) {
-                        JSONObject enumValues = setting.getJSONObject("orderedEnumValues");
-
+                        JSONArray enumValues = setting.getJSONArray("orderedEnumValues");
+                        for (int i =0; i < enumValues.length(); i++) {
+                            UserPreference.Option option = new UserPreference.Option();
+                            JSONObject theOption = enumValues.getJSONObject(i);
+                            option.setValue(theOption.getString("value"));
+                            option.setDisplayValue(theOption.getString("displayValue"));
+                            theSetting.addEnumOption(option);
+                        }
                     }
+                    userPref.addUserPreferenceSetting(theSetting);
                 }
                 userPref.setNeedToEdit(hasPrefsToEdit);
-
                 model.setUserPreference(userPref);
             }
-
-            responseString = responseObject.toString();
-
-
-            System.out.println(model);
 
             return model;
         } catch (JSONException e) {
@@ -150,7 +151,7 @@ public class ShindigGadgetMetadataServiceImpl implements GadgetMetadataService {
     
     
     public static void main(String[] args) throws Exception {
-        ShindigGadgetMetadataServiceImpl svc = new ShindigGadgetMetadataServiceImpl();
+        ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
         svc.getGadgetMetadata("http://www.google.com/ig/modules/finance_portfolios.xml");
     }
 }

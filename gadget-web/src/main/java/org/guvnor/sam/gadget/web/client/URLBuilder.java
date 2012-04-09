@@ -38,4 +38,8 @@ public class URLBuilder {
     public static String getAuthenticationURL() {
         return urlBase + "rs/users/authentication";
     }
+    
+    public static String getPagesURL(Long userId) {
+        return urlBase + "rs/users/user/" + userId + "/pages";
+    }
 }

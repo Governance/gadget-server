@@ -18,35 +18,34 @@
 package org.guvnor.sam.gadget.server.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * @author: Jeff Yu
- * @date: 4/04/12
+ * @date: 5/04/12
  */
 @Entity
-@Table(name="GS_PAGE")
-public class Page {
+@Table(name="GS_WIDGET")
+public class Widget {
 
     @Id
     @GeneratedValue
-    @Column(name="PAGE_ID")
+    @Column(name="ID")
     private long id;
 
-    @Column(name="PAGE_COLUMNS")
-    private long columns;
-
-    @Column(name="PAGE_NAME")
+    @Column(name="NAME")
     private String name;
 
-    @Column(name="PAGE_ORDER")
-    private long pageOrder;
+    @Column(name="APP_URL")
+    private String appUrl;
 
-    @OneToMany
-    private List<Widget> widgets;
+    @Column(name="ORDER")
+    private long order;
 
     @ManyToOne
     private User user;
+
+    @Column(name="PREFS")
+    private String preference;
 
     public long getId() {
         return id;
@@ -54,14 +53,6 @@ public class Page {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getColumns() {
-        return columns;
-    }
-
-    public void setColumns(long columns) {
-        this.columns = columns;
     }
 
     public String getName() {
@@ -72,20 +63,12 @@ public class Page {
         this.name = name;
     }
 
-    public List<Widget> getWidgets() {
-        return widgets;
+    public long getOrder() {
+        return order;
     }
 
-    public void setWidgets(List<Widget> widgets) {
-        this.widgets = widgets;
-    }
-
-    public long getPageOrder() {
-        return pageOrder;
-    }
-
-    public void setPageOrder(long pageOrder) {
-        this.pageOrder = pageOrder;
+    public void setOrder(long order) {
+        this.order = order;
     }
 
     public User getUser() {
@@ -94,5 +77,21 @@ public class Page {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPreference() {
+        return preference;
+    }
+
+    public void setPreference(String preference) {
+        this.preference = preference;
+    }
+
+    public String getAppUrl() {
+        return appUrl;
+    }
+
+    public void setAppUrl(String appUrl) {
+        this.appUrl = appUrl;
     }
 }

@@ -18,6 +18,7 @@
 package org.guvnor.sam.gadget.web.client.presenter;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.RequestBuilder;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -28,6 +29,8 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
 import org.guvnor.sam.gadget.web.client.NameTokens;
+import org.guvnor.sam.gadget.web.client.URLBuilder;
+import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
 
 /**
  * @author: Jeff Yu
@@ -47,7 +50,11 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     }
 
     public interface IndexView extends View {
-
+        public void setPresenter(IndexPresenter presenter);
+    }
+    
+    public void getPages(Long userId, RestfulInvoker.Response callback) {
+        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPagesURL(userId), null, callback);
     }
 
     @ProxyCodeSplit
@@ -55,4 +62,10 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     @NoGatekeeper
     public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
+
+    @Override
+    public void onBind() {
+        super.onBind();
+        getView().setPresenter(this);
+    }
 }

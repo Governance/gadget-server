@@ -20,10 +20,7 @@ package org.guvnor.sam.gadget.server;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
-import org.guvnor.sam.gadget.server.service.ApplicationDataManager;
-import org.guvnor.sam.gadget.server.service.ApplicationDataManagerImpl;
-import org.guvnor.sam.gadget.server.service.UserManager;
-import org.guvnor.sam.gadget.server.service.UserManagerImpl;
+import org.guvnor.sam.gadget.server.service.*;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -90,6 +87,7 @@ public class CoreModule extends AbstractModule{
 
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
+        bind(PageManager.class).to(PageManagerImpl.class).in(Scopes.SINGLETON);
     }
 
 }

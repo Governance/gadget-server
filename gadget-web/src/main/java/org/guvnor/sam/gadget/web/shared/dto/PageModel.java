@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2008-12, Red Hat Middleware LLC, and others contributors as indicated
+ * Copyright 2008-11, Red Hat Middleware LLC, and others contributors as indicated
  * by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
@@ -17,27 +17,20 @@
  */
 package org.guvnor.sam.gadget.web.shared.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author: Jeff Yu
- * @date: 9/02/12
+ * @date: 8/04/12
  */
-public class GadgetModel {
-
-    private String specUrl;
-
+public class PageModel {
+    
     private String name;
+    
+    private Long order;
 
-    private String iframeUrl;
-
-    private UserPreference userPreference;
-
-    public String getSpecUrl() {
-        return specUrl;
-    }
-
-    public void setSpecUrl(String specUrl) {
-        this.specUrl = specUrl;
-    }
+    private List<GadgetModel> models = new ArrayList<GadgetModel>();
 
     public String getName() {
         return name;
@@ -47,32 +40,23 @@ public class GadgetModel {
         this.name = name;
     }
 
-    public String getIframeUrl() {
-        return iframeUrl;
+    public Long getOrder() {
+        return order;
     }
 
-    public void setIframeUrl(String iframeUrl) {
-        this.iframeUrl = iframeUrl;
+    public void setOrder(Long order) {
+        this.order = order;
     }
 
-    public UserPreference getUserPreference() {
-        return userPreference;
+    public List<GadgetModel> getModels() {
+        return models;
     }
 
-    public void setUserPreference(UserPreference userPreference) {
-        this.userPreference = userPreference;
+    public void addModel(GadgetModel model) {
+        models.add(model);
     }
 
-    public String toString() {
-        StringBuilder sbuffer = new StringBuilder();
-        sbuffer.append("[");
-        sbuffer.append(" name => " + name);
-        sbuffer.append(" iframUrl =>" + iframeUrl);
-        sbuffer.append(" userPreference => [");
-        sbuffer.append( userPreference.getData().size());
-        sbuffer.append("]");
-        
-        sbuffer.append("]");
-        return sbuffer.toString();
+    public void setModels(List<GadgetModel> models) {
+        this.models = models;
     }
 }

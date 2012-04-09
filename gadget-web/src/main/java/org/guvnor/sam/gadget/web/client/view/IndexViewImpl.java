@@ -17,9 +17,12 @@
  */
 package org.guvnor.sam.gadget.web.client.view;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -27,6 +30,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import org.guvnor.sam.gadget.web.client.ApplicationEntryPoint;
 import org.guvnor.sam.gadget.web.client.BootstrapContext;
 import org.guvnor.sam.gadget.web.client.presenter.IndexPresenter;
+import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
 import org.guvnor.sam.gadget.web.client.widgets.*;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 
@@ -44,23 +48,34 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     private DockLayoutPanel panel;
 
     private BootstrapContext context;
+    
+    private IndexPresenter presenter;
 
     @Inject
     public IndexViewImpl(BootstrapContext ctx) {
         context = ctx;
+        presenter.getPages(new Long(1), new RestfulInvoker.Response() {
+            public void onResponseReceived(Request request, Response response) {
+                Log.debug(response.getText());
+                initWidget();
+            }
+        });
+    }
+
+    private void initWidget() {
         mainContentPanel = new TabLayout();
 
         PortalLayout portalLayout = new PortalLayout(3);
 
         GadgetModel sgModel = new GadgetModel();
         Portlet samGadget = new Portlet(sgModel);
-        
+
         GadgetModel ccModel = new GadgetModel();
         Portlet ccGadget = new Portlet(ccModel);
-        
+
         GadgetModel gModel = new GadgetModel();
         Portlet gnews = new Portlet(gModel);
-        
+
         portalLayout.addPortlet(0, samGadget);
         portalLayout.addPortlet(1, gnews);
         portalLayout.addPortlet(2, ccGadget);
@@ -101,7 +116,6 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
         getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
-
     }
 
     public Widget asWidget() {
@@ -116,4 +130,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         return footerPanel;
     }
 
+    public void setPresenter(IndexPresenter presenter) {
+        this.presenter = presenter;
+    }
 }
