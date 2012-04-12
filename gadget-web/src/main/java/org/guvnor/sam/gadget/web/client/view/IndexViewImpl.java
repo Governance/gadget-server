@@ -113,26 +113,8 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
             for(GadgetModel model : page.getModels()) {
                 portalLayout.addPortlet(model.getOrder().intValue(), new Portlet(model));
             }
-            
             mainContentPanel.addTab(page.getName(), portalLayout);
         }
-
-/*        PortalLayout portalLayout = new PortalLayout(3);
-
-        GadgetModel sgModel = new GadgetModel();
-        Portlet samGadget = new Portlet(sgModel);
-
-        GadgetModel ccModel = new GadgetModel();
-        Portlet ccGadget = new Portlet(ccModel);
-
-        GadgetModel gModel = new GadgetModel();
-        Portlet gnews = new Portlet(gModel);
-
-        portalLayout.addPortlet(0, samGadget);
-        portalLayout.addPortlet(1, gnews);
-        portalLayout.addPortlet(2, ccGadget);
-
-        mainContentPanel.addTab("Home", portalLayout);*/
 
         //Hard-coded for testing...
         PortalLayout sndLayout = new PortalLayout(2);
