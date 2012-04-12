@@ -30,6 +30,8 @@ public class GadgetModel {
     private String iframeUrl;
 
     private UserPreference userPreference;
+    
+    private Long order;
 
     public String getSpecUrl() {
         return specUrl;
@@ -61,6 +63,14 @@ public class GadgetModel {
 
     public void setUserPreference(UserPreference userPreference) {
         this.userPreference = userPreference;
+    }
+
+    public Long getOrder() {
+        return order;
+    }
+
+    public void setOrder(Long order) {
+        this.order = order;
     }
 
     public String toString() {

@@ -20,11 +20,13 @@ package org.guvnor.sam.gadget.web.client.widgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 
 import org.guvnor.sam.gadget.web.client.util.UUID;
+import org.guvnor.sam.gadget.web.server.ConfigurationUtil;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 
 /**
@@ -76,7 +78,7 @@ public class Portlet extends Composite {
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setHeight("250px");
-        gadgetSpec.setUrl(model.getIframeUrl());
+        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl());
     }
 
     @Override

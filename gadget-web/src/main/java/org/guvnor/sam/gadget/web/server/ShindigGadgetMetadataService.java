@@ -17,6 +17,7 @@
  */
 package org.guvnor.sam.gadget.web.server;
 
+import org.guvnor.sam.gadget.server.model.Gadget;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 import org.guvnor.sam.gadget.web.shared.dto.UserPreference;
 import org.jboss.resteasy.client.ClientRequest;
@@ -43,51 +44,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
     public GadgetModel getGadgetMetadata(String gadgetUrl) {
 
-        JSONArray rpcArray = new JSONArray();
-        try {
-            JSONObject fetchMetadataRpcOperation = new JSONObject()
-                    .put("method", "gadgets.metadata")
-                    .put("id", "gadgets.metadata")
-                    .put("params", new JSONObject()
-                            .put("container", "default")
-
-                            .append("ids", gadgetUrl)
-
-                            .append("fields", "iframeUrl")
-                            .append("fields", "modulePrefs.*")
-                            .append("fields", "needsTokenRefresh")
-                            .append("fields", "userPrefs.*")
-                            .append("fields", "views.preferredHeight")
-                            .append("fields", "views.preferredWidth")
-                            .append("fields", "expireTimeMs")
-                            .append("fields", "responseTimeMs")
-
-                            .put("userId", "@viewer")
-                            .put("groupId", "@self")
-                    );
-
-            rpcArray.put(fetchMetadataRpcOperation);
-        } catch (JSONException e) {
-            throw new IllegalArgumentException("Error occurred while generating data for shindig metadata call", e);
-        }
-
-        //convert the json object to a string
-        String postData = rpcArray.toString();
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("requestContent: {}", postData);
-        }
-
-        ClientRequest request = new ClientRequest(ConfigurationUtil.SHINDIG_RPC_URL);
-        request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
-
-        String responseString = null;
-        try {
-            responseString = request.postTarget(String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        String responseString = getMetadata(gadgetUrl);
 
         //now trim back the response to just the metadata for the single gadget
         try {
@@ -102,7 +59,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
             model.setSpecUrl(gadgetUrl);
 
             System.out.println(responseObject.toString());
-            
+
             // check to see if this gadget has at least one non-hidden user pref
             // to determine if we should display the edit prefs button
             boolean hasPrefsToEdit = false;
@@ -148,10 +105,91 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         }
 
     }
-    
-    
+
+    private String getMetadata(String gadgetUrl) {
+        JSONArray rpcArray = new JSONArray();
+        try {
+            JSONObject fetchMetadataRpcOperation = new JSONObject()
+                    .put("method", "gadgets.metadata")
+                    .put("id", "gadgets.metadata")
+                    .put("params", new JSONObject()
+                            .put("container", "default")
+                            .put("view", "home")
+                            .put("st", "default")
+                            .put("debug", true)
+
+                            .append("ids", gadgetUrl)
+                            .append("fields", "iframeUrl")
+                            .append("fields", "modulePrefs.*")
+                            .append("fields", "needsTokenRefresh")
+                            .append("fields", "userPrefs.*")
+                            .append("fields", "views.preferredHeight")
+                            .append("fields", "views.preferredWidth")
+                            .append("fields", "expireTimeMs")
+                            .append("fields", "responseTimeMs")
+
+                            .put("userId", "@viewer")
+                            .put("groupId", "@self")
+                    );
+
+            rpcArray.put(fetchMetadataRpcOperation);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Error occurred while generating data for shindig metadata call", e);
+        }
+
+        //convert the json object to a string
+        String postData = rpcArray.toString();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("requestContent: {}", postData);
+        }
+
+        ClientRequest request = new ClientRequest(ConfigurationUtil.SHINDIG_RPC_URL);
+        request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
+
+        String responseString = null;
+        try {
+            responseString = request.postTarget(String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return responseString;
+    }
+
+    public Gadget getGadgetData(String gadgetUrl) {
+        String responseString = getMetadata(gadgetUrl);
+        
+        //now trim back the response to just the metadata for the single gadget
+        try {
+            JSONObject responseObject = new JSONArray(responseString).
+                    getJSONObject(0).
+                    getJSONObject("result").
+                    getJSONObject(gadgetUrl);
+
+            JSONObject modulePref = responseObject.getJSONObject("modulePrefs");
+            
+            Gadget gadget = new Gadget();
+            gadget.setTitle(modulePref.getString("title"));
+            gadget.setScreenshotUrl(modulePref.getString("screenshot"));
+            gadget.setAuthorEmail(modulePref.getString("authorEmail"));
+            gadget.setAuthor(modulePref.getString("author"));
+            gadget.setTitleUrl(modulePref.getString("titileUrl"));
+            gadget.setThumbnailUrl(modulePref.getString("thumbnail"));
+            gadget.setDescription(modulePref.getString("description"));
+
+
+            return gadget;
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
+        }
+        
+    }
+
+
     public static void main(String[] args) throws Exception {
         ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
-        svc.getGadgetMetadata("http://www.google.com/ig/modules/finance_portfolios.xml");
+        svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml?view=view&st=default");
+        svc.getGadgetMetadata("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
+        svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
     }
 }

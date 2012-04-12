@@ -18,6 +18,7 @@
 package org.guvnor.sam.gadget.web.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.URL;
 
 /**
  * @author: Jeff Yu
@@ -42,4 +43,5 @@ public class URLBuilder {
     public static String getPagesURL(Long userId) {
         return urlBase + "rs/users/user/" + userId + "/pages";
     }
+
 }

@@ -31,6 +31,9 @@ import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.guvnor.sam.gadget.web.client.NameTokens;
 import org.guvnor.sam.gadget.web.client.URLBuilder;
 import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
+import org.guvnor.sam.gadget.web.shared.dto.PageModel;
+
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -51,6 +54,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     public interface IndexView extends View {
         public void setPresenter(IndexPresenter presenter);
+        //public void setPageModel(List<PageModel> models);
     }
     
     public void getPages(Long userId, RestfulInvoker.Response callback) {
@@ -67,5 +71,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     public void onBind() {
         super.onBind();
         getView().setPresenter(this);
+
+
     }
 }

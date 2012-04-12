@@ -101,9 +101,11 @@ public class UserController {
             PageModel pageModel = new PageModel();
             pageModel.setName(page.getName());
             pageModel.setOrder(page.getPageOrder());
+            pageModel.setColumns(page.getColumns());
 
             for (Widget widget :page.getWidgets()) {
                 GadgetModel gadgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
+                gadgetModel.setOrder(widget.getOrder());
                 pageModel.addModel(gadgetModel);
             }
 

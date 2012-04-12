@@ -40,17 +40,18 @@ public class PageManagerImpl implements PageManager{
         Page page = new Page();
         page.setName("Home");
         page.setPageOrder(0);
+        page.setColumns(3);
 
         Widget samGadget = new Widget();
         samGadget.setAppUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
-        samGadget.setOrder(1);
+        samGadget.setOrder(0);
         
         Widget gnews = new Widget();
-        gnews.setOrder(2);
+        gnews.setOrder(1);
         gnews.setAppUrl("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml");
         
         Widget cWidget = new Widget();
-        cWidget.setOrder(3);
+        cWidget.setOrder(2);
         cWidget.setAppUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
         
         List<Widget> widgets = new ArrayList<Widget>();

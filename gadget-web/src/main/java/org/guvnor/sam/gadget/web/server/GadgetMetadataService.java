@@ -1,5 +1,6 @@
 package org.guvnor.sam.gadget.web.server;
 
+import org.guvnor.sam.gadget.server.model.Gadget;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
 
 /**
@@ -15,4 +16,7 @@ public interface GadgetMetadataService {
      * @return The GadgetModel that constructed from raw JSON response from the Shindig metadata RPC call.
      */
     public GadgetModel getGadgetMetadata(String gadgetUrl);
+    
+    
+    public Gadget getGadgetData(String gadgetUrl);
 }

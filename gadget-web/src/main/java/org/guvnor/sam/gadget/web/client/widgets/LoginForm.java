@@ -131,6 +131,7 @@ public class LoginForm extends Composite {
                 signupError.setText("");
                 username.setValue("");
                 password.setValue("");
+                loginError.setText("");
                 closeWindow(signupId);
                 openWindow(loginId);
             }
@@ -150,7 +151,7 @@ public class LoginForm extends Composite {
         $wnd.$('#' + loginId).dialog({
             autoOpen:true,
             modal:false,
-            width:400,
+            width:300,
             height:200,
             closeOnEscape: false,
             open: function(event, ui) { $wnd.$(".ui-dialog-titlebar-close", ui.dialog).hide(); },

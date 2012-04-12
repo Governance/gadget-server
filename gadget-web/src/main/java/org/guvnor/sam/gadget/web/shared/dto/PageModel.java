@@ -24,11 +24,13 @@ import java.util.List;
  * @author: Jeff Yu
  * @date: 8/04/12
  */
-public class PageModel {
+public class PageModel{
     
     private String name;
     
     private Long order;
+    
+    private Long columns;
 
     private List<GadgetModel> models = new ArrayList<GadgetModel>();
 
@@ -58,5 +60,13 @@ public class PageModel {
 
     public void setModels(List<GadgetModel> models) {
         this.models = models;
+    }
+
+    public Long getColumns() {
+        return columns;
+    }
+
+    public void setColumns(Long columns) {
+        this.columns = columns;
     }
 }

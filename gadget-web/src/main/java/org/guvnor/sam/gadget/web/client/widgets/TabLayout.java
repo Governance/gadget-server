@@ -113,6 +113,10 @@ public class TabLayout extends Composite {
 
     public void onAttach() {
         super.onAttach();
+        initializeTab();
+    }
+
+    public void initializeTab() {
         initTabs(id);
         registerCloseEvent(id);
     }

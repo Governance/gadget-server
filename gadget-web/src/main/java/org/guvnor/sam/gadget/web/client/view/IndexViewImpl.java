@@ -29,10 +29,14 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 import org.guvnor.sam.gadget.web.client.ApplicationEntryPoint;
 import org.guvnor.sam.gadget.web.client.BootstrapContext;
+import org.guvnor.sam.gadget.web.client.model.JSOParser;
 import org.guvnor.sam.gadget.web.client.presenter.IndexPresenter;
 import org.guvnor.sam.gadget.web.client.util.RestfulInvoker;
 import org.guvnor.sam.gadget.web.client.widgets.*;
 import org.guvnor.sam.gadget.web.shared.dto.GadgetModel;
+import org.guvnor.sam.gadget.web.shared.dto.PageModel;
+
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -51,21 +55,69 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     
     private IndexPresenter presenter;
 
+    private List<PageModel> pageModels;
+
     @Inject
     public IndexViewImpl(BootstrapContext ctx) {
         context = ctx;
+        headerPanel = new LayoutPanel();
+        headerPanel.setStyleName("header-panel");
+
+        footerPanel = new LayoutPanel();
+        footerPanel.setStyleName("footer-panel");
+
+        panel = new DockLayoutPanel(Style.Unit.PX);
+        panel.getElement().setAttribute("id", "container");
+
+        mainContentPanel = new TabLayout();
+
+        final AddTabForm addTabForm = new AddTabForm(mainContentPanel);
+
+        Anchor anchor = new Anchor();
+        anchor.setText("Add a tab");
+        anchor.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent clickEvent) {
+                addTabForm.show();
+            }
+        });
+        mainContentPanel.addTabAnchor(anchor);
+
+        mainPanel = new LayoutPanel();
+        mainPanel.add(addTabForm);
+        mainPanel.add(mainContentPanel);
+
+        panel.addNorth(headerPanel, 70);
+        panel.addSouth(footerPanel, 25);
+        panel.add(mainPanel);
+
+        getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
+        getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
+
         presenter.getPages(new Long(1), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
                 Log.debug(response.getText());
-                initWidget();
+                pageModels = JSOParser.getPageModels(response.getText());
+                Log.info("the Size " + pageModels.size());
+                initializePages();
             }
         });
+
+
     }
 
-    private void initWidget() {
-        mainContentPanel = new TabLayout();
+    private void initializePages() {
 
-        PortalLayout portalLayout = new PortalLayout(3);
+        for (PageModel page : pageModels) {
+            PortalLayout portalLayout = new PortalLayout(page.getColumns().intValue());
+            
+            for(GadgetModel model : page.getModels()) {
+                portalLayout.addPortlet(model.getOrder().intValue(), new Portlet(model));
+            }
+            
+            mainContentPanel.addTab(page.getName(), portalLayout);
+        }
+
+/*        PortalLayout portalLayout = new PortalLayout(3);
 
         GadgetModel sgModel = new GadgetModel();
         Portlet samGadget = new Portlet(sgModel);
@@ -80,42 +132,16 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         portalLayout.addPortlet(1, gnews);
         portalLayout.addPortlet(2, ccGadget);
 
+        mainContentPanel.addTab("Home", portalLayout);*/
+
+        //Hard-coded for testing...
         PortalLayout sndLayout = new PortalLayout(2);
         PortletLayout helloWorld = new PortletLayout("HelloWorld", "Hello World Portlet");
         sndLayout.addPortlet(0, helloWorld);
 
-        final AddTabForm addTabForm = new AddTabForm(mainContentPanel);
-
-        Anchor anchor = new Anchor();
-        anchor.setText("Add a tab");
-        anchor.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent clickEvent) {
-                addTabForm.show();
-            }
-        });
-        mainContentPanel.addTabAnchor(anchor);
-        mainContentPanel.addTab("Home", portalLayout);
         mainContentPanel.addTab("Finance", sndLayout);
 
-        headerPanel = new LayoutPanel();
-        headerPanel.setStyleName("header-panel");
-
-        footerPanel = new LayoutPanel();
-        footerPanel.setStyleName("footer-panel");
-
-        panel = new DockLayoutPanel(Style.Unit.PX);
-        panel.getElement().setAttribute("id", "container");
-
-        mainPanel = new LayoutPanel();
-        mainPanel.add(addTabForm);
-        mainPanel.add(mainContentPanel);
-
-        panel.addNorth(headerPanel, 70);
-        panel.addSouth(footerPanel, 25);
-        panel.add(mainPanel);
-
-        getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
-        getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
+        mainContentPanel.initializeTab();
     }
 
     public Widget asWidget() {
@@ -133,4 +159,6 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     public void setPresenter(IndexPresenter presenter) {
         this.presenter = presenter;
     }
+
+
 }
