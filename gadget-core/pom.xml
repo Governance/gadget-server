@@ -48,6 +48,25 @@
         <version>${h2.version}</version>
     </dependency>
 
+      <!-- Shindig -->
+      <dependency>
+          <groupId>org.apache.shindig</groupId>
+          <artifactId>shindig-common</artifactId>
+          <type>jar</type>
+          <scope>compile</scope>
+          <version>${shindig.version}</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>jasper-el</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>el-api</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+
      <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
