@@ -7,11 +7,11 @@
   <persistence-unit name="gadget-core" transaction-type="RESOURCE_LOCAL">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-      <class>org.guvnor.sam.gadget.server.model.User</class>
-      <class>org.guvnor.sam.gadget.server.model.ApplicationData</class>
-      <class>org.guvnor.sam.gadget.server.model.Page</class>
-      <class>org.guvnor.sam.gadget.server.model.Widget</class>
-      <class>org.guvnor.sam.gadget.server.model.Gadget</class>
+      <class>org.savara.gadget.server.model.User</class>
+      <class>org.savara.gadget.server.model.ApplicationData</class>
+      <class>org.savara.gadget.server.model.Page</class>
+      <class>org.savara.gadget.server.model.Widget</class>
+      <class>org.savara.gadget.server.model.Gadget</class>
       <properties>
           <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
       </properties>

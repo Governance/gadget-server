@@ -30,7 +30,7 @@
         </layout>
     </appender>
 
-    <logger name="org.guvnor.sam.gadget.web">
+    <logger name="org.savara.gadget.web">
         <level value="INFO" />
     </logger>
 

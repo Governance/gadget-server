@@ -1,0 +1,14 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:sam='urn:import:org.savara.gadget.web.client.widgets'>
+
+  <g:HTMLPanel>
+      <div style="height:100%" ui:field="tabs">
+          <sam:UnorderedList ui:field="tabsBar">
+          </sam:UnorderedList>
+          <g:FlowPanel ui:field="tabsContent">
+          </g:FlowPanel>
+      </div>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

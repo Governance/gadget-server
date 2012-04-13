@@ -8,7 +8,7 @@
     <display-name>Gadget Server</display-name>
     <!-- configuration -->
     <!-- If you have your own Guice module(s), put them here as a colon-separated list. -->
-    <!-- FIXME: org.guvnor.sam.gadget.server.JPASocialModule shall be used, but not working yet-->
+    <!-- FIXME: org.savara.gadget.server.JPASocialModule shall be used, but not working yet-->
     <!-- Note that any extras modules are optional -->
     <context-param>
         <param-name>guice-modules</param-name>
