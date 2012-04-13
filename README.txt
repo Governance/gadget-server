@@ -1,7 +1,16 @@
-Gadget Server
-=============
+Gadget Server Project:
+======================
 
-This is a project that built on the Apache Shindig for showing the gadgets and manipulating gadgets.
+This is a project that builds on the Apache Shindig as the open social gadget containers.
+
+
+Modules introduction:
+=====================
+
+Gadget-Core:                This is the domain object module.
+Gadget-Shindig:             This is the module that implements the shindig SPI.
+Gadget-Web:                 This is the module for GWT based UI showing the gadgets,
+                             and RESTeasy powered restful services
 
 
 Deploying the Gadget Server:
@@ -9,10 +18,12 @@ Deploying the Gadget Server:
 Run:
    mvn clean install
 Then:
-  copy the gadget-server.war from the gadget-web/target folder to Tomcat/JBoss AS7 deployment folder.
+  copy following two wars into the $Tomcat webapps folder. (This has been tested under Tomcat 6.x)
+  1) gadget-server.war from the gadget-shindig/target folder.
+  2) gadget-web.war from the gadget-web/target folder.
 
 Start the Browser to go to: 
-  http://localhost:8080/gadget-server.
+  http://localhost:8080/gadget-web
 
 
 
