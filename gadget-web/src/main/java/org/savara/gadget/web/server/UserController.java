@@ -19,6 +19,7 @@ package org.savara.gadget.web.server;
 
 import com.google.gson.Gson;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.savara.gadget.server.CoreModule;
 import org.savara.gadget.server.model.Page;
@@ -42,17 +43,16 @@ import java.util.List;
 @Path("/users")
 public class UserController {
 
+    @Inject
     private UserManager userManager;
-    private ApplicationDataManager applicationDataManager;
+    @Inject
     private PageManager pageManager;
+    @Inject
     private GadgetMetadataService metadataService;
 
+    @Inject
     public UserController() {
-        Injector injector = Guice.createInjector(new CoreModule());
-        userManager = injector.getInstance(UserManager.class);
-        applicationDataManager = injector.getInstance(ApplicationDataManager.class);
-        pageManager = injector.getInstance(PageManager.class);
-        metadataService = new ShindigGadgetMetadataService();
+
     }
 
     @GET

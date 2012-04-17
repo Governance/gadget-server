@@ -8,8 +8,11 @@
     <display-name>Gadget Web</display-name>
 
     <context-param>
-        <param-name>javax.ws.rs.Application</param-name>
-        <param-value>org.savara.gadget.web.server.RestApplication</param-value>
+        <param-name>resteasy.guice.modules</param-name>
+        <param-value>
+            org.savara.gadget.web.server.GadgetServerModule,
+            org.savara.gadget.server.CoreModule
+        </param-value>
     </context-param>
 
     <context-param>
@@ -19,7 +22,7 @@
 
     <listener>
         <listener-class>
-            org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+            org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
         </listener-class>
     </listener>
 
