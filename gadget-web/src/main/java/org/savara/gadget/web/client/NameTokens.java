@@ -29,6 +29,6 @@ public class NameTokens {
     
     public static final String SIGNUP_VIEW = "signup";
     
-    public static final String WIDGET_STORE = "widgetstore";
+    public static final String WIDGET_STORE = "store";
 
 }

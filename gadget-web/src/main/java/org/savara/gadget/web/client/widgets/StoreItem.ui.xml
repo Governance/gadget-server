@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:sam='urn:import:org.savara.gadget.web.client.widgets'>
+
+    <g:DecoratorPanel>
+        <g:HorizontalPanel>
+            <g:VerticalPanel>
+               <g:Image url="http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg">
+               </g:Image>
+               <g:Button text="Add To Page">
+               </g:Button>
+            </g:VerticalPanel>
+
+            <g:VerticalPanel>
+                <g:Label text="Currency Converter"></g:Label>
+                <g:Label text="Customizable news gadget that shows different news sections in separate tabs"></g:Label>
+            </g:VerticalPanel>
+        </g:HorizontalPanel>
+    </g:DecoratorPanel>
+
+</ui:UiBinder>

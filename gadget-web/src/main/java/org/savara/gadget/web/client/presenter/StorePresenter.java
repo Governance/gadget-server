@@ -15,26 +15,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gadget.web.client;
+package org.savara.gadget.web.client.presenter;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
+import org.savara.gadget.web.client.NameTokens;
 
 /**
  * @author: Jeff Yu
- * @date: 9/05/11
+ * @date: 30/04/12
  */
-public class ApplicationPlaceManager extends PlaceManagerImpl {
+public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePresenter.StoreProxy>{
 
     @Inject
-    public ApplicationPlaceManager(EventBus bus, TokenFormatter formatter) {
-        super(bus, formatter);
+    public StorePresenter(EventBus bus, StoreView view, StoreProxy proxy) {
+        super(bus, view, proxy);
+    }
+    
+
+    @Override
+    protected void revealInParent() {
+        RevealRootLayoutContentEvent.fire(this, this);
     }
 
-    public void revealDefaultPlace() {
-        revealPlace(new PlaceRequest(NameTokens.WIDGET_STORE));
+    public interface StoreView extends View {
+        
     }
+
+    @ProxyCodeSplit
+    @NameToken(NameTokens.WIDGET_STORE)
+    @NoGatekeeper
+    public interface StoreProxy extends ProxyPlace<StorePresenter> {}
+    
 }

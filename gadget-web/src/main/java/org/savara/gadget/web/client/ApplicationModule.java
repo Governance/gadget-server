@@ -21,9 +21,8 @@ import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
 import org.savara.gadget.web.client.presenter.IndexPresenter;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
-import org.savara.gadget.web.client.view.Footer;
-import org.savara.gadget.web.client.view.Header;
-import org.savara.gadget.web.client.view.IndexViewImpl;
+import org.savara.gadget.web.client.presenter.StorePresenter;
+import org.savara.gadget.web.client.view.*;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -34,7 +33,6 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-import org.savara.gadget.web.client.view.LoginViewImpl;
 
 /**
  * @author: Jeff Yu
@@ -62,5 +60,7 @@ public class ApplicationModule extends AbstractPresenterModule {
                 IndexPresenter.IndexProxy.class);
         bindPresenter(LoginPresenter.class, LoginPresenter.LoginView.class, LoginViewImpl.class,
                 LoginPresenter.LoginProxy.class);
+        bindPresenter(StorePresenter.class, StorePresenter.StoreView.class, StoreViewImpl.class,
+                StorePresenter.StoreProxy.class);
     }
 }

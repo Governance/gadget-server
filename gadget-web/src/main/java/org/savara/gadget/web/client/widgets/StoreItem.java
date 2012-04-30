@@ -15,26 +15,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gadget.web.client;
+package org.savara.gadget.web.client.widgets;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author: Jeff Yu
- * @date: 9/05/11
+ * @date: 30/04/12
  */
-public class ApplicationPlaceManager extends PlaceManagerImpl {
+public class StoreItem extends Composite {
 
-    @Inject
-    public ApplicationPlaceManager(EventBus bus, TokenFormatter formatter) {
-        super(bus, formatter);
+    interface StoreItemUiBinder extends UiBinder<Widget, StoreItem> {}
+
+    private static StoreItemUiBinder uiBinder = GWT.create(StoreItemUiBinder.class);
+
+    public StoreItem() {
+        initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void revealDefaultPlace() {
-        revealPlace(new PlaceRequest(NameTokens.WIDGET_STORE));
-    }
 }

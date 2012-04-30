@@ -20,6 +20,7 @@ package org.savara.gadget.web.client;
 import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.presenter.IndexPresenter;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
+import org.savara.gadget.web.client.presenter.StorePresenter;
 import org.savara.gadget.web.client.view.Footer;
 import org.savara.gadget.web.client.view.Header;
 
@@ -46,6 +47,7 @@ public interface ApplicationUI extends Ginjector {
 
     AsyncProvider<IndexPresenter> getIndexPresenter();
     AsyncProvider<LoginPresenter> getLoginPresenter();
+    AsyncProvider<StorePresenter> getStorePresenter();
     
     Footer getFooter();
     Header getHeader();
