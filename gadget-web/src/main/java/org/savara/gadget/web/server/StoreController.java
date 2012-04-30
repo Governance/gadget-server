@@ -17,19 +17,41 @@
  */
 package org.savara.gadget.web.server;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Scopes;
+import org.savara.gadget.server.model.Gadget;
+import org.savara.gadget.server.service.GadgetService;
+import org.savara.gadget.web.shared.dto.PageResponse;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import java.util.List;
 
 /**
  * @author: Jeff Yu
- * @date: 13/04/12
+ * @date: 30/04/12
  */
-public class GadgetServerModule implements Module {
+@Path("/stores")
+public class StoreController {
 
-    public void configure(Binder binder) {
-        binder.bind(UserController.class);
-        binder.bind(StoreController.class);
-        binder.bind(GadgetMetadataService.class).to(ShindigGadgetMetadataService.class).in(Scopes.SINGLETON);
+    @Inject
+    GadgetService gadgetService;
+
+    @Inject
+    public StoreController() {
+
     }
+
+    @GET
+    @Path("all/{offset}/{pageSize}")
+    @Produces("application/json")
+    public PageResponse<Gadget> getGadgets(@PathParam("offset") int offset,
+                                           @PathParam("pageSize") int pageSize) {
+        List<Gadget> gadgets = gadgetService.getAllGadgets(offset, pageSize);
+        int number = gadgetService.getAllGadgetsNum();
+        PageResponse<Gadget> result = new PageResponse<Gadget>(gadgets, number);
+        return result;
+    }
+
 }

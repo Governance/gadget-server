@@ -79,6 +79,7 @@ public class CoreModule extends AbstractModule{
     @Override
     protected void configure() {
         Names.bindProperties(this.binder(), properties);
+
         if (entityManager == null) {
             bind(EntityManager.class).toProvider(EntityManagerProvider.class).in(Scopes.SINGLETON);
         } else {
@@ -88,6 +89,8 @@ public class CoreModule extends AbstractModule{
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
         bind(PageManager.class).to(PageManagerImpl.class).in(Scopes.SINGLETON);
+        bind(GadgetService.class).to(GadgetServiceImpl.class).in(Scopes.SINGLETON);
+
     }
 
 }
