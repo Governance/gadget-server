@@ -20,6 +20,7 @@ package org.savara.gadget.web.client.view;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -53,13 +54,24 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         mainPanel = new LayoutPanel();
         mainPanel.getElement().setId("mainpanel");
 
+        VerticalPanel storesList = new VerticalPanel();
+        storesList.setWidth("100%");
+        
         StoreItem item = new StoreItem();
-        mainPanel.add(item);
+        StoreItem item2 = new StoreItem();
+        
+        storesList.add(item);
+        storesList.add(item2);
+        storesList.add(new StoreItem());
+        storesList.add(new StoreItem());
+
+        mainPanel.add(storesList);
 
         panel.addNorth(headerPanel, 70);
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 
+        headerPanel.add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         footerPanel.add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
     }
 

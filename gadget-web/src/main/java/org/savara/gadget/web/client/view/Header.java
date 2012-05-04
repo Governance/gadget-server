@@ -57,7 +57,9 @@ public class Header {
         store.addStyleName("header-link");
         store.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-
+                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+                        new PlaceRequest(NameTokens.WIDGET_STORE)
+                );
             }
         });
 
