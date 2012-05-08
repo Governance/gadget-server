@@ -29,23 +29,23 @@ public class Widget {
 
     @Id
     @GeneratedValue
-    @Column(name="ID")
+    @Column(name="WIDGET_ID")
     private long id;
 
-    @Column(name="NAME")
+    @Column(name="WIDGET_NAME")
     private String name;
 
-    @Column(name="APP_URL")
+    @Column(name="WIDGET_URL")
     private String appUrl;
 
-    @Column(name="ORDER")
+    @Column(name="WIDGET_ORDER")
     private long order;
+
+    @Column(name="WIDGET_PREFS")
+    private String preference;
 
     @ManyToOne
     private Page page;
-
-    @Column(name="PREFS")
-    private String preference;
 
     public long getId() {
         return id;

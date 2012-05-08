@@ -29,34 +29,34 @@ public class Gadget {
 
     @Id
     @GeneratedValue
-    @Column(name="ID")
+    @Column(name="GAGET_ID")
     private long id;
 
-    @Column(name="TITLE")
+    @Column(name="GADGET_TITLE")
     private String title;
 
-    @Column(name="TITLE_URL")
+    @Column(name="GADGET_TITLE_URL")
     private String titleUrl;
 
-    @Column(name="AUTHOR")
+    @Column(name="GADGET_AUTHOR")
     private String author;
 
-    @Column(name="AUTHOR_EMAIL")
+    @Column(name="GADGET_AUTHOR_EMAIL")
     private String authorEmail;
 
-    @Column(name="DESCRIPTION")
+    @Column(name="GADGET_DESCRIPTION")
     private String description;
 
-    @Column(name="URL")
+    @Column(name="GADGET_URL")
     private String url;
 
-    @Column(name="THUMBNAIL_URL")
+    @Column(name="GADGET_THUMBNAIL_URL")
     private String thumbnailUrl;
 
-    @Column(name="SCREENSHOT_URL")
+    @Column(name="GADGET_SCREENSHOT_URL")
     private String screenshotUrl;
 
-    @Column(name="TYPE")
+    @Column(name="GADGET_TYPE")
     private String type;
 
     public long getId() {
