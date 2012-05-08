@@ -42,7 +42,7 @@ public class Page {
     @Column(name="PAGE_ORDER")
     private long pageOrder;
 
-    @OneToMany
+    @OneToMany(mappedBy = "page")
     private List<Widget> widgets;
 
     @ManyToOne

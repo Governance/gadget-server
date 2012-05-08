@@ -27,7 +27,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="GS_APP_DATA")
-@XmlRootElement(name = "appData")
 public class ApplicationData implements Serializable {
 
     @Id @GeneratedValue

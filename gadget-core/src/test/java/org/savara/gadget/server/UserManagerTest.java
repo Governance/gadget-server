@@ -52,13 +52,13 @@ public class UserManagerTest {
         
         userManager.createUser(user);
 
-        System.out.println(user.getId());
         Assert.assertTrue(user.getId() > 0);
     }
     
     @Test
     public void testGetAllUsers() throws Exception {
         List<User> users = userManager.getAllUser();
+        Assert.assertTrue(users.size() > 0);
         for (User theUser : users) {
             System.out.println("User email2 is: " + theUser.getEmail() + "->" + theUser.getName());
         }

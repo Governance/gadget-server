@@ -42,7 +42,7 @@ public class Widget {
     private long order;
 
     @ManyToOne
-    private User user;
+    private Page page;
 
     @Column(name="PREFS")
     private String preference;
@@ -71,14 +71,6 @@ public class Widget {
         this.order = order;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getPreference() {
         return preference;
     }
@@ -93,5 +85,13 @@ public class Widget {
 
     public void setAppUrl(String appUrl) {
         this.appUrl = appUrl;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 }

@@ -54,10 +54,11 @@
         <shindig.version>3.0.0-beta4</shindig.version>
         <guice.version>3.0</guice.version>
         <persistence-api.version>1.0.1.Final</persistence-api.version>
-        <hibernate.version>4.0.0.Final</hibernate.version>
+        <hibernate.version>3.5.6-Final</hibernate.version>
         <javassist.version>3.12.1.GA</javassist.version>
         <h2.version>1.2.131</h2.version>
         <resteasy.version>2.2.1.GA</resteasy.version>
+        <log4j.version>1.5.8</log4j.version>
 	</properties>
 
 	<modules>

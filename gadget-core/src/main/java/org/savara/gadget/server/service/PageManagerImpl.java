@@ -56,8 +56,8 @@ public class PageManagerImpl implements PageManager{
         
         List<Widget> widgets = new ArrayList<Widget>();
         widgets.add(samGadget);
-        widgets.add(gnews);
-        widgets.add(cWidget);
+        //widgets.add(gnews);
+        //widgets.add(cWidget);
         page.setWidgets(widgets);
         
         pages.add(page);

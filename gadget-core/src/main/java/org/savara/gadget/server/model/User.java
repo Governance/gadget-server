@@ -18,8 +18,8 @@
 package org.savara.gadget.server.model;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -27,7 +27,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "GS_USER")
-@XmlRootElement(name="user")
 public class User implements Serializable{
 
     @Id
@@ -46,6 +45,9 @@ public class User implements Serializable{
 
     @Column(name="PASSWD")
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Page> pages;
 
     public long getId() {
         return id;
