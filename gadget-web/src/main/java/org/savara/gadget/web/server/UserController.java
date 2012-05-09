@@ -84,6 +84,13 @@ public class UserController {
         }
         return createJsonResponse(result);
     }
+
+    @GET
+    @Path("user/{username}/check")
+    public Response checkUsername(@PathParam("username") String username) {
+        boolean result = userManager.isUsernameExist(username);
+        return createJsonResponse(result);
+    }
     
     @GET
     @Path("user/{userId}/pages")

@@ -35,6 +35,10 @@ public class URLBuilder {
         return urlBase + "rs/users/user";
     }
     
+    public static String getCheckUserNameURL(String username) {
+        return urlBase + "rs/users/user/username/check";
+    }
+    
     public static String getAuthenticationURL() {
         return urlBase + "rs/users/authentication";
     }

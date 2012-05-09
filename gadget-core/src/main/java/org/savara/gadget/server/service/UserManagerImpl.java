@@ -89,4 +89,17 @@ public class UserManagerImpl implements UserManager {
         return null;
     }
 
+    public boolean isUsernameExist(String username) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Query query = entityManager.createQuery("select user from User user where user.name = :username");
+        query.setParameter("username", username);
+        List<User> users = query.getResultList();
+        if (users != null && users.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

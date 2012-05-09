@@ -37,4 +37,5 @@ public interface UserManager {
 
     User getUser(String username, String password);
     
+    boolean isUsernameExist(String username);
 }

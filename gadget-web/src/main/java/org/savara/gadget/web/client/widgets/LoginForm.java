@@ -92,6 +92,10 @@ public class LoginForm extends Composite {
 
 
     public void doLogin() {
+        if (isEmpty(username.getValue()) || isEmpty(password.getValue())) {
+            loginError.setText("username or password can not be empty.");
+            return;
+        }
         presenter.authenticateUser(username.getValue(), password.getValue(), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
                 if ("true".equals(response.getText())) {
@@ -108,15 +112,45 @@ public class LoginForm extends Composite {
         });
 
     }
+    
+    private boolean isEmpty(String value) {
+        if (value == null || "".equals(value.trim())) {
+            return true;
+        }
+        return false;
+    }
 
     public void doSignup(){
+        //TODO: best to enumerate all of possible errors at once.
         if (!signupConfirmPassword.getValue().equals(signupPassword.getValue())) {
             signupError.setText("Password and Confirm Password do not match");
             signupConfirmPassword.setValue("");
             signupPassword.setValue("");
             return;
+        } else if (email.getValue() != null && email.getValue().indexOf("@") == -1) {
+            signupError.setText("email is not valid.");
+            return;
+        } else if (isEmpty(signupUsername.getValue()) || isEmpty(signupPassword.getValue())) {
+            signupError.setText("username and password are required.");
+            return;
         }
 
+        presenter.checkUserName(signupUsername.getValue(), new RestfulInvoker.Response(){
+
+            public void onResponseReceived(Request request, Response response) {
+                if ("true".equals(response.getText())) {
+                    registerUser();
+                } else {
+                    signupError.setText("the username[" + signupUsername.getValue() + "] is already existed.");
+                    signupPassword.setValue("");
+                    signupConfirmPassword.setValue("");
+                }
+            }
+        });
+
+    }
+
+    private void registerUser() {
         presenter.registerUser(signupUsername.getValue(),
                 signupPassword.getValue(), email.getValue(),
                 displayName.getValue(), new RestfulInvoker.Response() {

@@ -89,6 +89,11 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
                 postData.toString(), callback);
     }
     
+    public void checkUserName(String username, RestfulInvoker.Response callback) {
+        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getCheckUserNameURL(username),
+                null, callback);
+    }
+    
     public void registerUser(String username, String password, String email,
                              String displayName, RestfulInvoker.Response callback) {
 
