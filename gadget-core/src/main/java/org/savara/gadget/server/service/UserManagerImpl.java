@@ -18,10 +18,13 @@
 package org.savara.gadget.server.service;
 
 import com.google.inject.Inject;
+import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
+import org.savara.gadget.server.model.Widget;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +33,16 @@ import java.util.List;
  */
 public class UserManagerImpl implements UserManager {
 
-    EntityManager entityManager;
+    private EntityManager entityManager;
+
+    private static Page homePage;
+
+    static {
+        homePage = new Page();
+        homePage.setName("Home");
+        homePage.setPageOrder(0);
+        homePage.setColumns(3);
+    }
 
     @Inject
     public UserManagerImpl(EntityManager manager) {
@@ -42,6 +54,17 @@ public class UserManagerImpl implements UserManager {
             entityManager.getTransaction().begin();
         }
         entityManager.persist(user);
+        entityManager.getTransaction().commit();
+        //TODO: this is for testing...
+        addPage(homePage, user);
+        return user;
+    }
+
+    public User getUserById(long userId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        User user = entityManager.find(User.class, userId);
         entityManager.getTransaction().commit();
         return user;
     }
@@ -96,10 +119,32 @@ public class UserManagerImpl implements UserManager {
         Query query = entityManager.createQuery("select user from User user where user.name = :username");
         query.setParameter("username", username);
         List<User> users = query.getResultList();
+        entityManager.getTransaction().commit();
+
         if (users != null && users.size() > 0) {
             return true;
         }
         return false;
+    }
+
+    public List<Page> getPages(long userId) {
+        Query query = entityManager.createQuery("select page from Page page where page.user.id = :userId order by page.pageOrder asc");
+        query.setParameter("userId", userId);
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        List<Page> pages = query.getResultList();
+        entityManager.getTransaction().commit();
+        return pages;
+    }
+
+    public void addPage(Page page, User user) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        page.setUser(user);
+        entityManager.persist(page);
+        entityManager.getTransaction().commit();
     }
 
 }

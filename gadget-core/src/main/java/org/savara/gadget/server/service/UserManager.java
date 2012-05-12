@@ -17,6 +17,7 @@
  */
 package org.savara.gadget.server.service;
 
+import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public interface UserManager {
     
     User createUser(User user);
     
+    User getUserById(long userId);
+    
     void updateUser(User user);
     
     void removeUser(User user);
@@ -38,4 +41,8 @@ public interface UserManager {
     User getUser(String username, String password);
     
     boolean isUsernameExist(String username);
+
+    List<Page> getPages(long userId);
+    
+    void addPage(Page page, User user);
 }

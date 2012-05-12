@@ -18,20 +18,17 @@
 package org.savara.gadget.web.server;
 
 import com.google.gson.Gson;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import org.savara.gadget.server.CoreModule;
 import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
 import org.savara.gadget.server.model.Widget;
-import org.savara.gadget.server.service.ApplicationDataManager;
-import org.savara.gadget.server.service.PageManager;
 import org.savara.gadget.server.service.UserManager;
 import org.savara.gadget.web.shared.dto.GadgetModel;
 import org.savara.gadget.web.shared.dto.PageModel;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +42,7 @@ public class UserController {
 
     @Inject
     private UserManager userManager;
-    @Inject
-    private PageManager pageManager;
+
     @Inject
     private GadgetMetadataService metadataService;
 
@@ -76,13 +72,23 @@ public class UserController {
     @Path("authentication")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response getUser(User user){
+    public Response getUser(User user, @Context HttpServletRequest request){
         boolean result = false;
         User theUser = userManager.getUser(user.getName(), user.getPassword());
         if (theUser != null) {
             result = true;
+            request.getSession().setAttribute("user", theUser);
         }
         return createJsonResponse(result);
+    }
+
+    @POST
+    @Path("user/invalidate")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response invalidSession(@Context HttpServletRequest request) {
+        request.getSession().invalidate();
+        return Response.ok().build();
     }
 
     @GET
@@ -96,7 +102,7 @@ public class UserController {
     @Path("user/{userId}/pages")
     @Produces("application/json")
     public List<PageModel> getPageModels(@PathParam("userId") long userId) {
-        List<Page> pages = pageManager.getPages(userId);
+        List<Page> pages = userManager.getPages(userId);
         
         List<PageModel> pageModels = new ArrayList<PageModel>();
         

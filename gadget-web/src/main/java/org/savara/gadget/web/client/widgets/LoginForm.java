@@ -138,7 +138,7 @@ public class LoginForm extends Composite {
         presenter.checkUserName(signupUsername.getValue(), new RestfulInvoker.Response(){
 
             public void onResponseReceived(Request request, Response response) {
-                if ("true".equals(response.getText())) {
+                if ("false".equals(response.getText())) {
                     registerUser();
                 } else {
                     signupError.setText("the username[" + signupUsername.getValue() + "] is already existed.");

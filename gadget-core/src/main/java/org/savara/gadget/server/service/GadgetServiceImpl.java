@@ -17,8 +17,13 @@
  */
 package org.savara.gadget.server.service;
 
+import com.google.inject.Inject;
 import org.savara.gadget.server.model.Gadget;
+import org.savara.gadget.server.model.Page;
+import org.savara.gadget.server.model.Widget;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,38 +33,92 @@ import java.util.List;
  */
 public class GadgetServiceImpl implements GadgetService{
 
-    public List<Gadget> getAllGadgets(int offset, int pageSize) {
-        
-        List<Gadget> gadgets = new ArrayList<Gadget>();
-        
-        Gadget gadget = new Gadget();
-        gadget.setAuthorEmail("googlemodules+tabnews+kennedy+201203211@google.com");
-        gadget.setTitle("Google News");
-        gadget.setAuthor("Google");
-        gadget.setDescription("Customizable news gadget that shows different news sections in separate tabs.");
-        gadget.setThumbnailUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us-thm.png");
-        gadget.setScreenshotUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us.png");
-        gadget.setId(11L);
-        gadget.setTitleUrl("http://news.google.com/");
-        
-        gadgets.add(gadget);
-        
-        Gadget gadget2 = new Gadget();
+    private EntityManager entityManager;
+
+    //TODO: need to be replaced with initial data sql.
+    private static Gadget gadget1;
+    
+    private static Gadget gadget2;
+    
+    @Inject
+    public GadgetServiceImpl(EntityManager em) {
+        this.entityManager = em;
+        initialize();
+    }
+
+    private void initialize() {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        entityManager.persist(gadget1);
+        entityManager.persist(gadget2);
+        entityManager.getTransaction().commit();
+    }
+    
+    static {
+        gadget1 = new Gadget();
+        gadget1.setAuthorEmail("googlemodules+tabnews+kennedy+201203211@google.com");
+        gadget1.setTitle("Google News");
+        gadget1.setAuthor("Google");
+        gadget1.setDescription("Customizable news gadget that shows different news sections in separate tabs.");
+        gadget1.setThumbnailUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us-thm.png");
+        gadget1.setScreenshotUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us.png");
+        gadget1.setTitleUrl("http://news.google.com/");
+
+        gadget2 = new Gadget();
         gadget2.setAuthor("ToFollow");
         gadget2.setAuthorEmail("info@tofollow.com");
         gadget2.setTitle("Currency Converter");
         gadget2.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
         gadget2.setScreenshotUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        gadget2.setId(12L);
         gadget2.setTitleUrl("http://tofollow.com");
 
-        gadgets.add(gadget2);
+    }
 
+    public List<Gadget> getAllGadgets(int offset, int pageSize) {
+        
+        List<Gadget> gadgets = new ArrayList<Gadget>();
+        gadgets.add(gadget1);
+        gadgets.add(gadget2);
         return gadgets;
     }
 
     public int getAllGadgetsNum() {
-        return 2;
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Query query = entityManager.createQuery("select count(gadget.id) from Gadget gadget");
+
+        Long result = (Long)query.getSingleResult();
+        entityManager.getTransaction().commit();
+        return result.intValue();
+    }
+
+    public void addGadgetToPage(Gadget gadget, Page page) {
+        Widget widget = new Widget();
+        widget.setAppUrl(gadget.getUrl());
+        widget.setName(gadget.getTitle());
+        widget.setPage(page);
+
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        entityManager.persist(widget);
+
+        page.getWidgets().add(widget);
+        entityManager.merge(page);
+
+        entityManager.getTransaction().commit();
+    }
+
+    public Gadget getGadgetById(long gadgetId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Gadget gadget = entityManager.find(Gadget.class, gadgetId);
+        entityManager.getTransaction().commit();
+
+        return gadget;
     }
 
 

@@ -88,7 +88,6 @@ public class CoreModule extends AbstractModule{
 
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
-        bind(PageManager.class).to(PageManagerImpl.class).in(Scopes.SINGLETON);
         bind(GadgetService.class).to(GadgetServiceImpl.class).in(Scopes.SINGLETON);
 
     }
