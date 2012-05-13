@@ -29,11 +29,12 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 import org.savara.gadget.web.client.ApplicationEntryPoint;
 import org.savara.gadget.web.client.BootstrapContext;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.presenter.IndexPresenter;
 import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.widgets.*;
-import org.savara.gadget.web.shared.dto.GadgetModel;
+import org.savara.gadget.web.shared.dto.WidgetModel;
 import org.savara.gadget.web.shared.dto.PageModel;
 
 import java.util.List;
@@ -56,10 +57,13 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     private IndexPresenter presenter;
 
     private List<PageModel> pageModels;
+    
+    private CurrentUser currentUser;
 
     @Inject
-    public IndexViewImpl(BootstrapContext ctx) {
+    public IndexViewImpl(BootstrapContext ctx, CurrentUser user) {
         context = ctx;
+        currentUser = user;
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
 
@@ -93,7 +97,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
 
-        presenter.getPages(new Long(1), new RestfulInvoker.Response() {
+        presenter.getPages(currentUser.getUserId(), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
                 Log.debug(response.getText());
                 pageModels = JSOParser.getPageModels(response.getText());
@@ -110,7 +114,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         for (PageModel page : pageModels) {
             PortalLayout portalLayout = new PortalLayout(page.getColumns().intValue());
             
-            for(GadgetModel model : page.getModels()) {
+            for(WidgetModel model : page.getModels()) {
                 portalLayout.addPortlet(model.getOrder().intValue(), new Portlet(model));
             }
             mainContentPanel.addTab(page.getName(), portalLayout);

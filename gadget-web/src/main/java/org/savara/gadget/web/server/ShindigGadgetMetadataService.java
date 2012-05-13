@@ -18,7 +18,7 @@
 package org.savara.gadget.web.server;
 
 import org.savara.gadget.server.model.Gadget;
-import org.savara.gadget.web.shared.dto.GadgetModel;
+import org.savara.gadget.web.shared.dto.WidgetModel;
 import org.savara.gadget.web.shared.dto.UserPreference;
 import org.jboss.resteasy.client.ClientRequest;
 import org.json.JSONArray;
@@ -42,7 +42,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
     public static final String DATA_TYPE = "dataType";
 
 
-    public GadgetModel getGadgetMetadata(String gadgetUrl) {
+    public WidgetModel getGadgetMetadata(String gadgetUrl) {
 
         String responseString = getMetadata(gadgetUrl);
 
@@ -53,7 +53,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
                     getJSONObject("result").
                     getJSONObject(gadgetUrl);
 
-            GadgetModel model = new GadgetModel();
+            WidgetModel model = new WidgetModel();
             model.setIframeUrl("http:" + responseObject.getString("iframeUrl"));
             model.setName(responseObject.getJSONObject("modulePrefs").getString("title"));
             model.setSpecUrl(gadgetUrl);

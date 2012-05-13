@@ -32,7 +32,7 @@ public class PageModel{
     
     private Long columns;
 
-    private List<GadgetModel> models = new ArrayList<GadgetModel>();
+    private List<WidgetModel> models = new ArrayList<WidgetModel>();
 
     public String getName() {
         return name;
@@ -50,15 +50,15 @@ public class PageModel{
         this.order = order;
     }
 
-    public List<GadgetModel> getModels() {
+    public List<WidgetModel> getModels() {
         return models;
     }
 
-    public void addModel(GadgetModel model) {
+    public void addModel(WidgetModel model) {
         models.add(model);
     }
 
-    public void setModels(List<GadgetModel> models) {
+    public void setModels(List<WidgetModel> models) {
         this.models = models;
     }
 

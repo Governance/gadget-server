@@ -23,7 +23,7 @@ import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
 import org.savara.gadget.server.model.Widget;
 import org.savara.gadget.server.service.UserManager;
-import org.savara.gadget.web.shared.dto.GadgetModel;
+import org.savara.gadget.web.shared.dto.WidgetModel;
 import org.savara.gadget.web.shared.dto.PageModel;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,13 +73,16 @@ public class UserController {
     @Consumes("application/json")
     @Produces("application/json")
     public Response getUser(User user, @Context HttpServletRequest request){
-        boolean result = false;
+        long userId = -1;
         User theUser = userManager.getUser(user.getName(), user.getPassword());
         if (theUser != null) {
-            result = true;
-            request.getSession().setAttribute("user", theUser);
+            User sessionUser = new User();
+            sessionUser.setId(theUser.getId());
+            sessionUser.setName(theUser.getName());
+            userId = theUser.getId();
+            request.getSession().setAttribute("user", sessionUser);
         }
-        return createJsonResponse(result);
+        return createJsonResponse(userId);
     }
 
     @POST
@@ -113,9 +116,9 @@ public class UserController {
             pageModel.setColumns(page.getColumns());
 
             for (Widget widget :page.getWidgets()) {
-                GadgetModel gadgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
-                gadgetModel.setOrder(widget.getOrder());
-                pageModel.addModel(gadgetModel);
+                WidgetModel widgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
+                widgetModel.setOrder(widget.getOrder());
+                pageModel.addModel(widgetModel);
             }
 
             pageModels.add(pageModel);

@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import org.savara.gadget.web.client.ApplicationEntryPoint;
 import org.savara.gadget.web.client.NameTokens;
 import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.util.RestfulInvoker;
 
 /**
@@ -39,9 +40,11 @@ import org.savara.gadget.web.client.util.RestfulInvoker;
  */
 public class Header {
 
+    private CurrentUser currentUser;
+    
     @Inject
-    public Header() {
-
+    public Header(CurrentUser user) {
+        currentUser = user;
     }
 
     public Widget asWidget() {
@@ -75,6 +78,7 @@ public class Header {
                 RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getInvalidSessionURL(), null,
                         new RestfulInvoker.Response(){
                             public void onResponseReceived(Request request, Response response) {
+                                currentUser.setLoggedIn(false);
                                 ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
                                         new PlaceRequest(NameTokens.LOGIN_VIEW));
                             }

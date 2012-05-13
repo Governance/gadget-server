@@ -1,7 +1,7 @@
 package org.savara.gadget.web.server;
 
 import org.savara.gadget.server.model.Gadget;
-import org.savara.gadget.web.shared.dto.GadgetModel;
+import org.savara.gadget.web.shared.dto.WidgetModel;
 
 /**
  * @author: Jeff Yu
@@ -15,7 +15,7 @@ public interface GadgetMetadataService {
      * @param gadgetUrl The gadget to fetch metadata for.
      * @return The GadgetModel that constructed from raw JSON response from the Shindig metadata RPC call.
      */
-    public GadgetModel getGadgetMetadata(String gadgetUrl);
+    public WidgetModel getGadgetMetadata(String gadgetUrl);
     
     
     public Gadget getGadgetData(String gadgetUrl);

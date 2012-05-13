@@ -21,7 +21,7 @@ package org.savara.gadget.web.shared.dto;
  * @author: Jeff Yu
  * @date: 9/02/12
  */
-public class GadgetModel {
+public class WidgetModel {
 
     private String specUrl;
 

@@ -25,7 +25,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 
 import org.savara.gadget.web.client.util.UUID;
-import org.savara.gadget.web.shared.dto.GadgetModel;
+import org.savara.gadget.web.shared.dto.WidgetModel;
 
 /**
  * @author: Jeff Yu
@@ -70,7 +70,7 @@ public class Portlet extends Composite {
         gadgetSpec.getElement().setId(widgetId);
     }
 
-    public Portlet(GadgetModel model) {
+    public Portlet(WidgetModel model) {
         this();
         title.setText(model.getName());
         gadgetSpec.getElement().setAttribute("scrolling", "no");

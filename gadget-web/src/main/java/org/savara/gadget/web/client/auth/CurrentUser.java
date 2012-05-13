@@ -27,6 +27,10 @@ public class CurrentUser {
 
     private String userName;
 
+    private long userId;
+
+    private long currentPage;
+
     public boolean isLoggedIn() {
         return loggedIn;
     }
@@ -41,5 +45,21 @@ public class CurrentUser {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(long currentPage) {
+        this.currentPage = currentPage;
     }
 }

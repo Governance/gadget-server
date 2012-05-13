@@ -18,6 +18,7 @@
 package org.savara.gadget.server.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,8 +43,8 @@ public class Page {
     @Column(name="PAGE_ORDER")
     private long pageOrder;
 
-    @OneToMany(mappedBy = "page")
-    private List<Widget> widgets;
+    @OneToMany(orphanRemoval = true, mappedBy = "page")
+    private List<Widget> widgets = new ArrayList<Widget>();
 
     @ManyToOne
     private User user;

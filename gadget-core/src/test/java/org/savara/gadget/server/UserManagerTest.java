@@ -88,11 +88,11 @@ public class UserManagerTest {
     @Test
     public void testGetAllGadgets() throws Exception {
         List<Gadget> gadgets = gadgetService.getAllGadgets(0, 10);
-        Assert.assertTrue(gadgets.size() > 0);
+        Assert.assertTrue(gadgets.size() == 3);
     }
     
     @Test
-    public void testGetGadget() throws Exception {
+    public void testGetGadgetById() throws Exception {
         Gadget gadget = gadgetService.getGadgetById(1);
         Assert.assertTrue(gadget.getId() == 1);
     }
@@ -100,7 +100,7 @@ public class UserManagerTest {
     @Test
     public void testGetGadgetsCount() throws Exception {
         int result = gadgetService.getAllGadgetsNum();
-        Assert.assertTrue(result == 2);
+        Assert.assertTrue(result == 3);
     }
 
     @Test

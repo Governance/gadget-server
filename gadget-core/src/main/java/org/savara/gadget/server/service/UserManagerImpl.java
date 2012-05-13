@@ -147,4 +147,23 @@ public class UserManagerImpl implements UserManager {
         entityManager.getTransaction().commit();
     }
 
+    public Page getPage(long pageId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Page page = entityManager.find(Page.class, pageId);
+        page.getWidgets();
+        entityManager.getTransaction().commit();
+        return page;
+    }
+
+    public void removePage(long pageId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Page page = entityManager.find(Page.class, pageId);
+        entityManager.remove(page);
+        entityManager.getTransaction().commit();
+    }
+
 }

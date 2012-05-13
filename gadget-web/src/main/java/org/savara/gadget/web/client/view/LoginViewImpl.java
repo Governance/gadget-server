@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gadget.web.client.ApplicationEntryPoint;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
 import org.savara.gadget.web.client.widgets.LoginForm;
 
@@ -43,7 +44,7 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
     private LoginForm loginForm;
 
     @Inject
-    public LoginViewImpl() {
+    public LoginViewImpl(CurrentUser user) {
         
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
@@ -57,7 +58,7 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         mainPanel = new LayoutPanel();
         mainPanel.getElement().setId("mainpanel");
 
-        loginForm = new LoginForm();
+        loginForm = new LoginForm(user);
         mainPanel.add(loginForm);
 
         panel.addNorth(headerPanel, 70);

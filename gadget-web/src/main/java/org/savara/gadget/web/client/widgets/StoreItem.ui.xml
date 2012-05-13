@@ -5,15 +5,15 @@
     <g:DecoratorPanel>
         <g:HorizontalPanel>
             <g:VerticalPanel>
-               <g:Image url="http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg">
+               <g:Image ui:field="itemImage">
                </g:Image>
-               <g:Button text="Add To Page">
+               <g:Button text="Add To Page" ui:field="addBtn">
                </g:Button>
             </g:VerticalPanel>
 
             <g:VerticalPanel>
-                <g:Label text="Currency Converter"></g:Label>
-                <g:Label text="Customizable news gadget that shows different news sections in separate tabs"></g:Label>
+                <g:Label ui:field="itemName"></g:Label>
+                <g:Label ui:field="itemDesc"></g:Label>
             </g:VerticalPanel>
         </g:HorizontalPanel>
     </g:DecoratorPanel>

@@ -18,6 +18,7 @@
 package org.savara.gadget.web.client;
 
 import org.savara.gadget.web.client.auth.CurrentUser;
+import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
 import org.savara.gadget.web.client.presenter.IndexPresenter;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
 import org.savara.gadget.web.client.presenter.StorePresenter;
@@ -53,7 +54,7 @@ public interface ApplicationUI extends Ginjector {
     Header getHeader();
 
     @DefaultGatekeeper
-    Gatekeeper getLoggedInGateKeeper();
+    LoggedInGateKeeper getLoggedInGateKeeper();
 
     CurrentUser getCurrentUser();
 }

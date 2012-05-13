@@ -18,15 +18,20 @@
 package org.savara.gadget.web.client.presenter;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.RequestBuilder;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.savara.gadget.web.client.NameTokens;
+import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
+import org.savara.gadget.web.client.util.RestfulInvoker;
 
 /**
  * @author: Jeff Yu
@@ -46,12 +51,25 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
     }
 
     public interface StoreView extends View {
+        void setPresenter(StorePresenter presenter);
         
     }
 
     @ProxyCodeSplit
     @NameToken(NameTokens.WIDGET_STORE)
-    @NoGatekeeper
+    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface StoreProxy extends ProxyPlace<StorePresenter> {}
+
+
+    public void getStoreItems(int offset, int pageSize, RestfulInvoker.Response callback) {
+        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getStoreURL(offset, pageSize),
+                null, callback);
+    }
+
+    @Override
+    public void onBind() {
+        super.onBind();
+        getView().setPresenter(this);
+    }
     
 }

@@ -50,5 +50,13 @@ public class URLBuilder {
     public static String getPagesURL(Long userId) {
         return urlBase + "rs/users/user/" + userId + "/pages";
     }
+    
+    public static String getStoreURL(int offset, int pageSize) {
+        return urlBase + "rs/stores/all/" + offset + "/" + pageSize;
+    }
+    
+    public static String getAddGadgetToPageURL(long pageId, long gadgetId) {
+        return urlBase + "rs/stores/page/" + pageId + "/gadget/" + gadgetId;
+    }
 
 }

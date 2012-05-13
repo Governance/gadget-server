@@ -18,9 +18,18 @@
 package org.savara.gadget.web.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.*;
+import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
+import org.savara.gadget.web.client.util.RestfulInvoker;
+import org.savara.gadget.web.shared.dto.StoreItemModel;
 
 /**
  * @author: Jeff Yu
@@ -32,8 +41,28 @@ public class StoreItem extends Composite {
 
     private static StoreItemUiBinder uiBinder = GWT.create(StoreItemUiBinder.class);
 
-    public StoreItem() {
+    @UiField Image itemImage;
+    @UiField Label itemName;
+    @UiField Label itemDesc;
+    @UiField Button addBtn;
+
+    public StoreItem(final StoreItemModel model, final CurrentUser user, final Label messageBar) {
         initWidget(uiBinder.createAndBindUi(this));
+        itemImage.setUrl(model.getThumbnailUrl());
+        itemName.setText(model.getName());
+        itemDesc.setText(model.getDescription());
+        
+        addBtn.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent clickEvent) {
+                RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getAddGadgetToPageURL(user.getCurrentPage(), model.getId()),
+                        null, new RestfulInvoker.Response(){
+
+                        public void onResponseReceived(Request request, Response response) {
+                             messageBar.setText("The Gadget [" + model.getName() + "] has been added successfully.");
+                    }
+                });
+            }
+        });
     }
 
 }

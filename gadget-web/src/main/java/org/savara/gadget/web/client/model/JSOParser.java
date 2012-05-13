@@ -18,9 +18,7 @@
 package org.savara.gadget.web.client.model;
 
 import com.google.gwt.core.client.JsArray;
-import org.savara.gadget.web.shared.dto.GadgetModel;
-import org.savara.gadget.web.shared.dto.PageModel;
-import org.savara.gadget.web.shared.dto.UserPreference;
+import org.savara.gadget.web.shared.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +41,12 @@ public class JSOParser {
 
             JsArray<JSOModel> widgetModels = pageModelValue.getArray("models");
             for (int j = 0; j < widgetModels.length(); j++) {
-                GadgetModel gadgetModel = new GadgetModel();
+                WidgetModel widgetModel = new WidgetModel();
                 JSOModel gadgetValue = widgetModels.get(j);
-                gadgetModel.setIframeUrl(gadgetValue.get("iframeUrl"));
-                gadgetModel.setName(gadgetValue.get("name"));
-                gadgetModel.setSpecUrl(gadgetValue.get("specUrl"));
-                gadgetModel.setOrder(gadgetValue.getLong("order"));
+                widgetModel.setIframeUrl(gadgetValue.get("iframeUrl"));
+                widgetModel.setName(gadgetValue.get("name"));
+                widgetModel.setSpecUrl(gadgetValue.get("specUrl"));
+                widgetModel.setOrder(gadgetValue.getLong("order"));
 
                 UserPreference userPreference = new UserPreference();
                 JSOModel prefValue = gadgetValue.getObject("userPreference");
@@ -77,13 +75,40 @@ public class JSOParser {
                     userPreference.addUserPreferenceSetting(prefSetting);
                 }
 
-                gadgetModel.setUserPreference(userPreference);
-                pageModel.addModel(gadgetModel);
+                widgetModel.setUserPreference(userPreference);
+                pageModel.addModel(widgetModel);
             }
           pageModels.add(pageModel);
         }
 
         return  pageModels;
+    }
+    
+    public static PageResponse<StoreItemModel> getStoreItems(String jsonValue) {
+        JSOModel model = JSOModel.fromJson(jsonValue);
+        JsArray<JSOModel> resultSets = model.getArray("resultSet");
+
+        List<StoreItemModel> items = new ArrayList<StoreItemModel>();
+
+        for (int i = 0; i < resultSets.length(); i++) {
+            StoreItemModel itemModel = new StoreItemModel();
+            JSOModel theItem = resultSets.get(i);
+            itemModel.setId(theItem.getLong("id"));
+            itemModel.setName(theItem.get("title"));
+            itemModel.setDescription(theItem.get("description"));
+            itemModel.setThumbnailUrl(theItem.get("thumbnailUrl"));
+
+            items.add(itemModel);
+        }
+        int numOfRec = model.getInt("totalResults");
+        int offset = model.getInt("offset");
+        int pageSize = model.getInt("pageSize");
+
+        PageResponse<StoreItemModel> response = new PageResponse<StoreItemModel>(items, numOfRec);
+        response.setOffset(offset);
+        response.setPageSize(pageSize);
+
+        return response;
     }
 
 }

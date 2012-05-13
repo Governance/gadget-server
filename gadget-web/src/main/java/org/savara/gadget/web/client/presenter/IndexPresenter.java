@@ -25,11 +25,13 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
 import org.savara.gadget.web.client.NameTokens;
 import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
 import org.savara.gadget.web.client.util.RestfulInvoker;
 
 /**
@@ -60,7 +62,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     @ProxyCodeSplit
     @NameToken(NameTokens.INDEX_VIEW)
-    @NoGatekeeper
+    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
 

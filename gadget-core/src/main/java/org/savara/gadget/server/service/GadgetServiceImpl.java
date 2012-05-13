@@ -37,8 +37,8 @@ public class GadgetServiceImpl implements GadgetService{
 
     //TODO: need to be replaced with initial data sql.
     private static Gadget gadget1;
-    
     private static Gadget gadget2;
+    private static Gadget gadget3;
     
     @Inject
     public GadgetServiceImpl(EntityManager em) {
@@ -52,6 +52,7 @@ public class GadgetServiceImpl implements GadgetService{
         }
         entityManager.persist(gadget1);
         entityManager.persist(gadget2);
+        entityManager.persist(gadget3);
         entityManager.getTransaction().commit();
     }
     
@@ -72,14 +73,26 @@ public class GadgetServiceImpl implements GadgetService{
         gadget2.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
         gadget2.setScreenshotUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
         gadget2.setTitleUrl("http://tofollow.com");
+        gadget2.setDescription("This is the currency converter widget");
+        
+        gadget3 = new Gadget();
+        gadget3.setAuthor("Jeff Yu");
+        gadget3.setAuthorEmail("Jeff@test.com");
+        gadget3.setTitle("BAM Gadget");
+        gadget3.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
+        gadget3.setDescription("This is the BAM gadget prototype...");
 
     }
 
     public List<Gadget> getAllGadgets(int offset, int pageSize) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
         
-        List<Gadget> gadgets = new ArrayList<Gadget>();
-        gadgets.add(gadget1);
-        gadgets.add(gadget2);
+        Query query = entityManager.createQuery("select gadget from Gadget gadget");
+        query.setFirstResult(offset).setMaxResults(pageSize);
+        List<Gadget> gadgets = query.getResultList();
+        entityManager.getTransaction().commit();
         return gadgets;
     }
 
@@ -99,6 +112,8 @@ public class GadgetServiceImpl implements GadgetService{
         widget.setAppUrl(gadget.getUrl());
         widget.setName(gadget.getTitle());
         widget.setPage(page);
+        //TODO: hard-coded for testing...
+        widget.setOrder(page.getWidgets().size() + 1);
 
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();

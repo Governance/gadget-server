@@ -15,26 +15,52 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package org.savara.gadget.web.client;
-
-import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+package org.savara.gadget.web.shared.dto;
 
 /**
  * @author: Jeff Yu
- * @date: 9/05/11
+ * @date: 13/05/12
  */
-public class ApplicationPlaceManager extends PlaceManagerImpl {
+public class StoreItemModel {
+    
+    private long id;
+    
+    private String name;
 
-    @Inject
-    public ApplicationPlaceManager(EventBus bus, TokenFormatter formatter) {
-        super(bus, formatter);
+    private String description;
+    
+    private String thumbnailUrl;
+
+
+    public long getId() {
+        return id;
     }
 
-    public void revealDefaultPlace() {
-        revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 }

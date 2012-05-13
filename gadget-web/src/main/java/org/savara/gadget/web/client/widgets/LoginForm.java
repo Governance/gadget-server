@@ -24,6 +24,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
 import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.util.UUID;
@@ -41,6 +42,8 @@ public class LoginForm extends Composite {
     private String loginId;
     
     private String signupId;
+
+    private CurrentUser currentUser;
     
     @UiField
     DivElement loginForm;
@@ -71,10 +74,12 @@ public class LoginForm extends Composite {
 
     private LoginPresenter presenter;
 
-    public LoginForm() {
+    public LoginForm(CurrentUser user) {
         String suffix = UUID.uuid(4);
         loginId = "loginform-" + suffix;
         signupId = "signupform-" + suffix;
+        
+        currentUser = user;
         
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -98,7 +103,9 @@ public class LoginForm extends Composite {
         }
         presenter.authenticateUser(username.getValue(), password.getValue(), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
-                if ("true".equals(response.getText())) {
+                if (!"-1".equals(response.getText())) {
+                    currentUser.setLoggedIn(true);
+                    currentUser.setUserId(Long.valueOf(response.getText()));
                     loginError.setText("");
                     username.setValue("");
                     password.setValue("");
