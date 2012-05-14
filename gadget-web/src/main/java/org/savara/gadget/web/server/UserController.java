@@ -22,7 +22,9 @@ import com.google.inject.Inject;
 import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
 import org.savara.gadget.server.model.Widget;
+import org.savara.gadget.server.service.GadgetService;
 import org.savara.gadget.server.service.UserManager;
+import org.savara.gadget.web.shared.dto.UserModel;
 import org.savara.gadget.web.shared.dto.WidgetModel;
 import org.savara.gadget.web.shared.dto.PageModel;
 
@@ -72,17 +74,17 @@ public class UserController {
     @Path("authentication")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response getUser(User user, @Context HttpServletRequest request){
-        long userId = -1;
+    public UserModel getUser(User user, @Context HttpServletRequest request){
         User theUser = userManager.getUser(user.getName(), user.getPassword());
+        UserModel userModel = new UserModel();
         if (theUser != null) {
-            User sessionUser = new User();
-            sessionUser.setId(theUser.getId());
-            sessionUser.setName(theUser.getName());
-            userId = theUser.getId();
-            request.getSession().setAttribute("user", sessionUser);
+            userModel.setUserId(theUser.getId());
+            userModel.setUserName(theUser.getName());
+            List<Page> pages = userManager.getPages(theUser.getId());
+            userModel.setCurrentPageId(pages.get(0).getId());
+            request.getSession().setAttribute("user", userModel);
         }
-        return createJsonResponse(userId);
+        return userModel;
     }
 
     @POST

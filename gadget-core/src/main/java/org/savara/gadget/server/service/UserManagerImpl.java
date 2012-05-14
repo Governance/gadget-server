@@ -35,15 +35,6 @@ public class UserManagerImpl implements UserManager {
 
     private EntityManager entityManager;
 
-    private static Page homePage;
-
-    static {
-        homePage = new Page();
-        homePage.setName("Home");
-        homePage.setPageOrder(0);
-        homePage.setColumns(3);
-    }
-
     @Inject
     public UserManagerImpl(EntityManager manager) {
         this.entityManager = manager;
@@ -56,6 +47,12 @@ public class UserManagerImpl implements UserManager {
         entityManager.persist(user);
         entityManager.getTransaction().commit();
         //TODO: this is for testing...
+        
+        Page homePage = new Page();
+        homePage.setName("Home");
+        homePage.setColumns(3);
+        homePage.setPageOrder(0);
+        homePage.setUser(user);
         addPage(homePage, user);
         return user;
     }
@@ -104,12 +101,13 @@ public class UserManagerImpl implements UserManager {
         query.setParameter("password", password);
         
         List<User> users = query.getResultList();
+        User user = null;
+        if (users.size() > 0) {
+            user =  users.get(0);
+        }
         entityManager.getTransaction().commit();
 
-        if (users.size() > 0) {
-            return users.get(0);
-        }
-        return null;
+        return user;
     }
 
     public boolean isUsernameExist(String username) {
@@ -152,7 +150,6 @@ public class UserManagerImpl implements UserManager {
             entityManager.getTransaction().begin();
         }
         Page page = entityManager.find(Page.class, pageId);
-        page.getWidgets();
         entityManager.getTransaction().commit();
         return page;
     }

@@ -31,7 +31,7 @@
     </appender>
 
     <logger name="org.savara.gadget.web">
-        <level value="INFO" />
+        <level value="DEBUG" />
     </logger>
 
     <!-- Root Logger -->

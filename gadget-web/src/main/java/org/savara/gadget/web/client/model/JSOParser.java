@@ -110,5 +110,14 @@ public class JSOParser {
 
         return response;
     }
+    
+    public static UserModel getUserModel(String jsonValue) {
+        JSOModel model = JSOModel.fromJson(jsonValue);
+        UserModel user = new UserModel();
+        user.setUserId(model.getLong("userId"));
+        user.setUserName(model.get("userName"));
+        user.setCurrentPageId(model.getLong("currentPageId"));
+        return user;
+    }
 
 }

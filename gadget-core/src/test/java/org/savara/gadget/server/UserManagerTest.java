@@ -22,6 +22,7 @@ import com.google.inject.Injector;
 import org.savara.gadget.server.model.Gadget;
 import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
+import org.savara.gadget.server.model.Widget;
 import org.savara.gadget.server.service.GadgetService;
 import org.savara.gadget.server.service.UserManager;
 import org.junit.Assert;
@@ -88,7 +89,7 @@ public class UserManagerTest {
     @Test
     public void testGetAllGadgets() throws Exception {
         List<Gadget> gadgets = gadgetService.getAllGadgets(0, 10);
-        Assert.assertTrue(gadgets.size() == 3);
+        Assert.assertTrue(gadgets.size() == 4);
     }
     
     @Test
@@ -100,13 +101,22 @@ public class UserManagerTest {
     @Test
     public void testGetGadgetsCount() throws Exception {
         int result = gadgetService.getAllGadgetsNum();
-        Assert.assertTrue(result == 3);
+        Assert.assertTrue(result == 4);
     }
 
     @Test
     public void testGetUserPage() throws Exception {
         List<Page> pages = userManager.getPages(user.getId());
         Assert.assertTrue(pages.size() > 0);
+    }
+    
+    @Test
+    public void testAddGadgetToPage() throws Exception {
+        Gadget gadget = gadgetService.getGadgetById(1);
+        Page page = userManager.getPage(1);
+        gadgetService.addGadgetToPage(gadget, page);
+        List<Widget> widgets = userManager.getPage(1).getWidgets();
+        Assert.assertTrue(widgets.size() > 0);
     }
 
 }

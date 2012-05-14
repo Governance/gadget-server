@@ -17,8 +17,11 @@
  */
 package org.savara.gadget.web.client.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -31,8 +34,13 @@ import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
 import org.savara.gadget.web.client.NameTokens;
 import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
+import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.util.RestfulInvoker;
+import org.savara.gadget.web.shared.dto.PageModel;
+
+import java.util.List;
 
 /**
  * @author: Jeff Yu
@@ -41,9 +49,12 @@ import org.savara.gadget.web.client.util.RestfulInvoker;
 public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
         IndexPresenter.IndexProxy>{
 
+    private CurrentUser currentUser;
+
     @Inject
-    public IndexPresenter(EventBus bus, IndexView view, IndexProxy proxy){
-         super(bus, view, proxy);
+    public IndexPresenter(EventBus bus, IndexView view, IndexProxy proxy, CurrentUser user){
+        super(bus, view, proxy);
+        currentUser = user;
     }
 
     @Override
@@ -53,11 +64,18 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     public interface IndexView extends View {
         public void setPresenter(IndexPresenter presenter);
-        //public void setPageModel(List<PageModel> models);
+        public void initializePages(List<PageModel> models);
     }
     
-    public void getPages(Long userId, RestfulInvoker.Response callback) {
-        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPagesURL(userId), null, callback);
+    public void getPages() {
+        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPagesURL(currentUser.getUserId()), null,
+                new RestfulInvoker.Response(){
+
+                    public void onResponseReceived(Request request, Response response) {
+                        List<PageModel> pageModels = JSOParser.getPageModels(response.getText());
+                        getView().initializePages(pageModels);
+                    }
+                });
     }
 
     @ProxyCodeSplit
@@ -71,6 +89,12 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
         super.onBind();
         getView().setPresenter(this);
 
-
     }
+
+    @Override
+    public void onReveal() {
+        super.onReveal();
+        getPages();
+    }
+
 }

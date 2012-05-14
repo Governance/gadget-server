@@ -24,7 +24,6 @@ import org.savara.gadget.server.model.Widget;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,9 +35,10 @@ public class GadgetServiceImpl implements GadgetService{
     private EntityManager entityManager;
 
     //TODO: need to be replaced with initial data sql.
-    private static Gadget gadget1;
-    private static Gadget gadget2;
-    private static Gadget gadget3;
+    private static Gadget todoList;
+    private static Gadget currencyConverter;
+    private static Gadget bamWidget;
+    private static Gadget dateAndTime;
     
     @Inject
     public GadgetServiceImpl(EntityManager em) {
@@ -50,37 +50,46 @@ public class GadgetServiceImpl implements GadgetService{
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
         }
-        entityManager.persist(gadget1);
-        entityManager.persist(gadget2);
-        entityManager.persist(gadget3);
+        entityManager.persist(todoList);
+        entityManager.persist(currencyConverter);
+        entityManager.persist(bamWidget);
+        entityManager.persist(dateAndTime);
         entityManager.getTransaction().commit();
     }
     
     static {
-        gadget1 = new Gadget();
-        gadget1.setAuthorEmail("googlemodules+tabnews+kennedy+201203211@google.com");
-        gadget1.setTitle("Google News");
-        gadget1.setAuthor("Google");
-        gadget1.setDescription("Customizable news gadget that shows different news sections in separate tabs.");
-        gadget1.setThumbnailUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us-thm.png");
-        gadget1.setScreenshotUrl("http://www.gstatic.com/ig/modules/tabnews/tabnews_content/us.png");
-        gadget1.setTitleUrl("http://news.google.com/");
+        todoList = new Gadget();
+        todoList.setAuthorEmail("weather@google.com");
+        todoList.setTitle("To-Do List");
+        todoList.setAuthor("Labpixies");
+        todoList.setDescription("Easily manage and track everything you need To-Do. The gadget lets you create multiple To-Do lists, each with a unique purpose.");
+        todoList.setThumbnailUrl("http://www.gstatic.com/ig/modules/labpixies/todo/images/thumbnail.cache.jpg");
+        todoList.setTitleUrl("");
+        todoList.setUrl("http://www.labpixies.com/campaigns/todo/todo.xml");
 
-        gadget2 = new Gadget();
-        gadget2.setAuthor("ToFollow");
-        gadget2.setAuthorEmail("info@tofollow.com");
-        gadget2.setTitle("Currency Converter");
-        gadget2.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        gadget2.setScreenshotUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        gadget2.setTitleUrl("http://tofollow.com");
-        gadget2.setDescription("This is the currency converter widget");
+        currencyConverter = new Gadget();
+        currencyConverter.setAuthor("Google");
+        currencyConverter.setAuthorEmail("info@tofollow.com");
+        currencyConverter.setTitle("Currency Converter");
+        currencyConverter.setThumbnailUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_content/en_us-thm.cache.png");
+        currencyConverter.setDescription("This is the currency converter widget");
+        currencyConverter.setUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
         
-        gadget3 = new Gadget();
-        gadget3.setAuthor("Jeff Yu");
-        gadget3.setAuthorEmail("Jeff@test.com");
-        gadget3.setTitle("BAM Gadget");
-        gadget3.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        gadget3.setDescription("This is the BAM gadget prototype...");
+        bamWidget = new Gadget();
+        bamWidget.setAuthor("Jeff Yu");
+        bamWidget.setAuthorEmail("Jeff@test.com");
+        bamWidget.setTitle("BAM Gadget");
+        bamWidget.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
+        bamWidget.setDescription("This is the BAM gadget prototype...");
+        bamWidget.setUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+
+        dateAndTime = new Gadget();
+        dateAndTime.setAuthor("Google");
+        dateAndTime.setAuthorEmail("admin@google.com");
+        dateAndTime.setTitle("Date & Time");
+        dateAndTime.setThumbnailUrl("http://www.gstatic.com/ig/modules/datetime_v2/content/__MSG_locale__-thm.cache.png");
+        dateAndTime.setDescription("Add a clock to your page. Click edit to change it to the color of your choice");
+        dateAndTime.setUrl("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
 
     }
 

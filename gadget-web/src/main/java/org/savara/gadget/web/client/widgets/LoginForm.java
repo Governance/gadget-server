@@ -17,6 +17,8 @@
  */
 package org.savara.gadget.web.client.widgets;
 
+import com.allen_sauer.gwt.log.client.Log;
+import com.allen_sauer.gwt.log.client.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.http.client.Request;
@@ -25,9 +27,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import org.savara.gadget.web.client.auth.CurrentUser;
+import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
 import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.util.UUID;
+import org.savara.gadget.web.shared.dto.UserModel;
 
 /**
  * @author: Jeff Yu
@@ -103,9 +107,14 @@ public class LoginForm extends Composite {
         }
         presenter.authenticateUser(username.getValue(), password.getValue(), new RestfulInvoker.Response() {
             public void onResponseReceived(Request request, Response response) {
-                if (!"-1".equals(response.getText())) {
+                Log.debug(response.getText());
+                UserModel user = JSOParser.getUserModel(response.getText());
+                if (user.getUserId() != 0) {
                     currentUser.setLoggedIn(true);
-                    currentUser.setUserId(Long.valueOf(response.getText()));
+                    currentUser.setUserId(user.getUserId());
+                    currentUser.setUserName(user.getUserName());
+                    currentUser.setCurrentPage(user.getCurrentPageId());
+
                     loginError.setText("");
                     username.setValue("");
                     password.setValue("");

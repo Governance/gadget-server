@@ -46,6 +46,8 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
         String responseString = getMetadata(gadgetUrl);
 
+        logger.debug( "gadget url is: " + gadgetUrl +  ", gadget metadata is: " + responseString);
+
         //now trim back the response to just the metadata for the single gadget
         try {
             JSONObject responseObject = new JSONArray(responseString).
@@ -58,7 +60,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
             model.setName(responseObject.getJSONObject("modulePrefs").getString("title"));
             model.setSpecUrl(gadgetUrl);
 
-            System.out.println(responseObject.toString());
+            logger.debug(responseObject.toString());
 
             // check to see if this gadget has at least one non-hidden user pref
             // to determine if we should display the edit prefs button
@@ -188,8 +190,9 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
     public static void main(String[] args) throws Exception {
         ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
-        svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml?view=view&st=default");
-        svc.getGadgetMetadata("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
-        svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+        //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
+        svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
+        //svc.getGadgetMetadata("http://www.labpixies.com/campaigns/todo/todo.xml");
+        //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
     }
 }

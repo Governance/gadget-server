@@ -17,13 +17,13 @@
  */
 package org.savara.gadget.web.server;
 
+import com.google.inject.Inject;
 import org.savara.gadget.server.model.Gadget;
 import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.service.GadgetService;
 import org.savara.gadget.server.service.UserManager;
 import org.savara.gadget.web.shared.dto.PageResponse;
 
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -58,7 +58,7 @@ public class StoreController {
     }
 
     @POST
-    @Path("page/${pageId}/gadget/${gadgetId}")
+    @Path("page/{pageId}/gadget/{gadgetId}")
     @Produces("application/json")
     public Response addGadgetToPage(@PathParam("pageId") long pageId, @PathParam("gadgetId") long gadgetId) {
         Gadget gadget = gadgetService.getGadgetById(gadgetId);

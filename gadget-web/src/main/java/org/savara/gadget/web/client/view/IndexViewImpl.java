@@ -55,8 +55,6 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     private BootstrapContext context;
     
     private IndexPresenter presenter;
-
-    private List<PageModel> pageModels;
     
     private CurrentUser currentUser;
 
@@ -97,35 +95,27 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
         getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
 
-        presenter.getPages(currentUser.getUserId(), new RestfulInvoker.Response() {
-            public void onResponseReceived(Request request, Response response) {
-                Log.debug(response.getText());
-                pageModels = JSOParser.getPageModels(response.getText());
-                Log.info("the Size " + pageModels.size());
-                initializePages();
-            }
-        });
-
-
     }
 
-    private void initializePages() {
+    public void initializePages(List<PageModel> pageModels) {
 
         for (PageModel page : pageModels) {
-            PortalLayout portalLayout = new PortalLayout(page.getColumns().intValue());
-            
+            int i = 0;
+            int columnNum = page.getColumns().intValue();
+            PortalLayout portalLayout = new PortalLayout(columnNum);
             for(WidgetModel model : page.getModels()) {
-                portalLayout.addPortlet(model.getOrder().intValue(), new Portlet(model));
+                portalLayout.addPortlet( i % columnNum, new Portlet(model));
+                i ++;
             }
             mainContentPanel.addTab(page.getName(), portalLayout);
         }
 
         //Hard-coded for testing...
-        PortalLayout sndLayout = new PortalLayout(2);
+/*        PortalLayout sndLayout = new PortalLayout(2);
         PortletLayout helloWorld = new PortletLayout("HelloWorld", "Hello World Portlet");
         sndLayout.addPortlet(0, helloWorld);
 
-        mainContentPanel.addTab("Finance", sndLayout);
+        mainContentPanel.addTab("Finance", sndLayout);*/
 
         mainContentPanel.initializeTab();
     }

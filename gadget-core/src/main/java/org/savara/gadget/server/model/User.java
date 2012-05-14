@@ -46,8 +46,11 @@ public class User implements Serializable{
     @Column(name="PASSWD")
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(orphanRemoval = true, mappedBy = "user")
     private List<Page> pages;
+
+    @Transient
+    private long currentPageId;
 
     public long getId() {
         return id;
@@ -87,5 +90,21 @@ public class User implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public long getCurrentPageId() {
+        return currentPageId;
+    }
+
+    public void setCurrentPageId(long currentPageId) {
+        this.currentPageId = currentPageId;
+    }
+
+    public List<Page> getPages() {
+        return pages;
+    }
+
+    public void setPages(List<Page> pages) {
+        this.pages = pages;
     }
 }

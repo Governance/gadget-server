@@ -43,10 +43,10 @@ public class Page {
     @Column(name="PAGE_ORDER")
     private long pageOrder;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "page")
+    @OneToMany(orphanRemoval = true, mappedBy = "page", fetch = FetchType.EAGER)
     private List<Widget> widgets = new ArrayList<Widget>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public long getId() {

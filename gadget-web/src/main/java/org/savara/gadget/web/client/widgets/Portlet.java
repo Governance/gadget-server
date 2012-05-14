@@ -62,7 +62,7 @@ public class Portlet extends Composite {
 
         settingsBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
-                 showUserPreference(id);
+                 //showUserPreference(id);
             }
         });
 
