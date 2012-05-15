@@ -163,4 +163,23 @@ public class UserManagerImpl implements UserManager {
         entityManager.getTransaction().commit();
     }
 
+    public void removeWidget(long widgetId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Widget widget = entityManager.find(Widget.class, widgetId);
+        widget.getPage().getWidgets().remove(widget);
+        entityManager.remove(widget);
+        entityManager.getTransaction().commit();
+    }
+
+    public Widget getWidgetById(long widgetId) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+        Widget widget = entityManager.find(Widget.class, widgetId);
+        entityManager.getTransaction().commit();
+        return widget;
+    }
+
 }

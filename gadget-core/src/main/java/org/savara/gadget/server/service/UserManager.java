@@ -19,6 +19,7 @@ package org.savara.gadget.server.service;
 
 import org.savara.gadget.server.model.Page;
 import org.savara.gadget.server.model.User;
+import org.savara.gadget.server.model.Widget;
 
 import java.util.List;
 
@@ -49,4 +50,8 @@ public interface UserManager {
     Page getPage(long pageId);
 
     void removePage(long pageId);
+
+    void removeWidget(long widgetId);
+
+    Widget getWidgetById(long widgetId);
 }

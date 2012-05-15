@@ -111,12 +111,20 @@ public class UserManagerTest {
     }
     
     @Test
-    public void testAddGadgetToPage() throws Exception {
+    public void testAddGadgetToPageAndRemoveWidget() throws Exception {
         Gadget gadget = gadgetService.getGadgetById(1);
         Page page = userManager.getPage(1);
         gadgetService.addGadgetToPage(gadget, page);
         List<Widget> widgets = userManager.getPage(1).getWidgets();
-        Assert.assertTrue(widgets.size() > 0);
+        Assert.assertTrue(widgets.size() == 1);
+        
+        Widget theWidget = widgets.get(0);
+        userManager.removeWidget(theWidget.getId());
+        
+        Widget w = userManager.getWidgetById(theWidget.getId());
+        Assert.assertNull(w);
+        widgets = userManager.getPage(1).getWidgets();
+        Assert.assertEquals(widgets.size(),0);
     }
 
 }

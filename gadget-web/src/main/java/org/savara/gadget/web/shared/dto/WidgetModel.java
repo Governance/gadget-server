@@ -23,6 +23,8 @@ package org.savara.gadget.web.shared.dto;
  */
 public class WidgetModel {
 
+    private long widgetId;
+
     private String specUrl;
 
     private String name;
@@ -71,6 +73,14 @@ public class WidgetModel {
 
     public void setOrder(Long order) {
         this.order = order;
+    }
+
+    public long getWidgetId() {
+        return widgetId;
+    }
+
+    public void setWidgetId(long widgetId) {
+        this.widgetId = widgetId;
     }
 
     public String toString() {

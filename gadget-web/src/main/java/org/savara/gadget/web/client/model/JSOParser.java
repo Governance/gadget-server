@@ -47,6 +47,7 @@ public class JSOParser {
                 widgetModel.setName(gadgetValue.get("name"));
                 widgetModel.setSpecUrl(gadgetValue.get("specUrl"));
                 widgetModel.setOrder(gadgetValue.getLong("order"));
+                widgetModel.setWidgetId(gadgetValue.getLong("widgetId"));
 
                 UserPreference userPreference = new UserPreference();
                 JSOModel prefValue = gadgetValue.getObject("userPreference");

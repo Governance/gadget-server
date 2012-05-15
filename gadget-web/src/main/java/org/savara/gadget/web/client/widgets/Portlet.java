@@ -17,14 +17,19 @@
  */
 package org.savara.gadget.web.client.widgets;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 
-import org.savara.gadget.web.client.util.UUID;
+import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.shared.dto.WidgetModel;
 
 /**
@@ -43,14 +48,14 @@ public class Portlet extends Composite {
 
     @UiField InlineLabel minBtn;
     @UiField InlineLabel title;
-    @UiField InlineLabel settingsBtn;
+    @UiField InlineLabel removeBtn;
     @UiField FlowPanel userPreference;
     @UiField FlowPanel portletContent;
     @UiField Frame gadgetSpec;
 
-    public Portlet() {
-        String uuid = UUID.uuid(4);
-        id = "portlet-" + uuid;
+    public Portlet(final String wid) {
+        widgetId = wid;
+        id = "portlet-" + widgetId;
         initWidget(uiBinder.createAndBindUi(this));
         getElement().setId(id);
 
@@ -60,18 +65,25 @@ public class Portlet extends Composite {
             }
         });
 
-        settingsBtn.addClickHandler(new ClickHandler() {
+        removeBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
-                 //showUserPreference(id);
+                String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
+                Log.debug("the close action url is: " + theURL);
+                RestfulInvoker.invoke(RequestBuilder.POST, theURL,
+                        null, new RestfulInvoker.Response() {
+
+                    public void onResponseReceived(Request request, Response response) {
+                        remove(id);
+                    }
+                });
             }
         });
 
-        widgetId = "widgetId-" + uuid;
         gadgetSpec.getElement().setId(widgetId);
     }
 
     public Portlet(WidgetModel model) {
-        this();
+        this(String.valueOf(model.getWidgetId()));
         title.setText(model.getName());
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");

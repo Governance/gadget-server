@@ -6,7 +6,7 @@
          <g:FlowPanel styleName="portlet-header ui-widget-header ui-corner-all">
               <g:InlineLabel ui:field="title" ></g:InlineLabel>
               <g:InlineLabel ui:field="minBtn" styleName="ui-icon ui-icon-triangle-1-s portlet-min"></g:InlineLabel>
-              <g:InlineLabel ui:field="settingsBtn" styleName="ui-icon ui-icon-gear portlet-settings"></g:InlineLabel>
+              <g:InlineLabel ui:field="removeBtn" styleName="ui-icon ui-icon-close portlet-settings"></g:InlineLabel>
               <!--g:HTMLPanel styleName="portlet-menu">
                   <div>
                       <div>Edit Preference</div>

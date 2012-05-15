@@ -58,5 +58,9 @@ public class URLBuilder {
     public static String getAddGadgetToPageURL(long pageId, long gadgetId) {
         return urlBase + "rs/stores/page/" + pageId + "/gadget/" + gadgetId;
     }
+    
+    public static String getRemoveWidgetURL(long widgetId) {
+        return urlBase + "rs/users/widget/" + widgetId + "/remove";
+    }
 
 }

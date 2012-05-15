@@ -117,6 +117,9 @@ public class GadgetServiceImpl implements GadgetService{
     }
 
     public void addGadgetToPage(Gadget gadget, Page page) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
         Widget widget = new Widget();
         widget.setAppUrl(gadget.getUrl());
         widget.setName(gadget.getTitle());
@@ -124,9 +127,6 @@ public class GadgetServiceImpl implements GadgetService{
         //TODO: hard-coded for testing...
         widget.setOrder(page.getWidgets().size() + 1);
 
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
         entityManager.persist(widget);
 
         page.getWidgets().add(widget);

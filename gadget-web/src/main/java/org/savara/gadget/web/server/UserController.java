@@ -119,6 +119,7 @@ public class UserController {
 
             for (Widget widget :page.getWidgets()) {
                 WidgetModel widgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
+                widgetModel.setWidgetId(widget.getId());
                 widgetModel.setOrder(widget.getOrder());
                 pageModel.addModel(widgetModel);
             }
@@ -127,6 +128,14 @@ public class UserController {
         }
         
         return pageModels;
+    }
+    
+    @POST
+    @Path("widget/{widgetId}/remove")
+    @Produces("application/json")
+    public Response removeWidget(@PathParam("widgetId") long widgetId) {
+        userManager.removeWidget(widgetId);
+        return Response.ok().build();
     }
     
     

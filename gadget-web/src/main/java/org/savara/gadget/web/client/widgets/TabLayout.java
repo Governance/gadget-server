@@ -54,8 +54,7 @@ public class TabLayout extends Composite {
         tabs.setId(id);
 
     }
-    
-    
+
     public void addTab(String tabTitle, Widget widget){
         String idSuffix = UUID.uuid(4);
         String tabContentId = "tab-content-" + idSuffix;
