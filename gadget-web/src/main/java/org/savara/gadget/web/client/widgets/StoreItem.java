@@ -49,6 +49,9 @@ public class StoreItem extends Composite {
     public StoreItem(final StoreItemModel model, final CurrentUser user, final Label messageBar) {
         initWidget(uiBinder.createAndBindUi(this));
         itemImage.setUrl(model.getThumbnailUrl());
+        itemImage.setHeight("60px");
+        itemImage.setWidth("100px");
+
         itemName.setText(model.getName());
         itemDesc.setText(model.getDescription());
         

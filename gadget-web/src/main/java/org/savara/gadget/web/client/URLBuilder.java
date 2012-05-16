@@ -47,8 +47,12 @@ public class URLBuilder {
         return urlBase + "rs/users/authentication";
     }
     
-    public static String getPagesURL(Long userId) {
+    public static String getPagesURL(long userId) {
         return urlBase + "rs/users/user/" + userId + "/pages";
+    }
+
+    public static String getAddPageURL(long userId) {
+        return urlBase + "rs/users/user/" + userId + "/page";
     }
     
     public static String getStoreURL(int offset, int pageSize) {

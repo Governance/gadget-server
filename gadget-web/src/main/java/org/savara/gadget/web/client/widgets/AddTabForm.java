@@ -17,11 +17,22 @@
  */
 package org.savara.gadget.web.client.widgets;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
+import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
+import org.savara.gadget.web.client.presenter.IndexPresenter;
+import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.util.UUID;
 
 /**
@@ -44,9 +55,13 @@ public class AddTabForm extends Composite {
     ListBox layoutColumns;
     
     private TabLayout tab;
+
+    private CurrentUser currentUser;
         
-    public AddTabForm() {
+    public AddTabForm(CurrentUser user) {
         id = "dialog-" + UUID.uuid(4);
+        currentUser = user;
+
         initWidget(uiBinder.createAndBindUi(this));
         dialog.setId(id);
 
@@ -54,8 +69,8 @@ public class AddTabForm extends Composite {
         layoutColumns.insertItem("Three Columns", "3", 1);
     }
     
-    public AddTabForm(TabLayout tabLayout) {
-        this();
+    public AddTabForm(CurrentUser user, TabLayout tabLayout) {
+        this(user);
         this.tab = tabLayout;
     }
 
@@ -73,11 +88,26 @@ public class AddTabForm extends Composite {
     public void addNewTab() {
         String name = tabName.getValue();
         String colNum = layoutColumns.getValue(layoutColumns.getSelectedIndex());
-        PortalLayout portal = new PortalLayout(Integer.valueOf(colNum));
 
-        tab.insertTab(name, portal);
+        Log.debug("the tab name is: " + name + ", and the colNum is: " + colNum + ", the userId : " + currentUser.getUserId());
 
-        tabName.setValue("");
+        JSONObject postData = new JSONObject();
+        postData.put("name", new JSONString(name));
+        postData.put("columns", new JSONNumber(Long.valueOf(colNum)));
+        
+        RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getAddPageURL(currentUser.getUserId()),
+                postData.toString(), new RestfulInvoker.Response(){
+
+            public void onResponseReceived(Request request, Response response) {
+                Log.debug("The response is: " + response.getText() + ", and the currentUser is : " + currentUser);
+                String newPageId = response.getText();
+                PortalLayout portal = new PortalLayout(Integer.valueOf(layoutColumns.getValue(layoutColumns.getSelectedIndex())));
+                tab.insertTab(tabName.getValue(), portal);
+                tabName.setValue("");
+                currentUser.setCurrentPage(Long.valueOf(newPageId));
+            }
+        });
+
     }
 
 

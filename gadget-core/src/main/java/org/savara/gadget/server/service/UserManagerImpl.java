@@ -136,13 +136,14 @@ public class UserManagerImpl implements UserManager {
         return pages;
     }
 
-    public void addPage(Page page, User user) {
+    public Page addPage(Page page, User user) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
         }
         page.setUser(user);
         entityManager.persist(page);
         entityManager.getTransaction().commit();
+        return page;
     }
 
     public Page getPage(long pageId) {

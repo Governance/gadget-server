@@ -60,9 +60,9 @@ public class GadgetServiceImpl implements GadgetService{
     static {
         todoList = new Gadget();
         todoList.setAuthorEmail("weather@google.com");
-        todoList.setTitle("To-Do List");
+        todoList.setTitle(" To-Do List");
         todoList.setAuthor("Labpixies");
-        todoList.setDescription("Easily manage and track everything you need To-Do. The gadget lets you create multiple To-Do lists, each with a unique purpose.");
+        todoList.setDescription(" Easily manage and track everything you need To-Do. The gadget lets you create multiple To-Do lists, each with a unique purpose.");
         todoList.setThumbnailUrl("http://www.gstatic.com/ig/modules/labpixies/todo/images/thumbnail.cache.jpg");
         todoList.setTitleUrl("");
         todoList.setUrl("http://www.labpixies.com/campaigns/todo/todo.xml");
@@ -70,25 +70,25 @@ public class GadgetServiceImpl implements GadgetService{
         currencyConverter = new Gadget();
         currencyConverter.setAuthor("Google");
         currencyConverter.setAuthorEmail("info@tofollow.com");
-        currencyConverter.setTitle("Currency Converter");
+        currencyConverter.setTitle(" Currency Converter");
         currencyConverter.setThumbnailUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_content/en_us-thm.cache.png");
-        currencyConverter.setDescription("This is the currency converter widget");
+        currencyConverter.setDescription(" This is the currency converter widget");
         currencyConverter.setUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
         
         bamWidget = new Gadget();
         bamWidget.setAuthor("Jeff Yu");
         bamWidget.setAuthorEmail("Jeff@test.com");
-        bamWidget.setTitle("BAM Gadget");
+        bamWidget.setTitle(" BAM Gadget");
         bamWidget.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        bamWidget.setDescription("This is the BAM gadget prototype...");
+        bamWidget.setDescription(" This is the BAM gadget prototype...");
         bamWidget.setUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
 
         dateAndTime = new Gadget();
         dateAndTime.setAuthor("Google");
         dateAndTime.setAuthorEmail("admin@google.com");
-        dateAndTime.setTitle("Date & Time");
+        dateAndTime.setTitle(" Date & Time");
         dateAndTime.setThumbnailUrl("http://www.gstatic.com/ig/modules/datetime_v2/content/__MSG_locale__-thm.cache.png");
-        dateAndTime.setDescription("Add a clock to your page. Click edit to change it to the color of your choice");
+        dateAndTime.setDescription(" Add a clock to your page. Click edit to change it to the color of your choice");
         dateAndTime.setUrl("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
 
     }

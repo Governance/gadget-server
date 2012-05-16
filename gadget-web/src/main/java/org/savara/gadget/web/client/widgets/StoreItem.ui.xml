@@ -12,8 +12,8 @@
             </g:VerticalPanel>
 
             <g:VerticalPanel>
-                <g:Label ui:field="itemName"></g:Label>
-                <g:Label ui:field="itemDesc"></g:Label>
+                <g:Label ui:field="itemName" styleName="storeItemDesc"></g:Label>
+                <g:Label ui:field="itemDesc" styleName="storeItemDesc"></g:Label>
             </g:VerticalPanel>
         </g:HorizontalPanel>
     </g:DecoratorPanel>

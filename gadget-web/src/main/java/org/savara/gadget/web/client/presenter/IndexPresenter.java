@@ -22,6 +22,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -77,6 +80,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
                     }
                 });
     }
+
 
     @ProxyCodeSplit
     @NameToken(NameTokens.INDEX_VIEW)

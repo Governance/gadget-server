@@ -50,6 +50,8 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
     
     private CurrentUser currentUser;
 
+    private Label messageBar = new Label();
+
     @Inject
     public StoreViewImpl(CurrentUser user) {
 
@@ -79,7 +81,7 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
                 
                 VerticalPanel storesList = new VerticalPanel();
                 storesList.setWidth("100%");
-                Label messageBar = new Label();
+                messageBar.setStyleName("storeItemInfo");
                 storesList.add(messageBar);
                 storeItems = JSOParser.getStoreItems(response.getText());
                 
@@ -98,5 +100,9 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
 
     public void setPresenter(StorePresenter presenter) {
         this.presenter = presenter;
+    }
+
+    public void clearMessageBar() {
+        messageBar.setText("");
     }
 }

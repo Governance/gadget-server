@@ -6,6 +6,10 @@ body {
     font: 12px/1.4 "Lucida Sans Unicode","Lucida Grande",sans-serif;
 }
 
+a {
+    cursor: pointer;
+}
+
 #container {
     max-width: 1024px;
     background: #BEBEBE;
@@ -117,7 +121,7 @@ li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 .gwt-DecoratorPanel .topRightInner,
 .gwt-DecoratorPanel .bottomLeftInner,
 .gwt-DecoratorPanel .bottomRightInner {
-    width: 5px;
+    width: 1px;
     height: 5px;
     zoom: 1;
     font-size: 1px;
@@ -125,19 +129,19 @@ li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 }
 .gwt-DecoratorPanel .topLeft {
     line-height: 0px;
-    background: url(images/circles.png) no-repeat 0px -6px;
+    background: url(images/circles.png) no-repeat 1px -6px;
 }
 .gwt-DecoratorPanel .topRight {
     line-height: 0px;
-    background: url(images/circles.png) no-repeat -2px -6px;
+    background: url(images/circles.png) no-repeat -4px -6px;
 }
 .gwt-DecoratorPanel .bottomLeft {
     line-height: 0px;
-    background: url(images/circles.png) no-repeat 0px -11px;
+    background: url(images/circles.png) no-repeat 1px -11px;
 }
 .gwt-DecoratorPanel .bottomRight {
     line-height: 0px;
-    background: url(images/circles.png) no-repeat -2px -11px;
+    background: url(images/circles.png) no-repeat -4px -11px;
 }
 html>body .gwt-DecoratorPanel {
     width: 95%;
@@ -151,3 +155,7 @@ html>body .gwt-DecoratorPanel {
     height: 5px;
     overflow: hidden;
 }
+
+#widget store
+.storeItemDesc{margin:5px 5px 5px 25px;}
+.storeItemInfo{width:95%; background:#2E6E9E; color: white; margin: 5px 5px 10px 25px;}

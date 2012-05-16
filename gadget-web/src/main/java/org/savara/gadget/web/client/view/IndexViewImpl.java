@@ -73,7 +73,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
         mainContentPanel = new TabLayout();
 
-        final AddTabForm addTabForm = new AddTabForm(mainContentPanel);
+        final AddTabForm addTabForm = new AddTabForm(currentUser, mainContentPanel);
 
         Anchor anchor = new Anchor();
         anchor.setText("Add a tab");

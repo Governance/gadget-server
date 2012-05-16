@@ -52,6 +52,7 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
 
     public interface StoreView extends View {
         void setPresenter(StorePresenter presenter);
+        void clearMessageBar();
         
     }
 
@@ -70,6 +71,12 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
     public void onBind() {
         super.onBind();
         getView().setPresenter(this);
+    }
+    
+    @Override
+    public void onReveal() {
+        super.onReveal();
+        getView().clearMessageBar();
     }
     
 }

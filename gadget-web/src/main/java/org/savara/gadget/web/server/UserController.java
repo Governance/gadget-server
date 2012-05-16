@@ -137,6 +137,21 @@ public class UserController {
         userManager.removeWidget(widgetId);
         return Response.ok().build();
     }
+
+    @POST
+    @Path("user/{userId}/page")
+    @Consumes("application/json")
+    public Response createPage(@PathParam("userId") long userId, PageModel pageModel) {
+        Page page = new Page();
+        page.setName(pageModel.getName());
+        page.setColumns(pageModel.getColumns());
+        
+        User theUser = userManager.getUserById(userId);
+
+        Page thePage = userManager.addPage(page, theUser);
+
+        return createJsonResponse(thePage.getId());
+    }
     
     
     private Response createJsonResponse(Object wrapper) {

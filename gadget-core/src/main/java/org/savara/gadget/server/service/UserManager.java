@@ -45,7 +45,7 @@ public interface UserManager {
 
     List<Page> getPages(long userId);
     
-    void addPage(Page page, User user);
+    Page addPage(Page page, User user);
     
     Page getPage(long pageId);
 
