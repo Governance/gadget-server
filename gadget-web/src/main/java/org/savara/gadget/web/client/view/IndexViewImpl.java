@@ -99,6 +99,8 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
     public void initializePages(List<PageModel> pageModels) {
 
+        mainContentPanel.clearAllTabs();
+
         for (PageModel page : pageModels) {
             int i = 0;
             int columnNum = page.getColumns().intValue();
@@ -109,13 +111,6 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
             }
             mainContentPanel.addTab(page.getName(), portalLayout);
         }
-
-        //Hard-coded for testing...
-/*        PortalLayout sndLayout = new PortalLayout(2);
-        PortletLayout helloWorld = new PortletLayout("HelloWorld", "Hello World Portlet");
-        sndLayout.addPortlet(0, helloWorld);
-
-        mainContentPanel.addTab("Finance", sndLayout);*/
 
         mainContentPanel.initializeTab();
     }

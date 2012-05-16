@@ -92,13 +92,12 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     public void onBind() {
         super.onBind();
         getView().setPresenter(this);
-        getPages();
     }
 
     @Override
     public void onReveal() {
         super.onReveal();
-
+        getPages();
     }
 
 }

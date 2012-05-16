@@ -22,7 +22,6 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-
 import org.savara.gadget.web.client.util.UUID;
 
 import java.util.HashMap;
@@ -66,7 +65,6 @@ public class TabLayout extends Composite {
         theContent.getElement().setId(tabContentId);
         theContent.add(widget);
         tabsContent.add(theContent);
-
     }
 
     public void addTabAnchor(Anchor anchor) {
@@ -101,6 +99,8 @@ public class TabLayout extends Composite {
         theContent.add(widget);
         tabsContent.add(theContent);
 
+        tabNames.put(tabContentId, tabTitle);
+
         addNewTab(id, tabContentId, tabTitle);
     }
 
@@ -111,6 +111,13 @@ public class TabLayout extends Composite {
     public void initializeTab() {
         initTabs(id);
         registerCloseEvent(id);
+    }
+
+    public void clearAllTabs(){
+        for(String contentId : tabNames.keySet()) {
+            removeTab(id, contentId);
+        }
+        destroyTab(id);
     }
 
     /**
@@ -127,6 +134,16 @@ public class TabLayout extends Composite {
         var theTabs = $wnd.$('#'+id).tabs();
         $wnd.$('#'+id).tabs("add", "#"+tabContentId, tabTitle);
         theTabs.tabs("select","#"+tabContentId);
+    }-*/;
+
+    private static native void removeTab(String id, String tabContentId) /*-{
+        var theTabs = $wnd.$('#'+id).tabs();
+        theTabs.tabs("remove","#"+tabContentId);
+    }-*/;
+
+    private static native void destroyTab(String id) /*-{
+        var theTabs = $wnd.$('#'+id).tabs();
+        theTabs.tabs("destroy");
     }-*/;
 
     /**
