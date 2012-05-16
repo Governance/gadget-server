@@ -22,7 +22,7 @@ Then:
   1) gadget-server.war from the gadget-shindig/target folder.
   2) gadget-web.war from the gadget-web/target folder.
 
-Start the Browser to go to: 
+Start the Browser (best to use Chrome for now) to go to: 
   http://localhost:8080/gadget-web
 
 
