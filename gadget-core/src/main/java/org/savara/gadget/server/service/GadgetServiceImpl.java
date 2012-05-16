@@ -87,7 +87,7 @@ public class GadgetServiceImpl implements GadgetService{
         dateAndTime.setAuthor("Google");
         dateAndTime.setAuthorEmail("admin@google.com");
         dateAndTime.setTitle(" Date & Time");
-        dateAndTime.setThumbnailUrl("http://www.gstatic.com/ig/modules/datetime_v2/content/__MSG_locale__-thm.cache.png");
+        dateAndTime.setThumbnailUrl("http://gadgets.adwebmaster.net/images/gadgets/datetimemulti/thumbnail_en.jpg");
         dateAndTime.setDescription(" Add a clock to your page. Click edit to change it to the color of your choice");
         dateAndTime.setUrl("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
 
