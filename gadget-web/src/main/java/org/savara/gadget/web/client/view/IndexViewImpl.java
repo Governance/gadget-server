@@ -76,13 +76,13 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         final AddTabForm addTabForm = new AddTabForm(currentUser, mainContentPanel);
 
         Anchor anchor = new Anchor();
-        anchor.setText("Add a tab");
+        anchor.setText("+");
         anchor.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
                 addTabForm.show();
             }
         });
-        mainContentPanel.addTabAnchor(anchor);
+        mainContentPanel.setTabAnchor(anchor);
 
         mainPanel = new LayoutPanel();
         mainPanel.add(addTabForm);
@@ -111,6 +111,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
             }
             mainContentPanel.addTab(page.getName(), portalLayout);
         }
+        mainContentPanel.addTabAnchor();
 
         mainContentPanel.initializeTab();
     }

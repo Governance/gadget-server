@@ -45,13 +45,15 @@ public class TabLayout extends Composite {
 
     @UiField DivElement tabs;
     
+    private ListItem addTabAnchorItem;
+
+    
     private Map<String, String> tabNames = new HashMap<String, String>();
 
     public TabLayout() {
         id = "tabs-" + UUID.uuid(4);
         initWidget(uiBinder.createAndBindUi(this));
         tabs.setId(id);
-
     }
 
     public void addTab(String tabTitle, Widget widget){
@@ -67,10 +69,14 @@ public class TabLayout extends Composite {
         tabsContent.add(theContent);
     }
 
-    public void addTabAnchor(Anchor anchor) {
-        ListItem li = new ListItem();
-        li.add(anchor);
-        tabsBar.add(li);
+    public void setTabAnchor(Anchor anchor) {
+        addTabAnchorItem = new ListItem();
+        addTabAnchorItem.add(anchor);
+        tabsBar.add(addTabAnchorItem);
+    }
+
+    public void addTabAnchor() {
+        tabsBar.add(addTabAnchorItem);
     }
 
     private void addTabTitle(String tabTitle, String tabContentId) {
@@ -99,9 +105,15 @@ public class TabLayout extends Composite {
         theContent.add(widget);
         tabsContent.add(theContent);
 
+        int index = tabNames.size();
+
         tabNames.put(tabContentId, tabTitle);
 
-        addNewTab(id, tabContentId, tabTitle);
+        tabsBar.remove(addTabAnchorItem);
+
+        addNewTab(id, tabContentId, tabTitle, index);
+
+        tabsBar.add(addTabAnchorItem);
     }
 
     public void onAttach() {
@@ -117,6 +129,7 @@ public class TabLayout extends Composite {
         for(String contentId : tabNames.keySet()) {
             removeTab(id, contentId);
         }
+        tabsBar.remove(addTabAnchorItem);
         destroyTab(id);
     }
 
@@ -130,9 +143,9 @@ public class TabLayout extends Composite {
         });
     }-*/;
 
-    private static native void addNewTab(String id, String tabContentId, String tabTitle) /*-{
+    private static native void addNewTab(String id, String tabContentId, String tabTitle, int index) /*-{
         var theTabs = $wnd.$('#'+id).tabs();
-        $wnd.$('#'+id).tabs("add", "#"+tabContentId, tabTitle);
+        $wnd.$('#'+id).tabs("add", "#"+tabContentId, tabTitle, index);
         theTabs.tabs("select","#"+tabContentId);
     }-*/;
 
@@ -153,7 +166,7 @@ public class TabLayout extends Composite {
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$("li", theTabs).index($wnd.$(this).parent());
-            theTabs.tabs('remove', index - 1);
+            theTabs.tabs('remove', index);
         });
     }-*/;
 

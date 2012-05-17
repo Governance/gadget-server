@@ -38,6 +38,7 @@ public class PortalLayout extends Composite {
     
     private static final String THREE_COLUMN_WIDTH = "325px";
     private static final String TWO_COLUMN_WIDTH = "480px";
+    private static final String ONE_COLUMN_WIDTH = "980px";
     
     private String columnWidth = TWO_COLUMN_WIDTH;
 
@@ -53,7 +54,10 @@ public class PortalLayout extends Composite {
         columnPanel = new ArrayList<FlowPanel>(column);
         if (column == 3) {
             columnWidth = THREE_COLUMN_WIDTH;
+        } else if (column == 1) {
+            columnWidth = ONE_COLUMN_WIDTH;
         }
+
         for (int i = 0; i < column; i++) {
            FlowPanel cpanel = new FlowPanel();
            cpanel.getElement().addClassName("column");

@@ -65,8 +65,9 @@ public class AddTabForm extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
         dialog.setId(id);
 
-        layoutColumns.insertItem("Two Columns", "2", 0);
-        layoutColumns.insertItem("Three Columns", "3", 1);
+        layoutColumns.insertItem("One Column", "1", 0);
+        layoutColumns.insertItem("Two Columns", "2", 1);
+        layoutColumns.insertItem("Three Columns", "3", 2);
     }
     
     public AddTabForm(CurrentUser user, TabLayout tabLayout) {
