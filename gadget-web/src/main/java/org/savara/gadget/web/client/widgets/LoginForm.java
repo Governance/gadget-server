@@ -138,16 +138,16 @@ public class LoginForm extends Composite {
 
     public void doSignup(){
         //TODO: best to enumerate all of possible errors at once.
-        if (!signupConfirmPassword.getValue().equals(signupPassword.getValue())) {
+        if (isEmpty(signupUsername.getValue()) || isEmpty(signupPassword.getValue())) {
+            signupError.setText("username and password are required.");
+            return;
+        } else if (!signupConfirmPassword.getValue().equals(signupPassword.getValue())) {
             signupError.setText("Password and Confirm Password do not match");
             signupConfirmPassword.setValue("");
             signupPassword.setValue("");
             return;
         } else if (email.getValue() != null && email.getValue().indexOf("@") == -1) {
             signupError.setText("email is not valid.");
-            return;
-        } else if (isEmpty(signupUsername.getValue()) || isEmpty(signupPassword.getValue())) {
-            signupError.setText("username and password are required.");
             return;
         }
 
@@ -172,17 +172,24 @@ public class LoginForm extends Composite {
                 displayName.getValue(), new RestfulInvoker.Response() {
 
             public void onResponseReceived(Request request, Response response) {
-                signupUsername.setValue("");
-                signupPassword.setValue("");
-                signupConfirmPassword.setValue("");
-                email.setValue("");
-                displayName.setValue("");
-                signupError.setText("");
-                username.setValue("");
-                password.setValue("");
-                loginError.setText("");
-                closeWindow(signupId);
-                openWindow(loginId);
+                UserModel user = JSOParser.getUserModel(response.getText());
+                if (user.getUserId() != 0) {
+                    currentUser.setLoggedIn(true);
+                    currentUser.setUserId(user.getUserId());
+                    currentUser.setUserName(user.getUserName());
+                    currentUser.setCurrentPage(user.getCurrentPageId());
+
+                    signupUsername.setValue("");
+                    signupPassword.setValue("");
+                    signupConfirmPassword.setValue("");
+                    email.setValue("");
+                    displayName.setValue("");
+                    signupError.setText("");
+                    loginError.setText("");
+                    closeWindow(signupId);
+                    presenter.forwardToIndex();
+                }
+
             }
 
         });

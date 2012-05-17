@@ -65,9 +65,9 @@ public class UserController {
     @Path("user")
     @Produces("application/json")
     @Consumes("application/json")
-    public User createUser(User user){
+    public UserModel createUser(User user, @Context HttpServletRequest request){
         userManager.createUser(user);
-        return user;
+        return getUser(user, request);
     }
 
     @POST
