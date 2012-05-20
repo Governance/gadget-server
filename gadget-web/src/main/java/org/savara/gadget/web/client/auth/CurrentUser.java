@@ -31,6 +31,8 @@ public class CurrentUser {
 
     private long currentPage;
 
+    private boolean isInWidgetStore = false;
+
     public boolean isLoggedIn() {
         return loggedIn;
     }
@@ -61,5 +63,13 @@ public class CurrentUser {
 
     public void setCurrentPage(long currentPage) {
         this.currentPage = currentPage;
+    }
+
+    public boolean isInWidgetStore() {
+        return isInWidgetStore;
+    }
+
+    public void setInWidgetStore(boolean inWidgetStore) {
+        isInWidgetStore = inWidgetStore;
     }
 }

@@ -50,7 +50,7 @@ public class StoreItem extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
         itemImage.setUrl(model.getThumbnailUrl());
         itemImage.setHeight("60px");
-        itemImage.setWidth("100px");
+        itemImage.setWidth("120px");
 
         itemName.setText(model.getName());
         itemDesc.setText(model.getDescription());

@@ -173,6 +173,7 @@ public class LoginForm extends Composite {
 
             public void onResponseReceived(Request request, Response response) {
                 UserModel user = JSOParser.getUserModel(response.getText());
+
                 if (user.getUserId() != 0) {
                     currentUser.setLoggedIn(true);
                     currentUser.setUserId(user.getUserId());

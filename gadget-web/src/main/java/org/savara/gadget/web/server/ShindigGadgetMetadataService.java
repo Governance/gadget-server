@@ -191,7 +191,8 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
     public static void main(String[] args) throws Exception {
         ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
         //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
-        svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
+        //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
+        svc.getGadgetMetadata("http://research.stlouisfed.org/gadgets/code/alfredgraph.xml");
         //svc.getGadgetMetadata("http://www.labpixies.com/campaigns/todo/todo.xml");
         //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
     }

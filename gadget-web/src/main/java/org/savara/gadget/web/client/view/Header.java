@@ -17,6 +17,7 @@
  */
 package org.savara.gadget.web.client.view;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,37 +41,25 @@ import org.savara.gadget.web.client.util.RestfulInvoker;
  */
 public class Header {
 
-    private CurrentUser currentUser;
+    private LayoutPanel headerLayout;
+
+    private CurrentUser user;
+    
+    private HTML backToTabs;
+    
+    private HTML store;
     
     @Inject
-    public Header(CurrentUser user) {
-        currentUser = user;
+    public Header(CurrentUser cuser) {
+        user = cuser;
+        headerLayout = new LayoutPanel();
+        headerLayout.addStyleName("header-panel");
+
+        Log.debug("header instance gets initialised.");
     }
 
     public Widget asWidget() {
-        LayoutPanel headerLayout = new LayoutPanel();
-        headerLayout.addStyleName("header-panel");
-
-        HTML home = new HTML("Home");
-        home.addStyleName("header-link");
-        home.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
-                        new PlaceRequest(NameTokens.INDEX_VIEW)
-                );
-            }
-        });
-
-        HTML store = new HTML("Widget Store");
-        store.addStyleName("header-link");
-        store.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
-                        new PlaceRequest(NameTokens.WIDGET_STORE)
-                );
-            }
-        });
-
+        Log.debug("header instance's asWidget method");
         HTML logout = new HTML("Logout");
         logout.addStyleName("header-link");
         logout.addClickHandler(new ClickHandler() {
@@ -78,7 +67,7 @@ public class Header {
                 RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getInvalidSessionURL(), null,
                         new RestfulInvoker.Response(){
                             public void onResponseReceived(Request request, Response response) {
-                                currentUser.setLoggedIn(false);
+                                user.setLoggedIn(false);
                                 ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
                                         new PlaceRequest(NameTokens.LOGIN_VIEW));
                             }
@@ -86,20 +75,63 @@ public class Header {
             }
         });
 
-        headerLayout.add(home);
-        headerLayout.add(store);
         headerLayout.add(logout);
-
-        headerLayout.setWidgetRightWidth(home, 100, Style.Unit.PX, 60, Style.Unit.PX);
-        headerLayout.setWidgetTopHeight(home, 45, Style.Unit.PX, 28, Style.Unit.PX);
-
-        headerLayout.setWidgetRightWidth(store, 5, Style.Unit.PX, 110, Style.Unit.PX);
-        headerLayout.setWidgetTopHeight(store, 45, Style.Unit.PX, 28, Style.Unit.PX);
 
         headerLayout.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
         headerLayout.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
 
         return headerLayout;
+    }
+
+    public void initializeNavigationMenu(final CurrentUser currentUser) {
+        Log.debug("the current user is in widget store?: " + currentUser.isInWidgetStore());
+
+        if (backToTabs != null) {
+            headerLayout.remove(backToTabs);
+            backToTabs = null;
+        }
+        if (store != null) {
+            headerLayout.remove(store);
+            store = null;
+        }
+        Log.debug("the headerLayout is: " + headerLayout);
+        
+        if (currentUser.isInWidgetStore()) {
+            backToTabs = new HTML("Back to Tabs");
+            backToTabs.addStyleName("header-link");
+            backToTabs.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+                            new PlaceRequest(NameTokens.INDEX_VIEW)
+                    );
+                }
+            });
+
+            headerLayout.add(backToTabs);
+
+            headerLayout.setWidgetRightWidth(backToTabs, 5, Style.Unit.PX, 110, Style.Unit.PX);
+            headerLayout.setWidgetTopHeight(backToTabs, 45, Style.Unit.PX, 28, Style.Unit.PX);
+            Log.debug("added the backToTabs " + backToTabs);
+
+        } else {
+            store = new HTML("Widget Store");
+            store.addStyleName("header-link");
+            store.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+                            new PlaceRequest(NameTokens.WIDGET_STORE)
+                    );
+                }
+            });
+
+            headerLayout.add(store);
+
+            headerLayout.setWidgetRightWidth(store, 5, Style.Unit.PX, 110, Style.Unit.PX);
+            headerLayout.setWidgetTopHeight(store, 45, Style.Unit.PX, 28, Style.Unit.PX);
+            
+            Log.debug("added to the widget store " + store);
+        }
+
     }
 
 }

@@ -17,8 +17,11 @@
  */
 package org.savara.gadget.web.client.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -30,8 +33,12 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import org.savara.gadget.web.client.NameTokens;
 import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
 import org.savara.gadget.web.client.auth.LoggedInGateKeeper;
+import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.util.RestfulInvoker;
+import org.savara.gadget.web.shared.dto.PageResponse;
+import org.savara.gadget.web.shared.dto.StoreItemModel;
 
 /**
  * @author: Jeff Yu
@@ -39,9 +46,12 @@ import org.savara.gadget.web.client.util.RestfulInvoker;
  */
 public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePresenter.StoreProxy>{
 
+    private CurrentUser currentUser;
+
     @Inject
-    public StorePresenter(EventBus bus, StoreView view, StoreProxy proxy) {
+    public StorePresenter(EventBus bus, StoreView view, StoreProxy proxy, CurrentUser user) {
         super(bus, view, proxy);
+        currentUser = user;
     }
     
 
@@ -53,18 +63,25 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
     public interface StoreView extends View {
         void setPresenter(StorePresenter presenter);
         void clearMessageBar();
+        void loadStoreItems(PageResponse<StoreItemModel> storeItems);
         
     }
 
     @ProxyCodeSplit
     @NameToken(NameTokens.WIDGET_STORE)
-    @UseGatekeeper(LoggedInGateKeeper.class)
+    //@UseGatekeeper(LoggedInGateKeeper.class)
+    @NoGatekeeper
     public interface StoreProxy extends ProxyPlace<StorePresenter> {}
 
 
-    public void getStoreItems(int offset, int pageSize, RestfulInvoker.Response callback) {
+    public void getStoreItems(int offset, int pageSize) {
         RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getStoreURL(offset, pageSize),
-                null, callback);
+                null, new RestfulInvoker.Response() {
+                public void onResponseReceived(Request request, Response response) {
+                     PageResponse<StoreItemModel> storeItems = JSOParser.getStoreItems(response.getText());
+                     getView().loadStoreItems(storeItems);
+                }
+        });
     }
 
     @Override
@@ -77,6 +94,9 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
     public void onReveal() {
         super.onReveal();
         getView().clearMessageBar();
+        currentUser.setInWidgetStore(true);
+        Log.debug("StorePresenter onReval()...");
+        getStoreItems(0, 10);
     }
     
 }

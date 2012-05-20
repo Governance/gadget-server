@@ -17,18 +17,14 @@
  */
 package org.savara.gadget.web.client.view;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gadget.web.client.ApplicationEntryPoint;
 import org.savara.gadget.web.client.auth.CurrentUser;
-import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.presenter.StorePresenter;
-import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.widgets.StoreItem;
 import org.savara.gadget.web.shared.dto.PageResponse;
 import org.savara.gadget.web.shared.dto.StoreItemModel;
@@ -45,15 +41,15 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
     private LayoutPanel mainPanel;
     
     private StorePresenter presenter;
-    
-    private PageResponse<StoreItemModel> storeItems;
-    
+
     private CurrentUser currentUser;
+    
+    private Header theHeader;
 
     private Label messageBar = new Label();
 
     @Inject
-    public StoreViewImpl(CurrentUser user) {
+    public StoreViewImpl(CurrentUser user, Header header) {
 
         this.currentUser = user;
 
@@ -73,25 +69,27 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 
-        headerPanel.add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
+        theHeader = header;
+        headerPanel.add(theHeader.asWidget());
         footerPanel.add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
-        
-        presenter.getStoreItems(0, 10, new RestfulInvoker.Response() {
-            public void onResponseReceived(Request request, Response response) {
-                
-                VerticalPanel storesList = new VerticalPanel();
-                storesList.setWidth("100%");
-                messageBar.setStyleName("storeItemInfo");
-                storesList.add(messageBar);
-                storeItems = JSOParser.getStoreItems(response.getText());
-                
-                for (StoreItemModel item : storeItems.getResultSet()) {
-                    StoreItem storeItem = new StoreItem(item, currentUser, messageBar);
-                    storesList.add(storeItem);
-                }
-                mainPanel.add(storesList);
-            }
-        });
+    }
+
+    public void loadStoreItems(PageResponse<StoreItemModel> storeItems) {
+        Log.debug("loadStoreItems ... ");
+        mainPanel.clear();
+
+        VerticalPanel storesList = new VerticalPanel();
+        storesList.setWidth("100%");
+        messageBar.setStyleName("storeItemInfo");
+        storesList.add(messageBar);
+
+        for (StoreItemModel item : storeItems.getResultSet()) {
+            StoreItem storeItem = new StoreItem(item, currentUser, messageBar);
+            storesList.add(storeItem);
+        }
+        mainPanel.add(storesList);
+
+        theHeader.initializeNavigationMenu(currentUser);
     }
 
     public Widget asWidget() {

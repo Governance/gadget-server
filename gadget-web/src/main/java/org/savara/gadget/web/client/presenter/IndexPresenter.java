@@ -71,6 +71,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     }
     
     public void getPages() {
+        Log.debug("the currentUser id in getPages() is: " + currentUser.getUserId());
         RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPagesURL(currentUser.getUserId()), null,
                 new RestfulInvoker.Response(){
 
@@ -84,7 +85,8 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     @ProxyCodeSplit
     @NameToken(NameTokens.INDEX_VIEW)
-    @UseGatekeeper(LoggedInGateKeeper.class)
+    //@UseGatekeeper(LoggedInGateKeeper.class)
+    @NoGatekeeper
     public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
 
@@ -97,6 +99,8 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     @Override
     public void onReveal() {
         super.onReveal();
+        currentUser.setInWidgetStore(false);
+        Log.debug("Index Presenter onReval()...");
         getPages();
     }
 

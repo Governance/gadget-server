@@ -21,8 +21,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -30,9 +28,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import org.savara.gadget.web.client.ApplicationEntryPoint;
 import org.savara.gadget.web.client.BootstrapContext;
 import org.savara.gadget.web.client.auth.CurrentUser;
-import org.savara.gadget.web.client.model.JSOParser;
 import org.savara.gadget.web.client.presenter.IndexPresenter;
-import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.widgets.*;
 import org.savara.gadget.web.shared.dto.WidgetModel;
 import org.savara.gadget.web.shared.dto.PageModel;
@@ -57,9 +53,11 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     private IndexPresenter presenter;
     
     private CurrentUser currentUser;
+    
+    private Header theHeader;
 
     @Inject
-    public IndexViewImpl(BootstrapContext ctx, CurrentUser user) {
+    public IndexViewImpl(BootstrapContext ctx, CurrentUser user, Header header) {
         context = ctx;
         currentUser = user;
         headerPanel = new LayoutPanel();
@@ -92,12 +90,16 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 
-        getHeaderPanel().add(ApplicationEntryPoint.MODULES.getHeader().asWidget());
+        theHeader = header;
+        getHeaderPanel().add(theHeader.asWidget());
         getFooterPanel().add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
+        
+        Log.debug("the IndexViewImpl gets initialised...");
 
     }
 
     public void initializePages(List<PageModel> pageModels) {
+        Log.debug("the initializePages...");
 
         mainContentPanel.clearAllTabs();
 
@@ -112,6 +114,8 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
             mainContentPanel.addTab(page.getName(), portalLayout);
         }
         mainContentPanel.addTabAnchor();
+
+        theHeader.initializeNavigationMenu(currentUser);
 
         mainContentPanel.initializeTab();
     }
