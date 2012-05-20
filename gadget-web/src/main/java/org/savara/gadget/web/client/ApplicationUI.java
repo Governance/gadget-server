@@ -23,7 +23,6 @@ import org.savara.gadget.web.client.presenter.IndexPresenter;
 import org.savara.gadget.web.client.presenter.LoginPresenter;
 import org.savara.gadget.web.client.presenter.StorePresenter;
 import org.savara.gadget.web.client.view.Footer;
-import org.savara.gadget.web.client.view.Header;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
@@ -51,7 +50,6 @@ public interface ApplicationUI extends Ginjector {
     AsyncProvider<StorePresenter> getStorePresenter();
     
     Footer getFooter();
-    Header getHeader();
 
     @DefaultGatekeeper
     LoggedInGateKeeper getLoggedInGateKeeper();

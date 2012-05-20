@@ -25,6 +25,8 @@ Then:
 Start the Browser (best to use Chrome for now) to go to: 
   http://localhost:8080/gadget-web
 
+You'll need to signup a user to login, there is no default user provided at the moment.
+
 
 
 

@@ -53,8 +53,7 @@ public class ApplicationModule extends AbstractPresenterModule {
         bind(ApplicationProperties.class).to(BootstrapContext.class).in(Singleton.class);
         
         bind(Footer.class).in(Singleton.class);
-        bind(Header.class).in(Singleton.class);
-        
+
         //Presenters
         bindPresenter(IndexPresenter.class, IndexPresenter.IndexView.class, IndexViewImpl.class,
                 IndexPresenter.IndexProxy.class);

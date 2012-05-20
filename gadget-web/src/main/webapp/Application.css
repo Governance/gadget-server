@@ -64,6 +64,11 @@ a {
     text-decoration:underline;
 }
 
+.userinfo {
+    background: url(images/user.png) no-repeat;
+    text-indent: 22px;
+}
+
 .red-error {color:red}
 
 
