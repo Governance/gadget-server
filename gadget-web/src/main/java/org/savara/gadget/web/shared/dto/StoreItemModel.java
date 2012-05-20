@@ -30,6 +30,8 @@ public class StoreItemModel {
     private String description;
     
     private String thumbnailUrl;
+    
+    private String author;
 
 
     public long getId() {
@@ -62,5 +64,13 @@ public class StoreItemModel {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

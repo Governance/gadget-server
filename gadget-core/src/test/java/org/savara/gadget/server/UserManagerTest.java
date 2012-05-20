@@ -89,7 +89,7 @@ public class UserManagerTest {
     @Test
     public void testGetAllGadgets() throws Exception {
         List<Gadget> gadgets = gadgetService.getAllGadgets(0, 10);
-        Assert.assertTrue(gadgets.size() == 4);
+        Assert.assertTrue(gadgets.size() == 5);
     }
     
     @Test
@@ -101,7 +101,7 @@ public class UserManagerTest {
     @Test
     public void testGetGadgetsCount() throws Exception {
         int result = gadgetService.getAllGadgetsNum();
-        Assert.assertTrue(result == 4);
+        Assert.assertTrue(result == 5);
     }
 
     @Test

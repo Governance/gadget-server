@@ -88,74 +88,54 @@ a {
 /** css for the Tab */
 li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 
-#decorator panel
+/** css for widget store */
 
-.gwt-DecoratorPanel {
-}
-.gwt-DecoratorPanel .topCenter {
-    border-top: 1px solid #bbb;
-    line-height: 0px;
-}
-.gwt-DecoratorPanel .bottomCenter {
-    border-bottom: 1px solid #bbb;
-    line-height: 0px;
-}
-.gwt-DecoratorPanel .topCenterInner,
-.gwt-DecoratorPanel .bottomCenterInner {
-    height: 1px;
-    line-height: 0px;
-    font-size: 1px;
-}
-.gwt-DecoratorPanel .middleLeft {
-    border-left: 1px solid #bbb;
-}
-.gwt-DecoratorPanel .middleRight {
-    border-right: 1px solid #bbb;
-}
-.gwt-DecoratorPanel .middleLeftInner,
-.gwt-DecoratorPanel .middleRightInner {
-    width: 1px;
-    line-height: 1px;
-}
-.gwt-DecoratorPanel .topLeftInner,
-.gwt-DecoratorPanel .topRightInner,
-.gwt-DecoratorPanel .bottomLeftInner,
-.gwt-DecoratorPanel .bottomRightInner {
-    width: 1px;
-    height: 5px;
-    zoom: 1;
-    font-size: 1px;
-    overflow: hidden;
-}
-.gwt-DecoratorPanel .topLeft {
-    line-height: 0px;
-    background: url(images/circles.png) no-repeat 1px -6px;
-}
-.gwt-DecoratorPanel .topRight {
-    line-height: 0px;
-    background: url(images/circles.png) no-repeat -4px -6px;
-}
-.gwt-DecoratorPanel .bottomLeft {
-    line-height: 0px;
-    background: url(images/circles.png) no-repeat 1px -11px;
-}
-.gwt-DecoratorPanel .bottomRight {
-    line-height: 0px;
-    background: url(images/circles.png) no-repeat -4px -11px;
-}
-html>body .gwt-DecoratorPanel {
-    width: 95%;
-    margin: 5px 5px 10px 25px;
-}
-* html .gwt-DecoratorPanel .topLeftInner,
-* html .gwt-DecoratorPanel .topRightInner,
-* html .gwt-DecoratorPanel .bottomLeftInner,
-* html .gwt-DecoratorPanel .bottomRightInner {
-    width: 5px;
-    height: 5px;
-    overflow: hidden;
+.gadget-item {
+    width: 90%;
+    padding: 0 0 25px 25px;
+    margin-bottom: 5px;
+    margin-left:25px;
+    border-bottom: 1px solid #2E6E9E;
 }
 
-#widget store
-.storeItemDesc{margin:5px 5px 5px 25px;}
-.storeItemInfo{width:95%; background:#2E6E9E; color: white; margin: 5px 5px 10px 25px;}
+.gadget-item:hover{
+    background:#D5E2E3;
+}
+
+.gadget img {
+    border: 1px solid #2E6E9E;
+}
+
+.gadget-name {
+    color: #15c;
+    font-weight: bold;
+    font-size: 110%;
+}
+
+.gadget-add-btn {
+    border: 1px solid #2E6E9E;
+    background: white;
+    cursor: pointer;
+}
+
+.gadget {
+    float:left;
+    text-algin:center;
+}
+
+.gadget-info {
+    margin-left:132px;
+}
+
+.gadget-info p {
+    margin-bottom: 5px;
+    overflow:hidden;
+}
+
+.author-panel {
+    font-size: 11px !important;
+    margin-bottom: 5px;
+}
+
+.storeItemInfo{width:90%; background:#2E6E9E; color: white; margin: 5px 5px 10px 25px;}
+

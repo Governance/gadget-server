@@ -1,21 +1,20 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:sam='urn:import:org.savara.gadget.web.client.widgets'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 
-    <g:DecoratorPanel>
-        <g:HorizontalPanel>
-            <g:VerticalPanel>
-               <g:Image ui:field="itemImage">
-               </g:Image>
-               <g:Button text="Add To Page" ui:field="addBtn">
-               </g:Button>
-            </g:VerticalPanel>
-
-            <g:VerticalPanel>
-                <g:Label ui:field="itemName" styleName="storeItemDesc"></g:Label>
-                <g:Label ui:field="itemDesc" styleName="storeItemDesc"></g:Label>
-            </g:VerticalPanel>
-        </g:HorizontalPanel>
-    </g:DecoratorPanel>
+    <g:HTMLPanel>
+        <div class="gadget-item">
+            <div class="gadget">
+                <g:Image ui:field="itemImage"></g:Image>
+                <div>
+                    <g:Button text="Add To Page" ui:field="addBtn" styleName="gadget-add-btn"></g:Button>
+                </div>
+            </div>
+            <div class="gadget-info">
+                <p><g:Label ui:field="itemName" styleName="gadget-name"></g:Label> </p>
+                <g:Label ui:field="itemAuthor" styleName="author-panel"></g:Label>
+                <p><g:Label ui:field="itemDesc"></g:Label> </p>
+            </div>
+        </div>
+    </g:HTMLPanel>
 
 </ui:UiBinder>

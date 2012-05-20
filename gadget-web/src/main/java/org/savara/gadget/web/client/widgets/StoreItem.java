@@ -45,6 +45,7 @@ public class StoreItem extends Composite {
     @UiField Label itemName;
     @UiField Label itemDesc;
     @UiField Button addBtn;
+    @UiField Label itemAuthor;
 
     public StoreItem(final StoreItemModel model, final CurrentUser user, final Label messageBar) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -54,6 +55,7 @@ public class StoreItem extends Composite {
 
         itemName.setText(model.getName());
         itemDesc.setText(model.getDescription());
+        itemAuthor.setText("By " + model.getAuthor());
         
         addBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {

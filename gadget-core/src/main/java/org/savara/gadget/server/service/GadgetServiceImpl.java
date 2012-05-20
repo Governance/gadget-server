@@ -39,6 +39,7 @@ public class GadgetServiceImpl implements GadgetService{
     private static Gadget currencyConverter;
     private static Gadget bamWidget;
     private static Gadget dateAndTime;
+    private static Gadget graph;
     
     @Inject
     public GadgetServiceImpl(EntityManager em) {
@@ -54,6 +55,7 @@ public class GadgetServiceImpl implements GadgetService{
         entityManager.persist(currencyConverter);
         entityManager.persist(bamWidget);
         entityManager.persist(dateAndTime);
+        entityManager.persist(graph);
         entityManager.getTransaction().commit();
     }
     
@@ -78,7 +80,7 @@ public class GadgetServiceImpl implements GadgetService{
         bamWidget = new Gadget();
         bamWidget.setAuthor("Jeff Yu");
         bamWidget.setAuthorEmail("Jeff@test.com");
-        bamWidget.setTitle(" BAM Gadget");
+        bamWidget.setTitle("Simple Button Gadget");
         bamWidget.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
         bamWidget.setDescription(" This is the BAM gadget prototype...");
         bamWidget.setUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
@@ -90,6 +92,15 @@ public class GadgetServiceImpl implements GadgetService{
         dateAndTime.setThumbnailUrl("http://gadgets.adwebmaster.net/images/gadgets/datetimemulti/thumbnail_en.jpg");
         dateAndTime.setDescription(" Add a clock to your page. Click edit to change it to the color of your choice");
         dateAndTime.setUrl("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
+        
+        graph = new Gadget();
+        graph.setAuthor("Research Department");
+        graph.setThumbnailUrl("http://research.stlouisfed.org/gadgets/images/alfredgraphgadgetthumbnail.png");
+        graph.setDescription("Vintage Economic Data from the Federal Reserve Bank of St. Louis");
+        graph.setAuthorEmail("webmaster@research.stlouisfed.org");
+        graph.setTitle("Economic Data - ALFRED Graph");
+        graph.setUrl("http://research.stlouisfed.org/gadgets/code/alfredgraph.xml");
+
 
     }
 

@@ -98,6 +98,7 @@ public class JSOParser {
             itemModel.setName(theItem.get("title"));
             itemModel.setDescription(theItem.get("description"));
             itemModel.setThumbnailUrl(theItem.get("thumbnailUrl"));
+            itemModel.setAuthor(theItem.get("author"));
 
             items.add(itemModel);
         }
