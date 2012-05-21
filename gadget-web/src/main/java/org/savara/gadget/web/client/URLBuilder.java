@@ -66,5 +66,9 @@ public class URLBuilder {
     public static String getRemoveWidgetURL(long widgetId) {
         return urlBase + "rs/users/widget/" + widgetId + "/remove";
     }
+    
+    public static String getRemovePageURL(long pageId) {
+        return urlBase + "rs/users/user/page/" + pageId + "/remove";
+    }
 
 }

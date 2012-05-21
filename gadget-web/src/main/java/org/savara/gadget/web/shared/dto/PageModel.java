@@ -25,12 +25,14 @@ import java.util.List;
  * @date: 8/04/12
  */
 public class PageModel{
+
+    private long id;
     
     private String name;
     
-    private Long order;
+    private long order;
     
-    private Long columns;
+    private long columns;
 
     private List<WidgetModel> models = new ArrayList<WidgetModel>();
 
@@ -40,14 +42,6 @@ public class PageModel{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getOrder() {
-        return order;
-    }
-
-    public void setOrder(Long order) {
-        this.order = order;
     }
 
     public List<WidgetModel> getModels() {
@@ -62,11 +56,27 @@ public class PageModel{
         this.models = models;
     }
 
-    public Long getColumns() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getOrder() {
+        return order;
+    }
+
+    public void setOrder(long order) {
+        this.order = order;
+    }
+
+    public long getColumns() {
         return columns;
     }
 
-    public void setColumns(Long columns) {
+    public void setColumns(long columns) {
         this.columns = columns;
     }
 }

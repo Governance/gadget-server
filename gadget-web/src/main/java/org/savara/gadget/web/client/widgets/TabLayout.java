@@ -17,11 +17,18 @@
  */
 package org.savara.gadget.web.client.widgets;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
+import org.savara.gadget.web.client.URLBuilder;
+import org.savara.gadget.web.client.auth.CurrentUser;
+import org.savara.gadget.web.client.util.RestfulInvoker;
 import org.savara.gadget.web.client.util.UUID;
 
 import java.util.HashMap;
@@ -46,19 +53,24 @@ public class TabLayout extends Composite {
     @UiField DivElement tabs;
     
     private ListItem addTabAnchorItem;
-
+    
+    private CurrentUser currentUser;
     
     private Map<String, String> tabNames = new HashMap<String, String>();
+    
+    private Map<String, String> indexIdMap = new HashMap<String, String>();
+    
+    private static int index = 0;
 
-    public TabLayout() {
+    public TabLayout(CurrentUser user) {
+        currentUser = user;
         id = "tabs-" + UUID.uuid(4);
         initWidget(uiBinder.createAndBindUi(this));
         tabs.setId(id);
     }
 
-    public void addTab(String tabTitle, Widget widget){
-        String idSuffix = UUID.uuid(4);
-        String tabContentId = "tab-content-" + idSuffix;
+    public void addTab(String pageId, String tabTitle, Widget widget){
+        String tabContentId = getTabContentId(pageId);
         tabNames.put(tabContentId, tabTitle);
 
         addTabTitle(tabTitle, tabContentId);
@@ -67,6 +79,9 @@ public class TabLayout extends Composite {
         theContent.getElement().setId(tabContentId);
         theContent.add(widget);
         tabsContent.add(theContent);
+        
+        indexIdMap.put(String.valueOf(index), pageId);
+        index ++;
     }
 
     public void setTabAnchor(Anchor anchor) {
@@ -96,24 +111,30 @@ public class TabLayout extends Composite {
 
     }
     
-    public void insertTab(String tabTitle, Widget widget) {
-        String idSuffix = UUID.uuid(4);
-        String tabContentId = "tab-content-" + idSuffix;
+    public void insertTab(String pageId, String tabTitle, Widget widget) {
+        String tabContentId = getTabContentId(pageId);
 
         FlowPanel theContent = new FlowPanel();
         theContent.getElement().setId(tabContentId);
         theContent.add(widget);
         tabsContent.add(theContent);
 
-        int index = tabNames.size();
+        int theIndex = tabNames.size();
 
         tabNames.put(tabContentId, tabTitle);
+        indexIdMap.put(String.valueOf(index), pageId);
+        index = index + 1;
 
         tabsBar.remove(addTabAnchorItem);
 
-        addNewTab(id, tabContentId, tabTitle, index);
+        addNewTab(id, tabContentId, tabTitle, theIndex);
 
         tabsBar.add(addTabAnchorItem);
+        
+    }
+    
+    private String getTabContentId(String pageId) {
+        return "tab-content-" + pageId;
     }
 
     public void onAttach() {
@@ -121,8 +142,8 @@ public class TabLayout extends Composite {
     }
 
     public void initializeTab() {
-        initTabs(id);
-        registerCloseEvent(id);
+        initTabs(this, id);
+        registerCloseEvent(this,id);
     }
 
     public void clearAllTabs(){
@@ -131,19 +152,47 @@ public class TabLayout extends Composite {
         }
         tabsBar.remove(addTabAnchorItem);
         destroyTab(id);
+        index = 0;
+    }
+    
+    private void setCurrentPage(Long indexId) {
+        String theIndexId = String.valueOf(indexId);
+        String pageId = indexIdMap.get(theIndexId);
+        currentUser.setCurrentPage(Long.valueOf(pageId));
+    }
+    
+    private void removePage(Long indexId) {
+        String theIndexId = String.valueOf(indexId);
+        String pageId = indexIdMap.get(theIndexId);
+        RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRemovePageURL(Long.valueOf(pageId).longValue()),
+                null, new RestfulInvoker.Response() {
+                    public void onResponseReceived(Request request, Response response) {
+                           //TODO:
+                    }
+        });
+    }
+    
+    public void selectCurrentActiveTab() {
+        String tabContentId = getTabContentId(String.valueOf(currentUser.getCurrentPage()));
+        selectTab(id, tabContentId);
     }
 
     /**
      * JSNI methods
      */
 
-    private static native void initTabs(String id) /*-{
+    private static native void initTabs(final TabLayout layout, String id) /*-{
         $wnd.$('#'+id).tabs({
             tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>remove</span></li>",
             select: function(event, ui) {
-
+                layout.@org.savara.gadget.web.client.widgets.TabLayout::setCurrentPage(Ljava/lang/Long;)(ui.index);
             }
         });
+    }-*/;
+
+    private static native void selectTab(String id, String tabContentId) /*-{
+        var theTabs = $wnd.$('#'+id).tabs();
+        theTabs.tabs("select","#"+tabContentId);
     }-*/;
 
     private static native void addNewTab(String id, String tabContentId, String tabTitle, int index) /*-{
@@ -165,11 +214,12 @@ public class TabLayout extends Composite {
     /**
      *  TODO: This is a hack, somehow couldn't attach the click event to removetBtn;
      * */
-    private static native void registerCloseEvent(String id) /*-{
+    private static native void registerCloseEvent(final TabLayout layout, String id) /*-{
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$(this).parent().index();
             if (index > -1) {
+                layout.@org.savara.gadget.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
                 theTabs.tabs('remove', index);
             }
         });

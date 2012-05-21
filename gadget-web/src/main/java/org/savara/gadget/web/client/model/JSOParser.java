@@ -38,6 +38,7 @@ public class JSOParser {
             pageModel.setName(pageModelValue.get("name"));
             pageModel.setOrder(pageModelValue.getLong("order"));
             pageModel.setColumns(pageModelValue.getLong("columns"));
+            pageModel.setId(pageModelValue.getLong("id"));
 
             JsArray<JSOModel> widgetModels = pageModelValue.getArray("models");
             for (int j = 0; j < widgetModels.length(); j++) {

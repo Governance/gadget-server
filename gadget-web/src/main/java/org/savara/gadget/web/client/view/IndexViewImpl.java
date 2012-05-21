@@ -117,7 +117,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         panel = new DockLayoutPanel(Style.Unit.PX);
         panel.getElement().setAttribute("id", "container");
 
-        mainContentPanel = new TabLayout();
+        mainContentPanel = new TabLayout(currentUser);
 
         final AddTabForm addTabForm = new AddTabForm(currentUser, mainContentPanel);
 
@@ -148,17 +148,18 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
         for (PageModel page : pageModels) {
             int i = 0;
-            int columnNum = page.getColumns().intValue();
+            int columnNum = Long.valueOf(page.getColumns()).intValue();
             PortalLayout portalLayout = new PortalLayout(columnNum);
             for(WidgetModel model : page.getModels()) {
                 portalLayout.addPortlet( i % columnNum, new Portlet(model));
                 i ++;
             }
-            mainContentPanel.addTab(page.getName(), portalLayout);
+            mainContentPanel.addTab(String.valueOf(page.getId()), page.getName(), portalLayout);
         }
         mainContentPanel.addTabAnchor();
 
         mainContentPanel.initializeTab();
+        mainContentPanel.selectCurrentActiveTab();
     }
 
     public Widget asWidget() {
