@@ -139,7 +139,10 @@ public class TabLayout extends Composite {
 
     private static native void initTabs(String id) /*-{
         $wnd.$('#'+id).tabs({
-            tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>remove</span></li>"
+            tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>remove</span></li>",
+            select: function(event, ui) {
+
+            }
         });
     }-*/;
 
@@ -165,8 +168,10 @@ public class TabLayout extends Composite {
     private static native void registerCloseEvent(String id) /*-{
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
-            var index = $wnd.$("li", theTabs).index($wnd.$(this).parent());
-            theTabs.tabs('remove', index);
+            var index = $wnd.$(this).parent().index();
+            if (index > -1) {
+                theTabs.tabs('remove', index);
+            }
         });
     }-*/;
 

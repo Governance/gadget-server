@@ -143,7 +143,6 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     }
 
     public void initializePages(List<PageModel> pageModels) {
-        Log.debug("the initializePages...");
 
         mainContentPanel.clearAllTabs();
 

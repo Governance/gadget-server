@@ -94,8 +94,6 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
     public void onReveal() {
         super.onReveal();
         getView().clearMessageBar();
-        currentUser.setInWidgetStore(true);
-        Log.debug("StorePresenter onReval()...");
         getStoreItems(0, 10);
     }
     
