@@ -11,7 +11,7 @@ a {
 }
 
 #container {
-    max-width: 1024px;
+    max-width: 1074px;
     background: #BEBEBE;
     border-right: 1px solid #A7ABB4!important;
     border-left: 1px solid #A7ABB4!important;
@@ -22,6 +22,10 @@ a {
     background: white;
     height: 100%;
     width: 100%;
+}
+
+#gadget-web-tabs {
+    overflow: scroll;
 }
 
 .header-panel {

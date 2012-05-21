@@ -64,7 +64,7 @@ public class TabLayout extends Composite {
 
     public TabLayout(CurrentUser user) {
         currentUser = user;
-        id = "tabs-" + UUID.uuid(4);
+        id = "gadget-web-tabs";
         initWidget(uiBinder.createAndBindUi(this));
         tabs.setId(id);
     }
