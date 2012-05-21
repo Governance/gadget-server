@@ -69,8 +69,7 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
 
     @ProxyCodeSplit
     @NameToken(NameTokens.WIDGET_STORE)
-    //@UseGatekeeper(LoggedInGateKeeper.class)
-    @NoGatekeeper
+    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface StoreProxy extends ProxyPlace<StorePresenter> {}
 
 

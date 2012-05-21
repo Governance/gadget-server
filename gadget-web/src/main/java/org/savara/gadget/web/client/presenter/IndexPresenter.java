@@ -84,8 +84,7 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     @ProxyCodeSplit
     @NameToken(NameTokens.INDEX_VIEW)
-    //@UseGatekeeper(LoggedInGateKeeper.class)
-    @NoGatekeeper
+    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
 
