@@ -28,6 +28,10 @@ a {
     overflow: scroll;
 }
 
+#gadget-store-list{
+    overflow:scroll;
+}
+
 .header-panel {
     min-height:70px;
     height:70px;

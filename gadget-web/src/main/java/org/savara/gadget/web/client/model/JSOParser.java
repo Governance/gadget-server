@@ -120,6 +120,7 @@ public class JSOParser {
         user.setUserId(model.getLong("userId"));
         user.setUserName(model.get("userName"));
         user.setCurrentPageId(model.getLong("currentPageId"));
+        user.setDisplayName(model.get("displayName"));
         return user;
     }
 

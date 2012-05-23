@@ -26,6 +26,8 @@ public class UserModel {
     private long userId;
     
     private String userName;
+    
+    private String displayName;
 
     private long currentPageId;
 
@@ -51,5 +53,13 @@ public class UserModel {
 
     public void setCurrentPageId(long currentPageId) {
         this.currentPageId = currentPageId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

@@ -83,11 +83,11 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         headerPanel.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
         headerPanel.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
 
-        Label userLabel = new Label(currentUser.getUserName());
+        Label userLabel = new Label(currentUser.getDisplayName());
         userLabel.setStyleName("userinfo");
         headerPanel.add(userLabel);
 
-        headerPanel.setWidgetRightWidth(userLabel, 65, Style.Unit.PX, 60, Style.Unit.PX);
+        headerPanel.setWidgetRightWidth(userLabel, 55, Style.Unit.PX, 150, Style.Unit.PX);
         headerPanel.setWidgetTopHeight(userLabel, 2, Style.Unit.PX, 28, Style.Unit.PX);
 
         HTML backToTabs = new HTML("Back to Tabs");
@@ -124,7 +124,8 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
     public void loadStoreItems(PageResponse<StoreItemModel> storeItems) {
         mainPanel.clear();
 
-        VerticalPanel storesList = new VerticalPanel();
+        FlowPanel storesList = new FlowPanel();
+        storesList.getElement().setId("gadget-store-list");
         storesList.setWidth("100%");
         messageBar.setStyleName("storeItemInfo");
         storesList.add(messageBar);

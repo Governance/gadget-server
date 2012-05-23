@@ -88,11 +88,11 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         headerPanel.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
         headerPanel.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
         
-        Label userLabel = new Label(currentUser.getUserName());
+        Label userLabel = new Label(currentUser.getDisplayName());
         userLabel.setStyleName("userinfo");
         headerPanel.add(userLabel);
 
-        headerPanel.setWidgetRightWidth(userLabel, 65, Style.Unit.PX, 60, Style.Unit.PX);
+        headerPanel.setWidgetRightWidth(userLabel, 55, Style.Unit.PX, 150, Style.Unit.PX);
         headerPanel.setWidgetTopHeight(userLabel, 2, Style.Unit.PX, 28, Style.Unit.PX);
 
         HTML store = new HTML("Widget Store");

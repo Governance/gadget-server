@@ -26,6 +26,8 @@ public class CurrentUser {
     private boolean loggedIn;
 
     private String userName;
+    
+    private String displayName;
 
     private long userId;
 
@@ -63,4 +65,11 @@ public class CurrentUser {
         this.currentPage = currentPage;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

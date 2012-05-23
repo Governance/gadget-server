@@ -114,7 +114,8 @@ public class LoginForm extends Composite {
                     currentUser.setUserId(user.getUserId());
                     currentUser.setUserName(user.getUserName());
                     currentUser.setCurrentPage(user.getCurrentPageId());
-
+                    currentUser.setDisplayName(user.getDisplayName());
+                    
                     loginError.setText("");
                     username.setValue("");
                     password.setValue("");
@@ -140,6 +141,9 @@ public class LoginForm extends Composite {
         //TODO: best to enumerate all of possible errors at once.
         if (isEmpty(signupUsername.getValue()) || isEmpty(signupPassword.getValue())) {
             signupError.setText("username and password are required.");
+            return;
+        } else if (isEmpty(displayName.getValue())) {
+            signupError.setText("Display Name is required");
             return;
         } else if (!signupConfirmPassword.getValue().equals(signupPassword.getValue())) {
             signupError.setText("Password and Confirm Password do not match");
@@ -179,6 +183,7 @@ public class LoginForm extends Composite {
                     currentUser.setUserId(user.getUserId());
                     currentUser.setUserName(user.getUserName());
                     currentUser.setCurrentPage(user.getCurrentPageId());
+                    currentUser.setDisplayName(user.getDisplayName());
 
                     signupUsername.setValue("");
                     signupPassword.setValue("");
