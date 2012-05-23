@@ -32,55 +32,71 @@ import java.util.Map;
  */
 public class Bootstrap {
 
-  private static final String DB_DRIVER = "db.driver";
-  private static final String DB_URL = "db.url";
-  private static final String DB_USER = "db.user";
-  private static final String DB_PASSWORD = "db.password";
-  private EntityManager entityManager;
+    private static final String DB_DRIVER = "db.driver";
+    private static final String DB_URL = "db.url";
+    private static final String DB_USER = "db.user";
+    private static final String DB_PASSWORD = "db.password";
+    private static final String ENVIRONMENT = "environment";
 
-  private String dbDriver;
-  private String dbUrl;
-  private String dbUser;
-  private String dbPassword;
-    
-  @Inject
-  public Bootstrap(@Named(DB_DRIVER) String dbDriver,
-                   @Named(DB_URL) String dbUrl, @Named(DB_USER) String dbUser,
-                   @Named(DB_PASSWORD) String dbPassword) {
-      
-      this.dbDriver = dbDriver;
-      this.dbUrl = dbUrl;
-      this.dbUser = dbUser;
-      this.dbPassword = dbPassword;
+    private EntityManager entityManager;
 
-  }
- 
-  public Bootstrap() {
-   
-  }
+    private String dbDriver;
+    private String dbUrl;
+    private String dbUser;
+    private String dbPassword;
 
-  public void init(String unitName) {
+    @Inject
+    public Bootstrap(@Named(DB_DRIVER) String dbDriver,
+                     @Named(DB_URL) String dbUrl, @Named(DB_USER) String dbUser,
+                     @Named(DB_PASSWORD) String dbPassword) {
 
-    Map<String, String> properties = new HashMap<String, String>();
+        this.dbDriver = dbDriver;
+        this.dbUrl = dbUrl;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
 
-    properties.put("hibernate.connection.driver_class", dbDriver);
-    properties.put("hibernate.connection.url", dbUrl);
-    properties.put("hibernate.connection.username", dbUser);
-    properties.put("hibernate.connection.password", dbPassword);
-    properties.put("hibernate.hbm2ddl.auto", "create-drop");
-
-    EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(unitName, properties);
-    entityManager = emFactory.createEntityManager();
-  }
-
-  /**
-   * @param unitName
-   * @return
-   */
-  public EntityManager getEntityManager(String unitName) {
-    if (entityManager == null) {
-      init(unitName);
     }
-    return entityManager;
-  }
+
+    public Bootstrap() {
+
+    }
+
+    public void init(String unitName) {
+
+        Map<String, String> properties = new HashMap<String, String>();
+        if (isNotEmpty(dbDriver)) {
+            properties.put("hibernate.connection.driver_class", dbDriver);
+        }
+        if (isNotEmpty(dbUrl)) {
+            properties.put("hibernate.connection.url", dbUrl);
+        }
+        if (isNotEmpty(dbUser)) {
+            properties.put("hibernate.connection.username", dbUser);
+        }
+        if (isNotEmpty(dbPassword)) {
+            properties.put("hibernate.connection.password", dbPassword);
+        }
+        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+
+        EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(unitName, properties);
+        entityManager = emFactory.createEntityManager();
+    }
+
+    private boolean isNotEmpty(String value) {
+        if (value == null || "".equalsIgnoreCase(value.trim())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param unitName
+     * @return
+     */
+    public EntityManager getEntityManager(String unitName) {
+        if (entityManager == null) {
+            init(unitName);
+        }
+        return entityManager;
+    }
 }

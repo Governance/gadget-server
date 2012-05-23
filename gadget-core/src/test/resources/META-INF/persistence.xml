@@ -7,8 +7,6 @@
   <persistence-unit name="gadget-core" transaction-type="RESOURCE_LOCAL">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-      <jta-data-source>java:jboss/GadgetServer</jta-data-source>
-
       <class>org.savara.gadget.server.model.User</class>
       <class>org.savara.gadget.server.model.ApplicationData</class>
       <class>org.savara.gadget.server.model.Page</class>

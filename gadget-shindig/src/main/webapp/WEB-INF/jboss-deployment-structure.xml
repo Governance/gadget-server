@@ -1,0 +1,12 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.1">
+    <deployment>
+        <dependencies>
+            <system>
+                <paths>
+                    <path name="com/sun/imageio/spi"/>
+                    <path name="com/sun/imageio/plugins/jpeg" />
+                </paths>
+            </system>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>
