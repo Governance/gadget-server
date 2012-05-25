@@ -41,6 +41,11 @@ Deploying Gadget Server in JBoss AS7:
 3) Start the server via following command in $JBoss-AS7 folder:
     bin/standalone.sh
 
+Deploying Gadget Server in Tomcat:
+=================================
+To be done here, need to work out the H2 JNDI datasource in Tomcat, or create a separate war file for it.
+
+
 Trying the Gadget Server UI:
 ============================
 
