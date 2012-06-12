@@ -10,8 +10,8 @@
     <context-param>
         <param-name>resteasy.guice.modules</param-name>
         <param-value>
-            org.savara.gadget.web.server.GadgetServerModule,
-            org.savara.gadget.server.CoreModule
+            org.overlord.gadgets.web.server.GadgetServerModule,
+            org.overlord.gadgets.server.CoreModule
         </param-value>
     </context-param>
 
