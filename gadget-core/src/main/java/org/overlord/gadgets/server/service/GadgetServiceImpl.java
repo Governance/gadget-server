@@ -38,7 +38,7 @@ public class GadgetServiceImpl implements GadgetService{
     //TODO: need to be replaced with initial data sql.
     private static Gadget todoList;
     private static Gadget currencyConverter;
-    private static Gadget bamWidget;
+    private static Gadget slaWidget;
     private static Gadget dateAndTime;
     private static Gadget graph;
     
@@ -54,7 +54,7 @@ public class GadgetServiceImpl implements GadgetService{
         }
         entityManager.persist(todoList);
         entityManager.persist(currencyConverter);
-        entityManager.persist(bamWidget);
+        entityManager.persist(slaWidget);
         entityManager.persist(dateAndTime);
         entityManager.persist(graph);
         entityManager.getTransaction().commit();
@@ -78,13 +78,13 @@ public class GadgetServiceImpl implements GadgetService{
         currencyConverter.setDescription(" This is the currency converter widget");
         currencyConverter.setUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
         
-        bamWidget = new Gadget();
-        bamWidget.setAuthor("Jeff Yu");
-        bamWidget.setAuthorEmail("Jeff@test.com");
-        bamWidget.setTitle("Simple Button Gadget");
-        bamWidget.setThumbnailUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/74e562e0-7881-4ade-87bb-ca9977151084.jpg");
-        bamWidget.setDescription(" This is the BAM gadget prototype...");
-        bamWidget.setUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
+        slaWidget = new Gadget();
+        slaWidget.setAuthor("Jeff Yu");
+        slaWidget.setAuthorEmail("Jeff@test.com");
+        slaWidget.setTitle("SLA Gadget");
+        slaWidget.setThumbnailUrl("http://slagadget.googlecode.com/git/thumbnail.png");
+        slaWidget.setDescription(" This is the Service Level Violation Gadget");
+        slaWidget.setUrl("http://slagadget.googlecode.com/git/gadget.xml");
 
         dateAndTime = new Gadget();
         dateAndTime.setAuthor("Google");
