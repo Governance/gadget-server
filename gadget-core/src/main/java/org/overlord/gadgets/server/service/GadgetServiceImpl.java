@@ -36,7 +36,7 @@ public class GadgetServiceImpl implements GadgetService{
     private EntityManager entityManager;
 
     //TODO: need to be replaced with initial data sql.
-    private static Gadget todoList;
+    private static Gadget rtGadget;
     private static Gadget currencyConverter;
     private static Gadget slaWidget;
     private static Gadget dateAndTime;
@@ -52,7 +52,7 @@ public class GadgetServiceImpl implements GadgetService{
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
         }
-        entityManager.persist(todoList);
+        entityManager.persist(rtGadget);
         entityManager.persist(currencyConverter);
         entityManager.persist(slaWidget);
         entityManager.persist(dateAndTime);
@@ -61,14 +61,13 @@ public class GadgetServiceImpl implements GadgetService{
     }
     
     static {
-        todoList = new Gadget();
-        todoList.setAuthorEmail("weather@google.com");
-        todoList.setTitle(" To-Do List");
-        todoList.setAuthor("Labpixies");
-        todoList.setDescription(" Easily manage and track everything you need To-Do. The gadget lets you create multiple To-Do lists, each with a unique purpose.");
-        todoList.setThumbnailUrl("http://www.gstatic.com/ig/modules/labpixies/todo/images/thumbnail.cache.jpg");
-        todoList.setTitleUrl("");
-        todoList.setUrl("http://www.labpixies.com/campaigns/todo/todo.xml");
+        rtGadget = new Gadget();
+        rtGadget.setAuthorEmail("jeff@test.com");
+        rtGadget.setTitle("Response Time");
+        rtGadget.setAuthor("Jeff Yu");
+        rtGadget.setDescription("This is the Response Time Gadget");
+        rtGadget.setThumbnailUrl("http://rt-gadget.googlecode.com/git/thumbnail.png");
+        rtGadget.setUrl("http://rt-gadget.googlecode.com/git/gadget.xml");
 
         currencyConverter = new Gadget();
         currencyConverter.setAuthor("Google");
