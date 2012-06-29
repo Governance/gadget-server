@@ -82,11 +82,12 @@ public class Portlet extends Composite {
         gadgetSpec.getElement().setId(widgetId);
     }
 
-    public Portlet(WidgetModel model) {
+    public Portlet(WidgetModel model, int width) {
         this(String.valueOf(model.getWidgetId()));
         title.setText(model.getName());
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
+        gadgetSpec.setWidth(width - 20 + "px");
         gadgetSpec.setHeight("250px");
         gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl());
     }

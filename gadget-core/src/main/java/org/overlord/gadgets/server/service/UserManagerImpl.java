@@ -51,7 +51,7 @@ public class UserManagerImpl implements UserManager {
         
         Page homePage = new Page();
         homePage.setName("Home");
-        homePage.setColumns(3);
+        homePage.setColumns(2);
         homePage.setPageOrder(0);
         homePage.setUser(user);
         addPage(homePage, user);
