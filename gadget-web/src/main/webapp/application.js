@@ -35,3 +35,24 @@ function resizeIframe(args) {
 function setPref(args, editToken, prefName, prefValue) {
 }
 
+
+/**
+ * This will be used for window maximization.
+ */
+function addOverlay(jqElm) {
+    var overlay = $('<div></div>');
+    var styleMap = {
+        position: "absolute",
+        height : jqElm.height(),
+        width : jqElm.width(),
+        'z-index': 10,
+        opacity : 0.7,
+        background : "#FFFFFF"
+    };
+    $(overlay).css(styleMap);
+    $(overlay).addClass("added-overlay");
+    jqElm.prepend(overlay[0]);
+}
+
+
+

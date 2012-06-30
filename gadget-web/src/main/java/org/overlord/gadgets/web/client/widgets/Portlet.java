@@ -49,6 +49,9 @@ public class Portlet extends Composite {
     @UiField InlineLabel minBtn;
     @UiField InlineLabel title;
     @UiField InlineLabel removeBtn;
+    @UiField InlineLabel maxBtn;
+    @UiField InlineLabel settingBtn;
+    @UiField InlineLabel restoreBtn;
     @UiField FlowPanel userPreference;
     @UiField FlowPanel portletContent;
     @UiField Frame gadgetSpec;
@@ -68,7 +71,6 @@ public class Portlet extends Composite {
         removeBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
                 String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
-                Log.debug("the close action url is: " + theURL);
                 RestfulInvoker.invoke(RequestBuilder.POST, theURL,
                         null, new RestfulInvoker.Response() {
 
@@ -77,6 +79,20 @@ public class Portlet extends Composite {
                     }
                 });
             }
+        });
+        
+        maxBtn.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				maximizeWindow(id);
+				showRestoreButton(id);
+			}        	
+        });
+        
+        restoreBtn.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				restoreWindow(id);
+				hideRestoreButton(id);
+			}        	
         });
 
         gadgetSpec.getElement().setId(widgetId);
@@ -95,6 +111,7 @@ public class Portlet extends Composite {
     @Override
     public void onAttach() {
         super.onAttach();
+        hideRestoreButton(id);
     }
 
     /**
@@ -115,5 +132,43 @@ public class Portlet extends Composite {
     private static native void showUserPreference(String id) /*-{
         $wnd.$('#' + id).find(".portlet-menu").show();
     }-*/;
+    
+    private static native void hideRestoreButton(String id) /*-{
+    	$wnd.$('#'+id).find(".portlet-restore").hide();
+    	$wnd.$('#'+id).find(".portlet-max").show();
+    	$wnd.$('#'+id).find(".portlet-setting").show();
+    	$wnd.$('#'+id).find(".portlet-close").show();
+    }-*/;
+    
+    private static native void showRestoreButton(String id) /*-{
+    	$wnd.$('#'+id).find(".portlet-restore").show();
+    	$wnd.$('#'+id).find(".portlet-max").hide();
+    	$wnd.$('#'+id).find(".portlet-setting").hide();
+    	$wnd.$('#'+id).find(".portlet-close").hide();
+    }-*/;
+    
+    private static native void maximizeWindow(String id) /*-{
+	    var overlay = $wnd.$('<div></div>');
+	    var jqElm = $wnd.$('#gadget-web-tabs');
+	    var styleMap = {
+	        position: "absolute",
+	        height : jqElm.height(),
+	        width : jqElm.width(),
+	        'z-index': 10,
+	        opacity : 0.7,
+	        background : "#FFFFFF"
+	    };
+	    $wnd.$(overlay).css(styleMap);
+	    $wnd.$(overlay).addClass("added-overlay");
+	    jqElm.prepend(overlay[0]);
+		$wnd.$(".column").sortable( "option", "disabled", true);
+		$wnd.$('#' + id).removeClass("portlet").addClass("portlet-canvas");
+	}-*/;
+    
+    private static native void restoreWindow(String id) /*-{
+		$wnd.$(".added-overlay").remove();
+		$wnd.$(".column").sortable( "option", "disabled", false);
+		$wnd.$('#' + id).removeClass("portlet-canvas").addClass("portlet");
+	}-*/;
 
 }

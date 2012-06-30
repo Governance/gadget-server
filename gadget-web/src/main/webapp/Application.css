@@ -86,10 +86,12 @@ a {
 
 .portlet { margin: 0 1em 1em 0;}
 .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em;}
-.portlet-header .ui-icon { float: left; }
+.portlet-header .ui-icon { float: left; cursor:pointer;}
 .portlet-header .portlet-min {}
-.portlet-header .portlet-settings {float:right;cursor: pointer;}
-.portlet-close {float:right;}
+.portlet-header .portlet-max {float:right;}
+.portlet-header .portlet-setting {float:right;}
+.portlet-header .portlet-close {float:right;}
+.portlet-header .portlet-restore {float:right;}
 .portlet-content { padding: 0.4em;}
 .ui-sortable-placeholder { border: 1px dashed black; visibility: visible !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
@@ -97,6 +99,8 @@ a {
 .portlet-menu {display:none;}
 
 .portlet-iframe {}
+
+.portlet-canvas {position:absolute;width:99.5%; height:100%; z-index:1000;}
 
 /** css for the Tab */
 li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }

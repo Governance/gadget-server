@@ -7,10 +7,15 @@
 	<script src="../jquery-ui-1.8.18.custom.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="../jquery-ui-1.8.18.custom.css" />
 	<style>
-	.column { width: 400px; float: left; padding-bottom: 100px;}
+	.column { float:left;width: auto; width:33%;}
 	.portlet { margin: 0 1em 1em 0;}
 	.portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
-	.portlet-header .ui-icon { float: right; }
+	.portlet-header .ui-icon{ float: left; cursor:pointer;}
+	.portlet-header .portlet-max{float:right;}
+	.portlet-header .portlet-setting{float:right;}
+	.portlet-header .portlet-close{float:right;}
+	.portlet-header .portlet-restore{float:right;}
+	.portlet-canvas {position:absolute;width:99.5%; height:100%; z-index:1000;}
 	.portlet-content { padding: 0.4em;}
 	.ui-sortable-placeholder { border: 1px dashed black; visibility: visible !important; }
 	.ui-sortable-placeholder * { visibility: hidden; }
@@ -27,61 +32,100 @@
 		$( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
 			.find( ".portlet-header" )
 				.addClass( "ui-widget-header ui-corner-all" )
-				.prepend( "<span class='ui-icon ui-icon-minusthick'>Minimise</span>")
+				.prepend( "<span class='ui-icon ui-icon-triangle-1-s'>Minimise</span>")
+				.prepend("<span class='ui-icon ui-icon-arrowthick-2-ne-sw portlet-max'>max</span>")
+				.prepend("<span class='ui-icon ui-icon-gear portlet-setting'>settings</span>")
+				.prepend("<span class='ui-icon ui-icon-closethick portlet-close'>close</span>")
+				.prepend("<span class='ui-icon ui-icon-arrowthick-1-sw portlet-restore'>restore</span>")
 				.end()
 			.find( ".portlet-content" );
+			
+		$(".portlet").find(".portlet-restore").hide();
 
-		$( ".portlet-header .ui-icon" ).click(function() {
-			$( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
+		$( ".portlet-header .ui-icon-triangle-1-s" ).click(function() {
+			$( this ).toggleClass( "ui-icon-triangle-1-s" ).toggleClass( "ui-icon-triangle-1-n" );
 			$( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
+		});
+		
+		$(".portlet-header .portlet-max").click(function(){
+			addOverlay($("#demo"));
+			$(".column").sortable( "option", "disabled", true);
+			$("#feed").removeClass("portlet").addClass("portlet-canvas");
+			$("#feed").find(".portlet-max").hide();
+			$("#feed").find(".portlet-setting").hide();
+			$("#feed").find(".portlet-close").hide();
+			$("#feed").find(".portlet-restore").show();
+		});
+		
+		$(".portlet-header .portlet-restore").click(function(){
+			$(".column").sortable( "option", "disabled", false);
+			$(".dnd-overlay").remove();
+			$("#feed").removeClass("portlet-canvas").addClass("portlet");
+			$("#feed").find(".portlet-restore").hide();
+			$("#feed").find(".portlet-max").show();
+			$("#feed").find(".portlet-setting").show();
+			$("#feed").find(".portlet-close").show();
 		});
 
 		$( ".column" ).disableSelection();
 	});
+	
+	function addOverlay(jqElm) {
+        var overlay = $('<div></div>');
+        var styleMap = {
+            position: "absolute",
+            height : jqElm.height(),
+            width : jqElm.width(),
+            'z-index': 10,
+            opacity : 0.7,
+            background : "#FFFFFF"
+        };
+        // style it and give it the marker class
+        $(overlay).css(styleMap);
+        $(overlay).addClass("dnd-overlay");
+        // add it to the dom before the iframe so it covers it
+        jqElm.prepend(overlay[0]);
+    }
 	</script>	
-<div class="demo">
+<div id="demo">
 
 <div class="column">
-
-	<div class="portlet">
-		<div class="portlet-header">Feeds</div>
-		<div class="portlet-content">
-			<div class="test">
-			Google Web Toolkit contains two powerful tools for creating optimized web applications. The GWT compiler performs comprehensive optimizations across your codebase — in-lining methods, removing dead code, optimizing strings, and more. By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
-			 By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
-			</div>			
+		<div class="portlet" id="feed">
+			<div class="portlet-header">Feeds</div>
+			<div class="portlet-userpref"></div>
+			<div class="portlet-content">
+				<div class="test">
+				Google Web Toolkit contains two powerful tools for creating optimized web applications. The GWT compiler performs comprehensive optimizations across your codebase — in-lining methods, removing dead code, optimizing strings, and more. By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
+				 By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.
+				</div>			
+			</div>
 		</div>
-	</div>
-	
-	<div class="portlet">
-		<div class="portlet-header">News</div>
-		<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-	</div>
+		<div class="portlet">
+			<div class="portlet-header">News</div>
+			<div class="portlet-userpref"></div>
+			<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+		</div>
 
 </div>
 
 <div class="column">
-
-	<div class="portlet">
-		<div class="portlet-header">Shopping</div>
-		<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-	</div>
+		<div class="portlet">
+			<div class="portlet-header">Shopping</div>
+			<div class="portlet-userpref"></div>
+			<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+		</div>
 
 </div>
 
 <div class="column">
-
-	<div class="portlet">
-		<div class="portlet-header"><span>Links</span></div>
-		<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-	</div>
-	
-	<div class="portlet">
-		<div class="portlet-header">Images</div>
-		<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-	</div>
-
+		<div class="portlet">
+			<div class="portlet-header"><span>Links</span></div>
+			<div class="portlet-userpref"></div>
+			<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+		</div>
 </div>
+
+<div style="clear:both;"></div>
 
 </div><!-- End demo -->
 
