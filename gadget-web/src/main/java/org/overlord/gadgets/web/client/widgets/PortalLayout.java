@@ -19,6 +19,7 @@ package org.overlord.gadgets.web.client.widgets;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class PortalLayout extends Composite {
 
     private FlowPanel portalPanel;
     
+    private String portalId;
+    
     private List<FlowPanel> columnPanel;
     
     public static final int THREE_COLUMN_WIDTH = 325;
@@ -42,14 +45,16 @@ public class PortalLayout extends Composite {
     
     private int columnWidth = TWO_COLUMN_WIDTH;
 
-    public PortalLayout() {
+    public PortalLayout(String pid) {
         portalPanel = new FlowPanel();
+        this.portalId = "portal-" + pid;
         portalPanel.getElement().addClassName("portal");
+        portalPanel.getElement().setId(portalId);
         initWidget(portalPanel);
     }
 
-    public PortalLayout(int column) {
-        this();
+    public PortalLayout(String portalId,int column) {
+        this(portalId);
         this.m_column = column;
         columnPanel = new ArrayList<FlowPanel>(column);
         if (column == 3) {
@@ -70,10 +75,21 @@ public class PortalLayout extends Composite {
     public int getPortletWidth() {
     	return columnWidth;
     }
-
+    
+    
+    public String getPortalId() {
+    	return this.portalId;
+    }
 
     public void addPortlet(int i, Widget portlet) {
         columnPanel.get(i).add(portlet);
+    }
+    
+    /**
+     * This is for getting the portal's height.
+     */
+    public void addClosingDiv() {
+    	portalPanel.add(new HTML("<div style='clear:both'></div>"));
     }
 
     @Override

@@ -15,7 +15,7 @@
 	.portlet-header .portlet-setting{float:right;}
 	.portlet-header .portlet-close{float:right;}
 	.portlet-header .portlet-restore{float:right;}
-	.portlet-canvas {position:absolute;width:99.5%; height:100%; z-index:1000;}
+	.portlet-canvas {position:absolute;width:99.5%; height:100%; z-index:1000;left:10px;vertical-align:top; top:15px;}
 	.portlet-content { padding: 0.4em;}
 	.ui-sortable-placeholder { border: 1px dashed black; visibility: visible !important; }
 	.ui-sortable-placeholder * { visibility: hidden; }
@@ -50,21 +50,21 @@
 		$(".portlet-header .portlet-max").click(function(){
 			addOverlay($("#demo"));
 			$(".column").sortable( "option", "disabled", true);
-			$("#feed").removeClass("portlet").addClass("portlet-canvas");
-			$("#feed").find(".portlet-max").hide();
-			$("#feed").find(".portlet-setting").hide();
-			$("#feed").find(".portlet-close").hide();
-			$("#feed").find(".portlet-restore").show();
+			$("#news").removeClass("portlet").addClass("portlet-canvas");
+			$("#news").find(".portlet-max").hide();
+			$("#news").find(".portlet-setting").hide();
+			$("#news").find(".portlet-close").hide();
+			$("#news").find(".portlet-restore").show();
 		});
 		
 		$(".portlet-header .portlet-restore").click(function(){
 			$(".column").sortable( "option", "disabled", false);
 			$(".dnd-overlay").remove();
-			$("#feed").removeClass("portlet-canvas").addClass("portlet");
-			$("#feed").find(".portlet-restore").hide();
-			$("#feed").find(".portlet-max").show();
-			$("#feed").find(".portlet-setting").show();
-			$("#feed").find(".portlet-close").show();
+			$("#news").removeClass("portlet-canvas").addClass("portlet");
+			$("#news").find(".portlet-restore").hide();
+			$("#news").find(".portlet-max").show();
+			$("#news").find(".portlet-setting").show();
+			$("#news").find(".portlet-close").show();
 		});
 
 		$( ".column" ).disableSelection();
@@ -100,7 +100,7 @@
 				</div>			
 			</div>
 		</div>
-		<div class="portlet">
+		<div class="portlet" id="news">
 			<div class="portlet-header">News</div>
 			<div class="portlet-userpref"></div>
 			<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
@@ -109,7 +109,7 @@
 </div>
 
 <div class="column">
-		<div class="portlet">
+		<div class="portlet" id="shopping">
 			<div class="portlet-header">Shopping</div>
 			<div class="portlet-userpref"></div>
 			<div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>

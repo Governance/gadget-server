@@ -72,11 +72,13 @@ public class TabLayout extends Composite {
         tabs.setId(id);
     }
 
-    public void addTab(String pageId, String tabTitle, Widget widget){
+    public void addTab(String pageId, String tabTitle, PortalLayout widget){
         String tabContentId = getTabContentId(pageId);
         tabNames.put(tabContentId, tabTitle);
 
         addTabTitle(tabTitle, tabContentId);
+        
+        widget.addClosingDiv();
         
         FlowPanel theContent = new FlowPanel();
         theContent.getElement().setId(tabContentId);

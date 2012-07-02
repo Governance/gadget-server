@@ -150,9 +150,9 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         for (PageModel page : pageModels) {
             int i = 0;
             int columnNum = Long.valueOf(page.getColumns()).intValue();
-            PortalLayout portalLayout = new PortalLayout(columnNum);
+            PortalLayout portalLayout = new PortalLayout(String.valueOf(page.getId()), columnNum);
             for(WidgetModel model : page.getModels()) {
-                portalLayout.addPortlet( i % columnNum, new Portlet(model, portalLayout.getPortletWidth()));
+                portalLayout.addPortlet( i % columnNum, new Portlet(model, portalLayout.getPortletWidth(), portalLayout.getPortalId()));
                 i ++;
             }
             mainContentPanel.addTab(String.valueOf(page.getId()), page.getName(), portalLayout);

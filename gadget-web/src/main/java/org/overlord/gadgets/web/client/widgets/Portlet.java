@@ -45,6 +45,11 @@ public class Portlet extends Composite {
     private String id;
 
     private String widgetId;
+    
+    //This is the portalLayout Id.
+    private String portalId;
+    
+    private WidgetModel wmodel;
 
     @UiField InlineLabel minBtn;
     @UiField InlineLabel title;
@@ -56,9 +61,10 @@ public class Portlet extends Composite {
     @UiField FlowPanel portletContent;
     @UiField Frame gadgetSpec;
 
-    public Portlet(final String wid) {
+    private Portlet(final String wid, final String pid) {
         widgetId = wid;
         id = "portlet-" + widgetId;
+        this.portalId = pid;
         initWidget(uiBinder.createAndBindUi(this));
         getElement().setId(id);
 
@@ -83,8 +89,10 @@ public class Portlet extends Composite {
         
         maxBtn.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				maximizeWindow(id);
+				maximizeWindow(id, portalId);
 				showRestoreButton(id);
+				gadgetSpec.setWidth("100%");
+				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getCanvasView());
 			}        	
         });
         
@@ -92,20 +100,30 @@ public class Portlet extends Composite {
 			public void onClick(ClickEvent event) {
 				restoreWindow(id);
 				hideRestoreButton(id);
+				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getHomeView());
 			}        	
         });
 
         gadgetSpec.getElement().setId(widgetId);
     }
 
-    public Portlet(WidgetModel model, int width) {
-        this(String.valueOf(model.getWidgetId()));
+    public Portlet(WidgetModel model, int width, String portalId) {
+        this(String.valueOf(model.getWidgetId()), portalId);
         title.setText(model.getName());
+        wmodel = model;
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setWidth(width - 20 + "px");
         gadgetSpec.setHeight("250px");
-        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl());
+        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl() + "?" + getHomeView());
+    }
+    
+    public String getHomeView() {
+    	return "view=home";
+    }
+    
+    public String getCanvasView() {
+    	return "view=canvas";
     }
 
     @Override
@@ -147,9 +165,9 @@ public class Portlet extends Composite {
     	$wnd.$('#'+id).find(".portlet-close").hide();
     }-*/;
     
-    private static native void maximizeWindow(String id) /*-{
+    private static native void maximizeWindow(String id, String portalId) /*-{
 	    var overlay = $wnd.$('<div></div>');
-	    var jqElm = $wnd.$('#gadget-web-tabs');
+	    var jqElm = $wnd.$('#' + portalId);
 	    var styleMap = {
 	        position: "absolute",
 	        height : jqElm.height(),

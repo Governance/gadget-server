@@ -105,7 +105,7 @@ public class AddTabForm extends Composite {
             public void onResponseReceived(Request request, Response response) {
                 Log.debug("The response is: " + response.getText() + ", and the currentUser is : " + currentUser);
                 String newPageId = response.getText();
-                PortalLayout portal = new PortalLayout(Integer.valueOf(layoutColumns.getValue(layoutColumns.getSelectedIndex())));
+                PortalLayout portal = new PortalLayout(newPageId, Integer.valueOf(layoutColumns.getValue(layoutColumns.getSelectedIndex())));
                 tab.insertTab(newPageId, tabName.getValue(), portal);
                 tabName.setValue("");
                 currentUser.setCurrentPage(Long.valueOf(newPageId));
