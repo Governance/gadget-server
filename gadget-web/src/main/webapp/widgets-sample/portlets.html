@@ -41,6 +41,8 @@
 			.find( ".portlet-content" );
 			
 		$(".portlet").find(".portlet-restore").hide();
+		
+		$(".portlet").find(".portlet-userpref").hide();
 
 		$( ".portlet-header .ui-icon-triangle-1-s" ).click(function() {
 			$( this ).toggleClass( "ui-icon-triangle-1-s" ).toggleClass( "ui-icon-triangle-1-n" );
@@ -65,6 +67,10 @@
 			$("#news").find(".portlet-max").show();
 			$("#news").find(".portlet-setting").show();
 			$("#news").find(".portlet-close").show();
+		});
+		
+		$(".portlet-header .portlet-setting").click(function(){
+			$("#feed").find(".portlet-userpref").show();
 		});
 
 		$( ".column" ).disableSelection();
@@ -92,7 +98,18 @@
 <div class="column">
 		<div class="portlet" id="feed">
 			<div class="portlet-header">Feeds</div>
-			<div class="portlet-userpref"></div>
+			<div class="portlet-userpref">
+				<form>
+					<table>
+						<tr>
+							<td>refresh Cycle</td><td><input type="text" /></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="Save"></td><td><input type="button" value="Cancel"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
 			<div class="portlet-content">
 				<div class="test">
 				Google Web Toolkit contains two powerful tools for creating optimized web applications. The GWT compiler performs comprehensive optimizations across your codebase — in-lining methods, removing dead code, optimizing strings, and more. By setting split-points in the code, it can also segment your download into multiple JavaScript fragments, splitting up large applications for faster startup time.

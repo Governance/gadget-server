@@ -17,6 +17,8 @@
  */
 package org.overlord.gadgets.web.client.widgets;
 
+import java.util.List;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,6 +32,9 @@ import com.google.gwt.user.client.ui.*;
 
 import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
+import org.overlord.gadgets.web.shared.dto.UserPreference;
+import org.overlord.gadgets.web.shared.dto.UserPreference.Option;
+import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
 
 /**
@@ -60,6 +65,7 @@ public class Portlet extends Composite {
     @UiField FlowPanel userPreference;
     @UiField FlowPanel portletContent;
     @UiField Frame gadgetSpec;
+    @UiField FlexTable prefTable;
 
     private Portlet(final String wid, final String pid) {
         widgetId = wid;
@@ -90,6 +96,7 @@ public class Portlet extends Composite {
         maxBtn.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				maximizeWindow(id, portalId);
+				hideUserPref(id);
 				showRestoreButton(id);
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getCanvasView());
@@ -103,6 +110,12 @@ public class Portlet extends Composite {
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getHomeView());
 			}        	
         });
+        
+        settingBtn.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				showUserPref(id);
+			}        	
+        });
 
         gadgetSpec.getElement().setId(widgetId);
     }
@@ -111,11 +124,63 @@ public class Portlet extends Composite {
         this(String.valueOf(model.getWidgetId()), portalId);
         title.setText(model.getName());
         wmodel = model;
+        
+        generateUserPref(model);
+        
         gadgetSpec.getElement().setAttribute("scrolling", "no");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setWidth(width - 20 + "px");
         gadgetSpec.setHeight("250px");
         gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl() + "?" + getHomeView());
+    }
+    
+    
+    private void generateUserPref(WidgetModel model) {
+    	UserPreference pref = model.getUserPreference();
+    	int row = 0;
+    	for (UserPreferenceSetting prefSet : pref.getData()) { 		
+    		if (UserPreference.Type.STRING.equals(prefSet.getType())) {
+    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    			prefTable.setWidget(row, 1, createTextBox(prefSet.getName(), prefSet.getDefaultValue()));
+    		} else if (UserPreference.Type.ENUM.equals(prefSet.getType())) {
+    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    			prefTable.setWidget(row, 1, createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), prefSet.getEnumOptions()));
+    		}
+    		row ++;
+    	}
+    	prefTable.setWidget(row, 1, createPrefSettingButtons());
+    	
+    }
+    
+    private Widget createTextBox(String name, String defaultVal) {
+    	TextBox textBox = new TextBox();
+    	textBox.setName(name);
+    	textBox.setValue(defaultVal);
+    	return textBox;
+    }
+    
+    private Widget createSelectBox(String name, String defaultVal, List<Option> options) {
+    	ListBox listBox = new ListBox(false);
+    	listBox.setName(name);
+    	for (Option option : options) {
+    		listBox.addItem(option.getValue());
+    	}
+    	
+    	return listBox;
+    }
+    
+    private Widget createPrefSettingButtons() {
+    	HorizontalPanel btnPanel = new HorizontalPanel();
+    	Button saveBtn = new Button("Save");
+    	Button cancelBtn = new Button("Cancel");
+    	btnPanel.add(saveBtn);
+    	btnPanel.add(cancelBtn);
+    	cancelBtn.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				hideUserPref(id);
+			}   		
+    	});
+    	return btnPanel;
     }
     
     public String getHomeView() {
@@ -130,6 +195,7 @@ public class Portlet extends Composite {
     public void onAttach() {
         super.onAttach();
         hideRestoreButton(id);
+        hideUserPref(id);
     }
 
     /**
@@ -188,5 +254,13 @@ public class Portlet extends Composite {
 		$wnd.$(".column").sortable( "option", "disabled", false);
 		$wnd.$('#' + id).removeClass("portlet-canvas").addClass("portlet");
 	}-*/;
+    
+    private static native void hideUserPref(String id) /*-{
+		$wnd.$('#' + id).find(".portlet-preference").hide();
+	}-*/;
+    
+    private static native void showUserPref(String id) /*-{
+		$wnd.$('#' + id).find(".portlet-preference").show();
+	}-*/; 
 
 }

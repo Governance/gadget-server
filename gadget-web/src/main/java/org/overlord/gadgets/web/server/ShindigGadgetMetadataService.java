@@ -85,7 +85,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
                     theSetting.setRequired(Boolean.valueOf(setting.getString("required")));
                     theSetting.setType(UserPreference.Type.valueOf(theType));
 
-                    if (responseObject.has("orderedEnumValues")) {
+                    if (setting.has("orderedEnumValues")) {
                         JSONArray enumValues = setting.getJSONArray("orderedEnumValues");
                         for (int i =0; i < enumValues.length(); i++) {
                             UserPreference.Option option = new UserPreference.Option();
@@ -179,7 +179,6 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
             gadget.setThumbnailUrl(modulePref.getString("thumbnail"));
             gadget.setDescription(modulePref.getString("description"));
 
-
             return gadget;
         } catch (JSONException e) {
             throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
@@ -192,7 +191,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
         //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
         //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
-        svc.getGadgetMetadata("http://research.stlouisfed.org/gadgets/code/alfredgraph.xml");
+        svc.getGadgetMetadata("http://rt-gadget.googlecode.com/git/gadget.xml");
         //svc.getGadgetMetadata("http://www.labpixies.com/campaigns/todo/todo.xml");
         //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
     }

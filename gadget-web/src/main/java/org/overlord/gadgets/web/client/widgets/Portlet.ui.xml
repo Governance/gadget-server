@@ -11,7 +11,10 @@
               <g:InlineLabel ui:field="removeBtn" styleName="ui-icon ui-icon-closethick portlet-close"></g:InlineLabel>
               <g:InlineLabel ui:field="restoreBtn" styleName="ui-icon ui-icon-arrowthick-1-sw portlet-restore"></g:InlineLabel>
          </g:FlowPanel>
-         <g:FlowPanel ui:field="userPreference"></g:FlowPanel>
+         <g:FlowPanel ui:field="userPreference" styleName="portlet-preference">
+         	<g:FlexTable ui:field="prefTable">
+         	</g:FlexTable>
+         </g:FlowPanel>
          <g:FlowPanel styleName="portlet-content" ui:field="portletContent">
              <g:Frame ui:field="gadgetSpec" styleName="portlet-iframe"></g:Frame>
          </g:FlowPanel>
