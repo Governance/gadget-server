@@ -20,6 +20,7 @@ package org.overlord.gadgets.server.service;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
+import org.overlord.gadgets.server.model.WidgetPreference;
 
 import java.util.List;
 
@@ -52,6 +53,8 @@ public interface UserManager {
     void removePage(long pageId);
 
     void removeWidget(long widgetId);
+    
+    void updateWidgetPreference(long widgetId, List<WidgetPreference> prefs);
 
     Widget getWidgetById(long widgetId);
 }

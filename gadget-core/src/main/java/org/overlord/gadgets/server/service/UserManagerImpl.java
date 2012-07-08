@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
+import org.overlord.gadgets.server.model.WidgetPreference;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -183,5 +184,20 @@ public class UserManagerImpl implements UserManager {
         entityManager.getTransaction().commit();
         return widget;
     }
+
+	public void updateWidgetPreference(long widgetId,
+			List<WidgetPreference> prefs) {
+		if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+		Query query = entityManager.createQuery("delete from WidgetPreference pref where pref.widget.id = :id");
+		query.setParameter("id", widgetId);
+		query.executeUpdate();
+		
+		Widget widget = entityManager.find(Widget.class, widgetId);
+		widget.setPrefs(prefs);
+		entityManager.merge(widget);
+		entityManager.getTransaction().commit();
+	}
 
 }

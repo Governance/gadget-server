@@ -18,7 +18,6 @@
 package org.overlord.gadgets.server.model;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
@@ -29,7 +28,9 @@ import java.io.Serializable;
 @Table(name="GS_APP_DATA")
 public class ApplicationData implements Serializable {
 
-    @Id @GeneratedValue
+	private static final long serialVersionUID = -3650687774226002399L;
+
+	@Id @GeneratedValue
     @Column(name="ID")
     private long id;
 

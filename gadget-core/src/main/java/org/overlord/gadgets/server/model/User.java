@@ -19,6 +19,7 @@ package org.overlord.gadgets.server.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,9 @@ import java.util.List;
 @Table(name = "GS_USER")
 public class User implements Serializable{
 
-    @Id
+	private static final long serialVersionUID = -5843968472547315144L;
+
+	@Id
     @GeneratedValue
     @Column(name= "ID")
     private long id;
@@ -47,7 +50,7 @@ public class User implements Serializable{
     private String password;
 
     @OneToMany(orphanRemoval = true, mappedBy = "user")
-    private List<Page> pages;
+    private List<Page> pages = new ArrayList<Page>();
 
     @Transient
     private long currentPageId;

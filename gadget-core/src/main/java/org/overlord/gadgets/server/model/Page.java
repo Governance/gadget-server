@@ -18,6 +18,8 @@
 package org.overlord.gadgets.server.model;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,11 @@ import java.util.List;
  */
 @Entity
 @Table(name="GS_PAGE")
-public class Page {
+public class Page implements Serializable{
 
-    @Id
+	private static final long serialVersionUID = -3949196421050038288L;
+
+	@Id
     @GeneratedValue
     @Column(name="PAGE_ID")
     private long id;

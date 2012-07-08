@@ -25,12 +25,14 @@ import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
+import org.overlord.gadgets.server.model.WidgetPreference;
 import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,6 +129,28 @@ public class UserManagerTest {
         Assert.assertNull(w);
         widgets = userManager.getPage(1).getWidgets();
         Assert.assertEquals(widgets.size(),0);
+    }
+    
+    @Test
+    public void testUpdateWidgetPref() throws Exception {
+        Gadget gadget = gadgetService.getGadgetById(1);
+        Page page = userManager.getPage(1);
+        gadgetService.addGadgetToPage(gadget, page);
+        List<Widget> widgets = userManager.getPage(1).getWidgets();
+        Assert.assertTrue(widgets.size() == 1);
+        
+        List<WidgetPreference> wps = new ArrayList<WidgetPreference>();
+        WidgetPreference wp = new WidgetPreference();
+        wp.setName("testName");
+        wp.setValue("testValue");
+        wps.add(wp);
+        
+        userManager.updateWidgetPreference(widgets.get(0).getId(), wps);
+        
+        Widget theWidget = widgets.get(0);
+        Widget w = userManager.getWidgetById(theWidget.getId());
+        Assert.assertTrue(w.getPrefs().size() == 1);
+        userManager.removeWidget(theWidget.getId());
     }
 
 }

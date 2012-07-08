@@ -17,6 +17,10 @@
  */
 package org.overlord.gadgets.server.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 /**
@@ -25,9 +29,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="GS_WIDGET")
-public class Widget {
+public class Widget implements Serializable{
 
-    @Id
+	private static final long serialVersionUID = 3619016542917740925L;
+
+	@Id
     @GeneratedValue
     @Column(name="WIDGET_ID")
     private long id;
@@ -40,9 +46,9 @@ public class Widget {
 
     @Column(name="WIDGET_ORDER")
     private long order;
-
-    @Column(name="WIDGET_PREFS")
-    private String preference;
+    
+    @OneToMany(mappedBy = "widget")
+    private List<WidgetPreference> prefs = new ArrayList<WidgetPreference>();
 
     @ManyToOne
     private Page page;
@@ -71,14 +77,6 @@ public class Widget {
         this.order = order;
     }
 
-    public String getPreference() {
-        return preference;
-    }
-
-    public void setPreference(String preference) {
-        this.preference = preference;
-    }
-
     public String getAppUrl() {
         return appUrl;
     }
@@ -94,4 +92,13 @@ public class Widget {
     public void setPage(Page page) {
         this.page = page;
     }
+
+	public List<WidgetPreference> getPrefs() {
+		return prefs;
+	}
+
+	public void setPrefs(List<WidgetPreference> prefs) {
+		this.prefs = prefs;
+	}
+
 }

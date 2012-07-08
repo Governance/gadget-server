@@ -17,6 +17,8 @@
  */
 package org.overlord.gadgets.server.model;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 /**
@@ -25,9 +27,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="GS_GADGET")
-public class Gadget {
+public class Gadget implements Serializable{
 
-    @Id
+	private static final long serialVersionUID = -3288676630965488450L;
+
+	@Id
     @GeneratedValue
     @Column(name="GAGET_ID")
     private long id;

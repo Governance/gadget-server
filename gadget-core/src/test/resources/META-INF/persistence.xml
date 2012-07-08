@@ -11,6 +11,7 @@
       <class>org.overlord.gadgets.server.model.ApplicationData</class>
       <class>org.overlord.gadgets.server.model.Page</class>
       <class>org.overlord.gadgets.server.model.Widget</class>
+      <class>org.overlord.gadgets.server.model.WidgetPreference</class>
       <class>org.overlord.gadgets.server.model.Gadget</class>
       <properties>
           <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
