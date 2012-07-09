@@ -66,8 +66,8 @@ public class GadgetServiceImpl implements GadgetService{
         rtGadget.setTitle("Response Time");
         rtGadget.setAuthor("Jeff Yu");
         rtGadget.setDescription("This is the Response Time Gadget");
-        rtGadget.setThumbnailUrl("http://rt-gadget.googlecode.com/git/thumbnail.png");
-        rtGadget.setUrl("http://rt-gadget.googlecode.com/git/gadget.xml");
+        rtGadget.setThumbnailUrl("http://localhost:8080/gadgets/rt-gadget/thumbnail.png");
+        rtGadget.setUrl("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
 
         currencyConverter = new Gadget();
         currencyConverter.setAuthor("Google");
@@ -81,9 +81,9 @@ public class GadgetServiceImpl implements GadgetService{
         slaWidget.setAuthor("Jeff Yu");
         slaWidget.setAuthorEmail("Jeff@test.com");
         slaWidget.setTitle("SLA Gadget");
-        slaWidget.setThumbnailUrl("http://slagadget.googlecode.com/git/thumbnail.png");
+        slaWidget.setThumbnailUrl("http://localhost:8080/gadgets/sla-gadget/thumbnail.png");
         slaWidget.setDescription(" This is the Service Level Violation Gadget");
-        slaWidget.setUrl("http://slagadget.googlecode.com/git/gadget.xml");
+        slaWidget.setUrl("http://localhost:8080/gadgets/sla-gadget/gadget.xml");
 
         dateAndTime = new Gadget();
         dateAndTime.setAuthor("Google");
