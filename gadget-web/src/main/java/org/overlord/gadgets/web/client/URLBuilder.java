@@ -70,5 +70,9 @@ public class URLBuilder {
     public static String getRemovePageURL(long pageId) {
         return urlBase + "rs/users/user/page/" + pageId + "/remove";
     }
+    
+    public static String updatePreferenceURL(long widgetId) {
+    	return urlBase + "rs/users/widget/"+widgetId+"/update";
+    }
 
 }

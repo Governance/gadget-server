@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
+import org.overlord.gadgets.server.model.WidgetPreference;
 import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.web.shared.dto.PageModel;
@@ -35,6 +36,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jeff Yu
@@ -147,6 +149,23 @@ public class UserController {
     @Consumes("application/json")
     public Response removePage(@PathParam("pageId") long pageId) {
         userManager.removePage(pageId);
+        return Response.ok().build();
+    }
+    
+    @POST
+    @Path("widget/{widgetId}/update")
+    @Consumes("application/json")
+    public Response updateWidgetPreference(@PathParam("widgetId") long widgetId, Map<String, String> prefs) {
+    	
+    	List<WidgetPreference> wps = new ArrayList<WidgetPreference>();
+    	for (String name : prefs.keySet()) {
+    		String value = prefs.get(name);
+    		WidgetPreference wp = new WidgetPreference();
+    		wp.setName(name);
+    		wp.setValue(value);
+    		wps.add(wp);
+    	}
+    	userManager.updateWidgetPreference(widgetId, wps);
         return Response.ok().build();
     }
 

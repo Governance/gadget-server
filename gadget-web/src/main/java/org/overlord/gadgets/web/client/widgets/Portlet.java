@@ -17,7 +17,10 @@
  */
 package org.overlord.gadgets.web.client.widgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -55,6 +58,8 @@ public class Portlet extends Composite {
     private String portalId;
     
     private WidgetModel wmodel;
+    
+    private List<Widget> prefs = new ArrayList<Widget>();
 
     @UiField InlineLabel minBtn;
     @UiField InlineLabel title;
@@ -141,10 +146,14 @@ public class Portlet extends Composite {
     	for (UserPreferenceSetting prefSet : pref.getData()) { 		
     		if (UserPreference.Type.STRING.equals(prefSet.getType())) {
     			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
-    			prefTable.setWidget(row, 1, createTextBox(prefSet.getName(), prefSet.getDefaultValue()));
+    			Widget textBox = createTextBox(prefSet.getName(), prefSet.getDefaultValue());
+    			prefs.add(textBox);
+    			prefTable.setWidget(row, 1, textBox);
     		} else if (UserPreference.Type.ENUM.equals(prefSet.getType())) {
     			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
-    			prefTable.setWidget(row, 1, createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), prefSet.getEnumOptions()));
+    			Widget listBox = createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), prefSet.getEnumOptions());
+    			prefs.add(listBox);
+    			prefTable.setWidget(row, 1, listBox);
     		}
     		row ++;
     	}
@@ -165,7 +174,13 @@ public class Portlet extends Composite {
     	for (Option option : options) {
     		listBox.addItem(option.getValue());
     	}
-    	
+    	int index = 0;
+    	for (int i = 0; i < options.size(); i ++) {
+    		if (options.get(i).getValue().equals(defaultVal)) {
+    			index = i;
+    		}
+    	}
+    	listBox.setSelectedIndex(index);   	
     	return listBox;
     }
     
@@ -174,6 +189,44 @@ public class Portlet extends Composite {
     	Button saveBtn = new Button("Save");
     	Button cancelBtn = new Button("Cancel");
     	btnPanel.add(saveBtn);
+    	saveBtn.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				StringBuffer sbuffer = new StringBuffer();
+				sbuffer.append("{");
+				
+				for (int i = 0; i < prefs.size(); i++) {
+					Widget theWidget = prefs.get(i);
+					String name = null;
+					String value = null;
+					if (theWidget instanceof TextBox) {
+						TextBox tbox = (TextBox)theWidget;
+						name = tbox.getName();
+						value = tbox.getValue();
+					} else if (theWidget instanceof ListBox) {
+						ListBox lbox = (ListBox)theWidget;
+						name = lbox.getName();
+						value = lbox.getValue(lbox.getSelectedIndex());
+					}
+					if (name != null) {
+						sbuffer.append("\"" + name + "\":\"" + value + "\"");
+						if (i < prefs.size() -1) {
+							sbuffer.append(",");
+						}
+					}
+				}
+				sbuffer.append("}");
+				Log.debug("The map value is: " + sbuffer.toString());
+				
+				RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.updatePreferenceURL(Long.valueOf(widgetId)), sbuffer.toString(), new RestfulInvoker.Response(){
+					public void onResponseReceived(Request request, Response response) {
+						hideUserPref(id);
+						gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getHomeView());
+					}
+					
+				});
+				
+			}  		
+    	});
     	btnPanel.add(cancelBtn);
     	cancelBtn.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
