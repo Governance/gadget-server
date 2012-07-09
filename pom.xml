@@ -65,6 +65,7 @@
           <module>gadget-core</module>
 	      <module>gadget-web</module>
           <module>gadget-shindig</module>
+          <module>gadgets</module>
 	</modules>
 
 	<build>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Response Time" description="Response Time gadget"
+	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
+  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://sla-violation.appspot.com/responsetime/all" />
+  <UserPref name="record" display_name="record:" default_value="10" datatype="enum">
+		<EnumValue value="10" />
+		<EnumValue value="15" />
+		<EnumValue value="20" />
+  </UserPref>
+  <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
+		<EnumValue value="30" />
+		<EnumValue value="60" />
+		<EnumValue value="120" />
+		<EnumValue value="180" />
+		<EnumValue value="300" />
+  </UserPref>
+
+  <Content type="html"><![CDATA[
+  <link href="http://rt-gadget.googlecode.com/git/d3.css" rel="stylesheet" type="text/css">
+   <style type="text/css">
+	#rtchart {
+	margin: 0;
+    padding: 0;
+    overflow: none;
+	}
+   </style>
+
+   <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+   <script type="text/javascript" src="d3.v2.js"></script>
+   <script type="text/javascript" src="d3line.js"></script>
+   <script type="text/javascript" src="d3legend.js"></script>
+   <script type="text/javascript" src="d3linewithlegend.js"></script>
+   <script type="text/javascript" src="nvtooltip.js"></script>
+   
+   <script type="text/javascript">
+	
+	function makeJSONRequest() {
+		var prefs, params, restUrl;
+	
+		prefs = new gadgets.Prefs();
+	
+		params = {};
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
+	
+		restUrl = prefs.getString("serviceUrl");
+		
+		gadgets.io.makeRequest(restUrl, updateUI, params);	
+	}
+	
+	function getDateTime(theDate) {
+		return theDate.getFullYear() + "-" + (theDate.getMonth() +1) + "-" + theDate.getDate() + " " + theDate.getHours()
+				+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
+	}
+	
+	function updateUI(response) {
+		var margin = {top: 30, right: 10, bottom: 50, left: 60};
+	    var chart = d3LineWithLegend()
+	                .xAxis.label('Number')
+	                .width(width(margin))
+	                .height(height(margin))
+	                .yAxis.label('Response Time (sec)');
+	
+	  var svg = d3.select('#rtchart svg')
+	      .datum(getData(response));
+	  	
+	  svg.transition().duration(500)
+	      .attr('width', width(margin))
+	      .attr('height', height(margin))
+	      .call(chart);
+	  
+ 	  chart.dispatch.on('showTooltip', function(e) {
+		  var offset = $('#rtchart').offset(), // { left: 0, top: 0 }
+		      left = e.pos[0] + offset.left,
+		      top = e.pos[1] + offset.top;
+
+		   	var content = '<p>serviceType:<b>' + e.point[2] + '</b></p>'
+						  + '<p>operation:<b>' + e.point[3] + '</b></p>'
+						  + '<p>' + e.series.label + ':<b>' + e.point[1] + '</b></p>'
+						  + '<p>time:<b>' + e.point[4] + '</b></p>';
+
+		   nvtooltip.show([left, top], content);
+		  });
+
+	  chart.dispatch.on('hideTooltip', function(e) {
+	    	nvtooltip.cleanup();
+	  });
+		
+	}
+	
+	function width(margin) {
+      var w = $(window).width() - 20;
+      return ( (w - margin.left - margin.right - 20) < 0 ) ? margin.left + margin.right + 2 : w;
+    }
+
+    function height(margin) {
+      var h = $(window).height() - 20;
+      return ( h - margin.top - margin.bottom - 20 < 0 ) ? margin.top + margin.bottom + 2 : h;
+    }
+
+    function getData(response) {
+	  var min = [], max = [], duration = [];
+	  var jsondata, rtResult, i, ts;
+	  jsondata = response.data;
+	  for (i = 0; i < jsondata.length; i++) {
+		rtResult = jsondata[i];
+		ts = getDateTime(new Date(rtResult.timestamp));
+		min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
+		max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
+		duration.push([i, rtResult.duration, rtResult.serviceType, rtResult.operation, ts]);
+	  }
+	  
+	  return [{data:min, label:"Min"},
+			  {data:max, label:"Max"},
+			  {data:duration, label:"Duration"}];
+	  	
+	}
+	
+	function loadData() {
+         var prefs, refreshInterval;
+         prefs = new gadgets.Prefs();
+         refreshInterval = prefs.getInt("refreshCycle")
+         makeJSONRequest();
+         setInterval(makeJSONRequest, refreshInterval * 1000);
+    }
+
+    gadgets.util.registerOnLoadHandler(loadData);
+
+   </script>
+	
+	<div id="rtchart">
+	  <svg></svg>
+	</div>
+    
+    
+]]> 
+  </Content>
+</Module>

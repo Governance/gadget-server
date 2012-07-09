@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="SLA Violation" description="SLA Violation gadget"
+	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
+  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://sla-violation.appspot.com/slaviolation/all" />
+  <UserPref name="pageSize" display_name="Size:" default_value="10" datatype="enum">
+		<EnumValue value="5" />
+		<EnumValue value="10" />
+		<EnumValue value="15" />
+		<EnumValue value="20" />
+  </UserPref>
+  <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
+		<EnumValue value="30" />
+		<EnumValue value="60" />
+		<EnumValue value="120" />
+		<EnumValue value="180" />
+		<EnumValue value="300" />
+  </UserPref>
+  <Content type="html"><![CDATA[
+  <style type="text/css">
+	#sla-table {font-size:9pt;border-collapse:collapse;text-align:left;}
+	#updatedTime {font-size:9pt;}
+	#sla-body tr{background-color:#FFFFFF;}
+	.tb-header {background:#A7C942;color: #FFFFFF; font-weight:bold;border:1px solid #98BF21;}
+	.tb-header td {}
+	.tb-row {border:1px solid #98BF21;}
+	.violation-text {color: red;} 
+   </style>
+
+   <script type="text/javascript">
+	
+	function makeJSONRequest() {
+		var prefs, params, restUrl;
+		
+		prefs = new gadgets.Prefs();
+		
+		params = {};
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
+		
+		restUrl = prefs.getString("serviceUrl");
+		
+		gadgets.io.makeRequest(restUrl, updateResponse, params);
+	}
+	
+	function updateResponse(result) {
+	    var jsondata, slaResult, i, rowData, theUpdatedTime;
+	    theUpdatedTime = new Date();
+	    document.getElementById("updatedTime").innerHTML = "Updated Time : " + getDateTime(theUpdatedTime);
+		deleteRows();
+		jsondata = result.data;
+		for (i = 0; i < jsondata.length; i++) {
+			slaResult = jsondata[i];
+			rowData = [slaResult.serviceType, slaResult.operation, slaResult.violation, getDateTime(new Date(slaResult.timestamp))];
+			insertRow(rowData);
+		}
+	}
+	
+	function getDateTime(theDate) {
+		return theDate.getFullYear() + "-" + (theDate.getMonth() +1) + "-" + theDate.getDate() + " " + theDate.getHours()
+				+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
+	}
+	
+	function insertRow(data) {
+		var theBody, theRow, theCell, i;
+		theBody = document.getElementById("sla-body");
+		theRow = document.createElement("TR");
+		theRow.setAttribute("class", "tb-row");
+		theBody.appendChild(theRow);
+		for (i = 0; i < data.length; i++) {
+			theCell = document.createElement("TD");
+			theCell.innerHTML = data[i];
+			if (i == 2) {
+				theCell.setAttribute("class", "violation-text");
+			}
+			theRow.appendChild(theCell);
+		}
+	}
+	
+	function deleteRows() {
+		var theBody, theSize, i;
+		theBody = document.getElementById("sla-body");
+		theSize = theBody.rows.length;
+		for (i = 0; i < theSize; i++) {
+			theBody.deleteRow(theBody.rows[i]);
+		}
+	}
+	
+	function loadData() {
+		var prefs, refreshInterval;
+		prefs = new gadgets.Prefs();
+		refreshInterval = prefs.getInt("refreshCycle")
+		makeJSONRequest();
+		setInterval(makeJSONRequest, refreshInterval * 1000);
+	}
+	
+	gadgets.util.registerOnLoadHandler(loadData);	
+   </script>
+   <div style="float:right;">
+		<span id="updatedTime"></span>
+   </div>
+   <table style="width:100%" id="sla-table" border="0" cellspacing="3" cellpadding="5">
+		<thead>
+			<tr class="tb-header">
+				<td>Service Type</td><td>Operation</td><td>Violation Description</td><td>Time</td>
+			</tr>			
+		</thead>
+		<tbody id="sla-body">
+
+		</tbody>
+   </table>
+]]> 
+  </Content>
+</Module>

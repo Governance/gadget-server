@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<title>SLA Gadget</title>
+		<style type="text/css">
+		#sla-table {font-size:9pt;border-collapse:collapse;text-align:left;}
+		#updatedTime {font-size:9pt;}
+		#sla-body tr{background-color:#FFFFFF;}
+		.tb-header {background:#A7C942;color: #FFFFFF; font-weight:bold;border:1px solid #98BF21;}
+		.tb-header td {}
+		.tb-row {border:1px solid #98BF21;}
+		.violation-text {color: red;} 
+	   </style>
+	</head>
+	<body>
+		<div style="float:right;">
+			<span id="updatedTime"></span>
+		</div>
+		<table style="width:100%" id="sla-table" border="0" cellspacing="3" cellpadding="5">
+			<thead>
+				<tr class="tb-header">
+					<td>Service Type</td><td>Operation</td><td>Violation Description</td><td>Time</td>
+				</tr>			
+			</thead>
+			<tbody id="sla-body">							
+			</tbody>
+	   </table>
+	   <script type="text/javascript">
+		function deleteRows() {
+			var theBody, theSize, i;
+			theBody = document.getElementById("sla-body");
+			theSize = theBody.rows.length;
+			for (i = 0; i < theSize; i++) {
+				theBody.deleteRow(theBody.rows[i]);
+			}
+		}
+		
+		function insertRow(data) {
+			var theBody, theRow, theCell, i;
+			theBody = document.getElementById("sla-body");
+			theRow = document.createElement("TR");
+			theRow.setAttribute("class", "tb-row");
+			theBody.appendChild(theRow);
+			for (i = 0; i < data.length; i++) {
+				theCell = document.createElement("TD");
+				theCell.innerHTML = data[i];
+				if (i == 2) {
+					theCell.setAttribute("class", "violation-text");
+				}
+				theRow.appendChild(theCell);
+			}
+		}
+		
+		function parseJSON(data) {
+		    return window.JSON && window.JSON.parse ? window.JSON.parse( data ) : (new Function("return " + data))(); 
+		}
+		
+		function getDateTime(theDate) {
+			return theDate.getFullYear() + "-" + (theDate.getMonth() +1) + "-" + theDate.getDate() + " " + theDate.getHours()
+					+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
+		}
+		
+		function init() {
+			var rowData, jsonData, theData, theModel, i, theUpdatedTime;
+			theUpdatedTime = new Date();
+			document.getElementById("updatedTime").innerHTML = "Updated Time : " + getDateTime(theUpdatedTime);
+			deleteRows();
+			theData = "[{\"timestamp\":1340458852614,\"operation\":\"Greet0\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]},{\"timestamp\":1340458852614,\"operation\":\"Greet1\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]}]";
+			jsonData = parseJSON(theData);
+			for (i = 0; i < jsonData.length; i++) {
+				theModel = jsonData[i];
+				rowData = [theModel.serviceType, theModel.operation, theModel.violation, getDateTime(new Date(theModel.timestamp))];
+				insertRow(rowData);
+			}
+		}
+		init();
+	   </script>
+	</body>
+</html>
