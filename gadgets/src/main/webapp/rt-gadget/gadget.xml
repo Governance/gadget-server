@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Response Time" description="Response Time gadget"
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://sla-violation.appspot.com/responsetime/all" />
+  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
   <UserPref name="record" display_name="record:" default_value="10" datatype="enum">
 		<EnumValue value="10" />
 		<EnumValue value="15" />
@@ -17,7 +17,7 @@
   </UserPref>
 
   <Content type="html"><![CDATA[
-  <link href="http://rt-gadget.googlecode.com/git/d3.css" rel="stylesheet" type="text/css">
+  <link href="d3.css" rel="stylesheet" type="text/css">
    <style type="text/css">
 	#rtchart {
 	margin: 0;
@@ -36,14 +36,17 @@
    <script type="text/javascript">
 	
 	function makeJSONRequest() {
-		var prefs, params, restUrl;
+		var prefs, params, restUrl, postdata;
 	
 		prefs = new gadgets.Prefs();
-	
+		postdata = "{\"collection\":\"ServiceResponseTime\"}";
+		
 		params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
 		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
-	
+		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+   		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
+   		
 		restUrl = prefs.getString("serviceUrl");
 		
 		gadgets.io.makeRequest(restUrl, updateUI, params);	
