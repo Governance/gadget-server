@@ -34,9 +34,10 @@ Deploying Gadget Server in JBoss AS7:
     </security>
 </datasource>
 
-2) copy following two wars into the $JBoss-AS7/standalone/deployments folder. (This has been tested under JBoss AS7.1.1.Final)
+2) copy following wars into the $JBoss-AS7/standalone/deployments folder. (This has been tested under JBoss AS7.1.1.Final)
   * gadget-server.war from the gadget-shindig/target folder.
   * gadget-web.war from the gadget-web/target folder.
+  * gadgets.war from the gadgets/target folder.
 
 3) Start the server via following command in $JBoss-AS7 folder:
     bin/standalone.sh
