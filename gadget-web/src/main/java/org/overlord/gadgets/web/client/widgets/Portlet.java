@@ -18,9 +18,14 @@
 package org.overlord.gadgets.web.client.widgets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.overlord.gadgets.web.client.URLBuilder;
+import org.overlord.gadgets.web.client.util.RestfulInvoker;
+import org.overlord.gadgets.web.shared.dto.UserPreference;
+import org.overlord.gadgets.web.shared.dto.UserPreference.Option;
+import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
+import org.overlord.gadgets.web.shared.dto.WidgetModel;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -31,14 +36,17 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
-
-import org.overlord.gadgets.web.client.URLBuilder;
-import org.overlord.gadgets.web.client.util.RestfulInvoker;
-import org.overlord.gadgets.web.shared.dto.UserPreference;
-import org.overlord.gadgets.web.shared.dto.UserPreference.Option;
-import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
-import org.overlord.gadgets.web.shared.dto.WidgetModel;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author: Jeff Yu

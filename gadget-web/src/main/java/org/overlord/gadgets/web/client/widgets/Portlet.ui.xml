@@ -6,9 +6,9 @@
          <g:FlowPanel styleName="portlet-header ui-widget-header ui-corner-all">
               <g:InlineLabel ui:field="title" ></g:InlineLabel>
               <g:InlineLabel ui:field="minBtn" styleName="ui-icon ui-icon-triangle-1-s portlet-min"></g:InlineLabel>
-              <g:InlineLabel ui:field="maxBtn" styleName="ui-icon ui-icon-arrowthick-2-ne-sw portlet-max"></g:InlineLabel>
-              <g:InlineLabel ui:field="settingBtn" styleName="ui-icon ui-icon-gear portlet-setting"></g:InlineLabel>
               <g:InlineLabel ui:field="removeBtn" styleName="ui-icon ui-icon-closethick portlet-close"></g:InlineLabel>
+              <g:InlineLabel ui:field="settingBtn" styleName="ui-icon ui-icon-gear portlet-setting"></g:InlineLabel>
+              <g:InlineLabel ui:field="maxBtn" styleName="ui-icon ui-icon-arrowthick-2-ne-sw portlet-max"></g:InlineLabel>
               <g:InlineLabel ui:field="restoreBtn" styleName="ui-icon ui-icon-arrowthick-1-sw portlet-restore"></g:InlineLabel>
          </g:FlowPanel>
          <g:FlowPanel ui:field="userPreference" styleName="portlet-preference">
