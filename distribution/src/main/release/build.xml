@@ -9,7 +9,7 @@
   
   <target name="deploy" description="Deploys the Gadget Server">
     <echo message="Deploys the Gadget Server" />
-    <copy file="modules/gadget-shindig-${version}.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
+    <copy file="modules/gadget-server-${version}.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
     <copy file="modules/gadget-web-${version}.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
     <copy file="modules/gadgets-${version}.war" toFile="${deploy.dir}/gadgets.war" overwrite="true" />
     <copy todir="${deploy.dir}" overwrite="true">

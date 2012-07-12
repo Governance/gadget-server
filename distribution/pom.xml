@@ -44,7 +44,7 @@
 	<dependencies>
 	    <dependency>
 	        <groupId>org.overlord.gadgets.server</groupId>
-	        <artifactId>gadget-shindig</artifactId>
+	        <artifactId>gadget-server</artifactId>
 			<type>war</type>
 	        <version>${project.version}</version>
 	    </dependency>
