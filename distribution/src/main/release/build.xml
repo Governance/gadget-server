@@ -5,7 +5,7 @@
   <!-- DEFAULT PROPERTY VALUES -->
   <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.5" />
   <property name="deploy.dir" value="${as7.home}/standalone/deployments" />
-  <property name="version" value="1.0.0-SNAPSHOT" />
+  <property name="version" value="1.0.0.20120716-M1" />
   
   <target name="deploy" description="Deploys the Gadget Server">
     <echo message="Deploys the Gadget Server" />

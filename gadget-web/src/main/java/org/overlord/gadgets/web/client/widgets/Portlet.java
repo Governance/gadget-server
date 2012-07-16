@@ -113,7 +113,7 @@ public class Portlet extends Composite {
 				showRestoreButton(id);
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("90%");
-				gadgetSpec.getElement().setAttribute("scrolling", "true");
+				gadgetSpec.getElement().setAttribute("scrolling", "auto");
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getCanvasView());
 			}        	
         });

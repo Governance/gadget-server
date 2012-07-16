@@ -25,11 +25,11 @@ a {
 }
 
 #gadget-web-tabs {
-    overflow: scroll;
+    overflow: auto;
 }
 
 #gadget-store-list{
-    overflow:scroll;
+    overflow:auto;
 }
 
 .header-panel {
@@ -57,6 +57,7 @@ a {
     min-height:25px;
     height:25px;
     width:100%;
+    background: #2B5D88;
 }
 
 .footer-link {
