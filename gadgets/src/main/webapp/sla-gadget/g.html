@@ -64,8 +64,11 @@
 			theUpdatedTime = new Date();
 			document.getElementById("updatedTime").innerHTML = "Updated Time : " + getDateTime(theUpdatedTime);
 			deleteRows();
-			theData = "[{\"timestamp\":1340458852614,\"operation\":\"Greet0\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]},{\"timestamp\":1340458852614,\"operation\":\"Greet1\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]}]";
+			theData = "[{\"timestamp\":1340458852614,\"operation\":\"Greet0\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]},{\"timestamp\":1340458852615,\"operation\":\"Greet1\",\"serviceType\":\"GreetService\",\"violation\":\"Invocation time is waaaayyy to long\",\"activityTypeRefs\":[]}]";
 			jsonData = parseJSON(theData);
+			jsonData.sort(function(a, b){
+				return (b.timestamp - a.timestamp);
+			});
 			for (i = 0; i < jsonData.length; i++) {
 				theModel = jsonData[i];
 				rowData = [theModel.serviceType, theModel.operation, theModel.violation, getDateTime(new Date(theModel.timestamp))];

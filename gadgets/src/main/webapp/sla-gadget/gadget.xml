@@ -55,6 +55,9 @@
 	    document.getElementById("updatedTime").innerHTML = "Updated Time : " + getDateTime(theUpdatedTime);
 		deleteRows();
 		jsondata = result.data;
+		jsondata.sort(function(a,b){
+			return (b.timestamp - a.timestamp);
+		});
 		for (i = 0; i < jsondata.length; i++) {
 			slaResult = jsondata[i];
 			rowData = [slaResult.serviceType, slaResult.operation, slaResult.violation, getDateTime(new Date(slaResult.timestamp))];
