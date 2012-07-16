@@ -112,6 +112,8 @@ public class Portlet extends Composite {
 				hideUserPref(id);
 				showRestoreButton(id);
 				gadgetSpec.setWidth("100%");
+				gadgetSpec.setHeight("90%");
+				gadgetSpec.getElement().setAttribute("scrolling", "true");
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getCanvasView());
 			}        	
         });
@@ -120,6 +122,9 @@ public class Portlet extends Composite {
 			public void onClick(ClickEvent event) {
 				restoreWindow(id);
 				hideRestoreButton(id);
+				gadgetSpec.setWidth("100%");
+				gadgetSpec.setHeight("250px");
+				gadgetSpec.getElement().setAttribute("scrolling", "no");
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "?" + getHomeView());
 			}        	
         });
