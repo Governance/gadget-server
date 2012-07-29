@@ -84,7 +84,10 @@ public class UserController {
             userModel.setUserId(theUser.getId());
             userModel.setUserName(theUser.getName());
             List<Page> pages = userManager.getPages(theUser.getId());
-            userModel.setCurrentPageId(pages.get(0).getId());
+            //TODO: need to get the currentPageId somehow.
+            if (pages != null && pages.size() > 0) {
+            	userModel.setCurrentPageId(pages.get(0).getId());
+            }
             userModel.setDisplayName(theUser.getDisplayName());
             request.getSession().setAttribute("user", userModel);
         }

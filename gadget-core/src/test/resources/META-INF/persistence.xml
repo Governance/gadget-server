@@ -8,6 +8,7 @@
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
       <class>org.overlord.gadgets.server.model.User</class>
+      <class>org.overlord.gadgets.server.model.Group</class>
       <class>org.overlord.gadgets.server.model.ApplicationData</class>
       <class>org.overlord.gadgets.server.model.Page</class>
       <class>org.overlord.gadgets.server.model.Widget</class>
@@ -15,6 +16,7 @@
       <class>org.overlord.gadgets.server.model.Gadget</class>
       <properties>
           <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+          <property name="hibernate.show_sql" value="true"/>
       </properties>
   </persistence-unit>
 

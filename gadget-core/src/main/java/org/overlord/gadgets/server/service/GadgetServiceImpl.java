@@ -34,75 +34,12 @@ import java.util.List;
 public class GadgetServiceImpl implements GadgetService{
 
     private EntityManager entityManager;
-
-    //TODO: need to be replaced with initial data sql.
-    private static Gadget rtGadget;
-    private static Gadget currencyConverter;
-    private static Gadget slaWidget;
-    private static Gadget dateAndTime;
-    private static Gadget graph;
     
     @Inject
     public GadgetServiceImpl(EntityManager em) {
         this.entityManager = em;
-        initialize();
-    }
-
-    private void initialize() {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
-        entityManager.persist(rtGadget);
-        entityManager.persist(currencyConverter);
-        entityManager.persist(slaWidget);
-        entityManager.persist(dateAndTime);
-        entityManager.persist(graph);
-        entityManager.getTransaction().commit();
     }
     
-    static {
-        rtGadget = new Gadget();
-        rtGadget.setAuthorEmail("jeff@test.com");
-        rtGadget.setTitle("Response Time");
-        rtGadget.setAuthor("Jeff Yu");
-        rtGadget.setDescription("This is the Response Time Gadget");
-        rtGadget.setThumbnailUrl("http://localhost:8080/gadgets/rt-gadget/thumbnail.png");
-        rtGadget.setUrl("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
-
-        currencyConverter = new Gadget();
-        currencyConverter.setAuthor("Google");
-        currencyConverter.setAuthorEmail("info@tofollow.com");
-        currencyConverter.setTitle(" Currency Converter");
-        currencyConverter.setThumbnailUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_content/en_us-thm.cache.png");
-        currencyConverter.setDescription(" This is the currency converter widget");
-        currencyConverter.setUrl("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
-        
-        slaWidget = new Gadget();
-        slaWidget.setAuthor("Jeff Yu");
-        slaWidget.setAuthorEmail("Jeff@test.com");
-        slaWidget.setTitle("SLA Gadget");
-        slaWidget.setThumbnailUrl("http://localhost:8080/gadgets/sla-gadget/thumbnail.png");
-        slaWidget.setDescription(" This is the Service Level Violation Gadget");
-        slaWidget.setUrl("http://localhost:8080/gadgets/sla-gadget/gadget.xml");
-
-        dateAndTime = new Gadget();
-        dateAndTime.setAuthor("Google");
-        dateAndTime.setAuthorEmail("admin@google.com");
-        dateAndTime.setTitle(" Date & Time");
-        dateAndTime.setThumbnailUrl("http://gadgets.adwebmaster.net/images/gadgets/datetimemulti/thumbnail_en.jpg");
-        dateAndTime.setDescription(" Add a clock to your page. Click edit to change it to the color of your choice");
-        dateAndTime.setUrl("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
-        
-        graph = new Gadget();
-        graph.setAuthor("Research Department");
-        graph.setThumbnailUrl("http://research.stlouisfed.org/gadgets/images/alfredgraphgadgetthumbnail.png");
-        graph.setDescription("Vintage Economic Data from the Federal Reserve Bank of St. Louis");
-        graph.setAuthorEmail("webmaster@research.stlouisfed.org");
-        graph.setTitle("Economic Data - ALFRED Graph");
-        graph.setUrl("http://research.stlouisfed.org/gadgets/code/alfredgraph.xml");
-
-
-    }
 
     public List<Gadget> getAllGadgets(int offset, int pageSize) {
         if (!entityManager.getTransaction().isActive()) {

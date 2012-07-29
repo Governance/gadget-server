@@ -62,6 +62,9 @@ public class Gadget implements Serializable{
 
     @Column(name="GADGET_TYPE")
     private String type;
+    
+    @Column(name="GADGET_GROUP")
+    private Group group;
 
     public long getId() {
         return id;
@@ -142,4 +145,19 @@ public class Gadget implements Serializable{
     public void setType(String type) {
         this.type = type;
     }
+
+	/**
+	 * @return the group
+	 */
+	public Group getGroup() {
+		return group;
+	}
+
+	/**
+	 * @param group the group to set
+	 */
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+    
 }

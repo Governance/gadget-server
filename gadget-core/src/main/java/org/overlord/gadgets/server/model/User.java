@@ -51,6 +51,17 @@ public class User implements Serializable{
 
     @OneToMany(orphanRemoval = true, mappedBy = "user")
     private List<Page> pages = new ArrayList<Page>();
+    
+    @ManyToMany
+    @JoinTable(name="GS_USER_GROUP", joinColumns = {
+    		@JoinColumn(name="USER_ID")
+    }, inverseJoinColumns = {
+    		@JoinColumn(name="GROUP_ID")
+    })
+    private List<Group> groups = new ArrayList<Group>();
+    
+    @Column(name="USER_ROLE")
+    private String role;
 
     @Transient
     private long currentPageId;
@@ -110,4 +121,33 @@ public class User implements Serializable{
     public void setPages(List<Page> pages) {
         this.pages = pages;
     }
+
+	/**
+	 * @return the groups
+	 */
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	/**
+	 * @param groups the groups to set
+	 */
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(String role) {
+		this.role = role;
+	}
+    
 }

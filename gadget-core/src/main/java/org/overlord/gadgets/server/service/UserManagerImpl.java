@@ -48,14 +48,6 @@ public class UserManagerImpl implements UserManager {
         }
         entityManager.persist(user);
         entityManager.getTransaction().commit();
-        //TODO: this is for testing...
-        
-        Page homePage = new Page();
-        homePage.setName("Home");
-        homePage.setColumns(2);
-        homePage.setPageOrder(0);
-        homePage.setUser(user);
-        addPage(homePage, user);
         return user;
     }
 
