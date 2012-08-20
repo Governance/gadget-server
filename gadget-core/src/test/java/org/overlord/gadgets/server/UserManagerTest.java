@@ -47,12 +47,20 @@ public class UserManagerTest {
     
     private static User user;
     
+    private static Page page;
+    
     static {
         user = new User();
         user.setName("jeff");
         user.setDisplayName("Jeff Yu");
         user.setEmail("jeff@test.com");
         user.setPassword("passwd");
+        
+        page = new Page();
+        page.setName("Home");
+        page.setColumns(2);
+        page.setUser(user);
+
     }
     
     @BeforeClass
@@ -62,6 +70,7 @@ public class UserManagerTest {
         gadgetService = injector.getInstance(GadgetService.class);
         
         userManager.createUser(user);
+        userManager.addPage(page, user);
     }
 
     @Test
@@ -117,9 +126,9 @@ public class UserManagerTest {
     @Test
     public void testAddGadgetToPageAndRemoveWidget() throws Exception {
         Gadget gadget = gadgetService.getGadgetById(1);
-        Page page = userManager.getPage(1);
-        gadgetService.addGadgetToPage(gadget, page);
-        List<Widget> widgets = userManager.getPage(1).getWidgets();
+        Page thePage = userManager.getPage(page.getId());
+        gadgetService.addGadgetToPage(gadget, thePage);
+        List<Widget> widgets = userManager.getPage(page.getId()).getWidgets();
         Assert.assertTrue(widgets.size() == 1);
         
         Widget theWidget = widgets.get(0);
@@ -127,16 +136,16 @@ public class UserManagerTest {
         
         Widget w = userManager.getWidgetById(theWidget.getId());
         Assert.assertNull(w);
-        widgets = userManager.getPage(1).getWidgets();
+        widgets = userManager.getPage(page.getId()).getWidgets();
         Assert.assertEquals(widgets.size(),0);
     }
     
     @Test
     public void testUpdateWidgetPref() throws Exception {
         Gadget gadget = gadgetService.getGadgetById(1);
-        Page page = userManager.getPage(1);
-        gadgetService.addGadgetToPage(gadget, page);
-        List<Widget> widgets = userManager.getPage(1).getWidgets();
+        Page thePage = userManager.getPage(page.getId());
+        gadgetService.addGadgetToPage(gadget, thePage);
+        List<Widget> widgets = userManager.getPage(page.getId()).getWidgets();
         Assert.assertTrue(widgets.size() == 1);
         
         List<WidgetPreference> wps = new ArrayList<WidgetPreference>();
