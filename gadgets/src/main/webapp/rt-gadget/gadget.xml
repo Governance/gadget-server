@@ -39,7 +39,7 @@
 		var prefs, params, restUrl, postdata;
 	
 		prefs = new gadgets.Prefs();
-		postdata = "{\"collection\":\"ServiceResponseTime\"}";
+		postdata = "{\"collection\":\"ServiceResponseTimes\"}";
 		
 		params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
