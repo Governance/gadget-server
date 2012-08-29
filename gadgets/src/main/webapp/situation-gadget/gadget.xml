@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="SLA Violation" description="SLA Violation gadget"
+  <ModulePrefs title="Situation" description="Situation gadget"
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
   <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
   <UserPref name="pageSize" display_name="Size:" default_value="10" datatype="enum">
@@ -33,7 +33,7 @@
 		var prefs, params, restUrl, postdata;
 		
 		prefs = new gadgets.Prefs();
-		postdata = "{\"collection\":\"ServiceViolations\"}";
+		postdata = "{\"collection\":\"Situations\"}";
 		
 		params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
@@ -60,7 +60,7 @@
 		});
 		for (i = 0; i < jsondata.length; i++) {
 			slaResult = jsondata[i];
-			rowData = [slaResult.serviceType, slaResult.operation, slaResult.violation, getDateTime(new Date(slaResult.timestamp))];
+			rowData = [slaResult.type, slaResult.severity, slaResult.description, getDateTime(new Date(slaResult.timestamp))];
 			insertRow(rowData);
 		}
 	}
@@ -111,7 +111,7 @@
    <table style="width:100%" id="sla-table" border="0" cellspacing="3" cellpadding="5">
 		<thead>
 			<tr class="tb-header">
-				<td>Service Type</td><td>Operation</td><td>Violation Description</td><td>Time</td>
+				<td>Type</td><td>Severity</td><td>Description</td><td>Time</td>
 			</tr>			
 		</thead>
 		<tbody id="sla-body">
