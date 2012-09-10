@@ -20,3 +20,11 @@ Building the Gadget Server:
 Run:
    mvn clean install
 
+
+
+Deploy the Gadget Server:
+============================
+
+1. Find gadget-server-1.0.0-SNAPSHOT.zip from the target directory under distribution module. 
+2. Unzip gadget-server-1.0.0-SNAPSHOT.zip, follow the readme from gadget-server-1.0.0-SNAPSHOT.zip to deploy the gadget server into AS7 (The AS7 version needs to 7.1.1Final or higher)
+
