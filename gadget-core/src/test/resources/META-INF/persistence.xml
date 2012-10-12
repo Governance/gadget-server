@@ -16,7 +16,7 @@
       <class>org.overlord.gadgets.server.model.Gadget</class>
       <properties>
           <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-          <property name="hibernate.show_sql" value="true"/>
+          <property name="hibernate.show_sql" value="false"/>
       </properties>
   </persistence-unit>
 
