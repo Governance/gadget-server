@@ -154,11 +154,17 @@ public class UserManagerTest {
         wp.setValue("testValue");
         wps.add(wp);
         
+        WidgetPreference wp2 = new WidgetPreference();
+        wp2.setName("testName2");
+        wp2.setValue("testValue2");
+        wps.add(wp2);
+        
         userManager.updateWidgetPreference(widgets.get(0).getId(), wps);
         
         Widget theWidget = widgets.get(0);
         Widget w = userManager.getWidgetById(theWidget.getId());
-        Assert.assertTrue(w.getPrefs().size() == 1);
+        Assert.assertTrue(w.getPrefs().size() == 2);
+        Assert.assertEquals("testName", w.getPrefs().get(0).getName());
         userManager.removeWidget(theWidget.getId());
     }
 

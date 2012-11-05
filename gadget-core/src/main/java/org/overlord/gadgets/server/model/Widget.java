@@ -47,8 +47,8 @@ public class Widget implements Serializable{
     @Column(name="WIDGET_ORDER")
     private long order;
     
-    @OneToMany(mappedBy = "widget")
-    private List<WidgetPreference> prefs = new ArrayList<WidgetPreference>();
+    @OneToMany(mappedBy = "widget", cascade= CascadeType.ALL)
+    private List<WidgetPreference> prefs;
 
     @ManyToOne
     private Page page;

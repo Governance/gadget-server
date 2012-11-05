@@ -187,8 +187,11 @@ public class UserManagerImpl implements UserManager {
 		query.executeUpdate();
 		
 		Widget widget = entityManager.find(Widget.class, widgetId);
+		for (WidgetPreference pref : prefs) {
+			pref.setWidget(widget);
+		}
+		
 		widget.setPrefs(prefs);
-		entityManager.merge(widget);
 		entityManager.getTransaction().commit();
 	}
 
