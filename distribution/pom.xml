@@ -38,28 +38,37 @@
     <properties>
         <mysql.connector.version>5.0.8</mysql.connector.version>
         <postgresql.version>8.3-603.jdbc3</postgresql.version>
-        <jtds.version>1.2.2</jtds.version>
     </properties>
 
 	<dependencies>
 	    <dependency>
 	        <groupId>org.overlord.gadgets.server</groupId>
 	        <artifactId>gadget-server</artifactId>
-			<type>war</type>
+			    <type>war</type>
 	        <version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 	        <groupId>org.overlord.gadgets.server</groupId>
 	        <artifactId>gadget-web</artifactId>
-			<type>war</type>
+			    <type>war</type>
 	        <version>${project.version}</version>
 	    </dependency>
 	    <dependency>
 	        <groupId>org.overlord.gadgets.server</groupId>
 	        <artifactId>gadgets</artifactId>
-			<type>war</type>
+			    <type>war</type>
 	        <version>${project.version}</version>
 	    </dependency>
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>${mysql.connector.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <version>${postgresql.version}</version>
+      </dependency>     
 	</dependencies>
 
     <build>

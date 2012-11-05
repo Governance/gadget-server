@@ -52,6 +52,21 @@
                 <include>org.overlord.gadgets.server:gadgets:war</include>
             </includes>
         </dependencySet>
+
+        <dependencySet>
+            <outputDirectory>/drivers/mysql/main</outputDirectory>
+            <includes>
+                <include>mysql:mysql-connector-java</include>
+            </includes>
+        </dependencySet>
+
+        <dependencySet>
+            <outputDirectory>/drivers/org/postgres/main</outputDirectory>
+            <includes>
+                <include>postgresql:postgresql</include>
+            </includes>
+        </dependencySet>
+
     </dependencySets>
 
 </assembly>

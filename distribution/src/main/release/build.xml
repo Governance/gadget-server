@@ -3,28 +3,41 @@
 <project name="GadgetServer_Installer">
 
   <!-- DEFAULT PROPERTY VALUES -->
-  <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.5" />
+  <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.6" />
   <property name="deploy.dir" value="${as7.home}/standalone/deployments" />
   <property name="version" value="1.0.0-SNAPSHOT" />
+  <property name="database" value="h2"/>
   
   <target name="deploy" description="Deploys the Gadget Server">
-    <echo message="Deploys the Gadget Server" />
+    <echo message="Deploying the Gadget Server" />
     <copy file="modules/gadget-server-${version}.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
     <copy file="modules/gadget-web-${version}.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
     <copy file="modules/gadgets-${version}.war" toFile="${deploy.dir}/gadgets.war" overwrite="true" />
+    
+    <antcall target="internal.install.gs.db.${database}" />
+
     <copy todir="${deploy.dir}" overwrite="true">
 	     <fileset dir="datasource">
-		   <include name="gs-h2-ds.xml" />
+		   <include name="gs-${database}-ds.xml" />
 		 </fileset>
     </copy>
+
   </target>
 
+  <!-- install database specific driver -->
+  <target name="internal.install.gs.db.h2">  
+  </target>
+
+  <target name="internal.install.gs.db.h2server">  
+  </target>
+
+
   <target name="undeploy" description="Undeploys the Gadget Server">
-	<echo message="Undeploys the Gadget Server" />
+	<echo message="Undeploying the Gadget Server" />
     <delete file="${deploy.dir}/gadget-server.war"/>
 	<delete file="${deploy.dir}/gadget-web.war"/>
 	<delete file="${deploy.dir}/gadgets.war"/>
-	<delete file="${deploy.dir}/gs-h2-ds.xml"/>
+	<delete file="${deploy.dir}/gs-${database}-ds.xml"/>
   </target>   
 
 </project>
