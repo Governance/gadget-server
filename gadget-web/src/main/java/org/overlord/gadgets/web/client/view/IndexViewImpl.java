@@ -100,9 +100,13 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         store.addStyleName("header-link");
         store.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
-                        new PlaceRequest(NameTokens.WIDGET_STORE)
-                );
+            	if (currentUser.getCurrentPage() != 0) {
+	                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
+	                        new PlaceRequest(NameTokens.WIDGET_STORE)
+	                );
+            	} else {
+            		
+            	}
             }
         });
 
