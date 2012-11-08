@@ -8,6 +8,9 @@
           </sam:UnorderedList>
           <g:FlowPanel ui:field="tabsContent">
           </g:FlowPanel>
+          <div ui:field="promptDiv" style="text-align:center;margin-top:15px;">
+      		<span>Please add a Page by click the '+' sign in the above navigation bar.</span>
+      	  </div>
       </div>
   </g:HTMLPanel>
 

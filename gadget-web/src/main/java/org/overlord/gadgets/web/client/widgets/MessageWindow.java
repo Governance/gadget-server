@@ -55,7 +55,7 @@ public class MessageWindow extends Composite{
     /**
      * JSNI methods
      */
-    private static native void initializeDialog(final AddTabForm form, String id) /*-{
+    private static native void initializeDialog( String id) /*-{
         $wnd.$('#' + id).dialog({
             autoOpen:false,
             modal:true,
@@ -63,7 +63,6 @@ public class MessageWindow extends Composite{
             height:200,
             buttons:{
                 "Submit": function(){
-                    form.@org.overlord.gadgets.web.client.widgets.AddTabForm::addNewTab()();
                     $wnd.$(this).dialog("close");
                 },
                 Cancel: function() {

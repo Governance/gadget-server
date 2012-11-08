@@ -48,12 +48,16 @@ public class TabLayout extends Composite {
     private static TabLayoutUiBinder uiBinder = GWT.create(TabLayoutUiBinder.class);
 
     private String id;
+    
+    private String promptId;
 
     @UiField UnorderedList tabsBar;
     
     @UiField FlowPanel tabsContent;
 
     @UiField DivElement tabs;
+    
+    @UiField DivElement promptDiv;
     
     private ListItem addTabAnchorItem;
     
@@ -70,6 +74,8 @@ public class TabLayout extends Composite {
         id = "gadget-web-tabs";
         initWidget(uiBinder.createAndBindUi(this));
         tabs.setId(id);
+        promptId = "gadget-web-tabs-prompt";
+        promptDiv.setId(promptId);
     }
 
     public void addTab(String pageId, String tabTitle, PortalLayout widget){
@@ -144,6 +150,11 @@ public class TabLayout extends Composite {
 
     public void onAttach() {
         super.onAttach();
+        if (currentUser.getCurrentPage() == 0) {
+        	showPrompt(promptId);
+        } else {
+        	hidePrompt(promptId);
+        }
     }
 
     public void initializeTab() {
@@ -215,6 +226,14 @@ public class TabLayout extends Composite {
         var theTabs = $wnd.$('#'+id).tabs();
         theTabs.tabs("destroy");
     }-*/;
+    
+    private static native void hidePrompt(String promptId) /*-{
+	    $wnd.$('#'+promptId).hide();
+	}-*/;
+    
+    private static native void showPrompt(String promptId) /*-{
+    	$wnd.$('#'+promptId).show();
+	}-*/;
 
     /**
      *  TODO: This is a hack, somehow couldn't attach the click event to removetBtn;

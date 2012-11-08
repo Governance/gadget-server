@@ -105,7 +105,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 	                        new PlaceRequest(NameTokens.WIDGET_STORE)
 	                );
             	} else {
-            		
+            		alertWindow("You need to create a Page before adding widgets from Widget Store!");
             	}
             }
         });
@@ -174,6 +174,14 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     public void setPresenter(IndexPresenter presenter) {
         this.presenter = presenter;
     }
-
+    
+    /**
+     * JNSI methods
+     * 
+     * @param alertMsg
+     */
+    private static native void alertWindow(String alertMsg) /*-{
+    	$wnd.alert(alertMsg);
+ 	}-*/;
 
 }
