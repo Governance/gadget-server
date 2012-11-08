@@ -174,16 +174,17 @@ public class TabLayout extends Composite {
     private void setCurrentPage(Long indexId) {
         String theIndexId = String.valueOf(indexId);
         String pageId = indexIdMap.get(theIndexId);
-        currentUser.setCurrentPage(Long.valueOf(pageId));
+        long thePageId = Long.valueOf(pageId).longValue();
+        updateUserCurrentPageId(thePageId);
     }
     
     private void removePage(Long indexId) {
         String theIndexId = String.valueOf(indexId);
         String pageId = indexIdMap.get(theIndexId);
+        indexIdMap.remove(theIndexId);
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRemovePageURL(Long.valueOf(pageId).longValue()),
                 null, new RestfulInvoker.Response() {
                     public void onResponseReceived(Request request, Response response) {
-                           //TODO:
                     }
         });
     }
@@ -191,6 +192,15 @@ public class TabLayout extends Composite {
     public void selectCurrentActiveTab() {
         String tabContentId = getTabContentId(String.valueOf(currentUser.getCurrentPage()));
         selectTab(id, tabContentId);
+    }
+    
+    private void updateUserCurrentPageId(final long pageId) {
+    	RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.updateCurrentPageId(currentUser.getUserId(), pageId), null,
+    			new RestfulInvoker.Response() {					
+					public void onResponseReceived(Request arg0, Response arg1) {
+						currentUser.setCurrentPage(pageId);
+					}
+				});
     }
 
     /**

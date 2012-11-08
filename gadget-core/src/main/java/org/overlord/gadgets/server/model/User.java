@@ -63,8 +63,8 @@ public class User implements Serializable{
     @Column(name="USER_ROLE")
     private String role;
 
-    @Transient
-    private long currentPageId;
+    @Column(name="CURR_PAGE_ID")
+    private Long currentPageId = new Long(0);
 
     public long getId() {
         return id;
@@ -106,11 +106,13 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public long getCurrentPageId() {
+    public Long getCurrentPageId() {
+    	if (null == currentPageId) 
+    		currentPageId = new Long(0);
         return currentPageId;
     }
 
-    public void setCurrentPageId(long currentPageId) {
+    public void setCurrentPageId(Long currentPageId) {
         this.currentPageId = currentPageId;
     }
 

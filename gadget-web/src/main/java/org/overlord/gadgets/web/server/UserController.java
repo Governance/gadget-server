@@ -83,11 +83,7 @@ public class UserController {
         if (theUser != null) {
             userModel.setUserId(theUser.getId());
             userModel.setUserName(theUser.getName());
-            List<Page> pages = userManager.getPages(theUser.getId());
-            //TODO: need to get the currentPageId somehow.
-            if (pages != null && pages.size() > 0) {
-            	userModel.setCurrentPageId(pages.get(0).getId());
-            }
+            userModel.setCurrentPageId(theUser.getCurrentPageId());
             userModel.setDisplayName(theUser.getDisplayName());
             request.getSession().setAttribute("user", userModel);
         }
@@ -185,6 +181,16 @@ public class UserController {
         Page thePage = userManager.addPage(page, theUser);
 
         return createJsonResponse(thePage.getId());
+    }
+    
+    @POST
+    @Path("user/{userId}/current/{pageId}")
+    @Consumes("application/json")
+    public Response updateUserCurrentPageId(@PathParam("userId") long userId, @PathParam("pageId") long pageId) {
+    	User theUser = userManager.getUserById(userId);
+    	theUser.setCurrentPageId(pageId);
+    	userManager.updateUser(theUser);
+    	return createJsonResponse(pageId);
     }
     
     

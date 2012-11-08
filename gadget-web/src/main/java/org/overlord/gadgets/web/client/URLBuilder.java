@@ -55,6 +55,10 @@ public class URLBuilder {
         return urlBase + "rs/users/user/" + userId + "/page";
     }
     
+    public static String updateCurrentPageId(long userId, long pageId) {
+    	return urlBase + "rs/users/user/" + userId + "/current/" + pageId;
+    }
+    
     public static String getStoreURL(int offset, int pageSize) {
         return urlBase + "rs/stores/all/" + offset + "/" + pageSize;
     }
