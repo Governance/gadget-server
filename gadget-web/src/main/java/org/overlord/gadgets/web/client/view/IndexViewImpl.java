@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -105,7 +106,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 	                        new PlaceRequest(NameTokens.WIDGET_STORE)
 	                );
             	} else {
-            		alertWindow("You need to create a Page before adding widgets from Widget Store!");
+            		Window.alert("You need to create a Page before adding widgets from Widget Store!");
             	}
             }
         });

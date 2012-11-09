@@ -142,6 +142,8 @@ public class TabLayout extends Composite {
 
         tabsBar.add(addTabAnchorItem);
         
+        hidePrompt(promptId);
+
     }
     
     private String getTabContentId(String pageId) {
@@ -179,12 +181,17 @@ public class TabLayout extends Composite {
     }
     
     private void removePage(Long indexId) {
-        String theIndexId = String.valueOf(indexId);
+        final String theIndexId = String.valueOf(indexId);
         String pageId = indexIdMap.get(theIndexId);
-        indexIdMap.remove(theIndexId);
+        
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRemovePageURL(Long.valueOf(pageId).longValue()),
                 null, new RestfulInvoker.Response() {
                     public void onResponseReceived(Request request, Response response) {
+                    	indexIdMap.remove(theIndexId);
+                    	if (indexIdMap.size() == 0) {
+                    		updateUserCurrentPageId(0);
+                    		showPrompt(promptId);
+                    	}
                     }
         });
     }
@@ -247,16 +254,15 @@ public class TabLayout extends Composite {
 
     /**
      *  TODO: This is a hack, somehow couldn't attach the click event to removetBtn;
-     * */
+     *  if (confirm('Are you sure to delete the page?')) not working properly, it will trigger confirm window multiple times.
+     **/
     private static native void registerCloseEvent(final TabLayout layout, String id) /*-{
-        $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
-        	if (confirm('Are you sure to delete the page?')) {
-	            var theTabs = $wnd.$('#'+id).tabs();
-	            var index = $wnd.$(this).parent().index();
-	            if (index > -1) {
-	                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
-	                theTabs.tabs('remove', index);
-	            }
+        $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){     	
+            var theTabs = $wnd.$('#'+id).tabs();
+            var index = $wnd.$(this).parent().index();
+            if (index > -1) {
+                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
+                theTabs.tabs('remove', index);
             }
         });
     }-*/;

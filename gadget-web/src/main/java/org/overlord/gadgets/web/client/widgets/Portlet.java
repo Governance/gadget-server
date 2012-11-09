@@ -98,14 +98,13 @@ public class Portlet extends Composite {
                 String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
                 RestfulInvoker.invoke(RequestBuilder.POST, theURL,
                         null, new RestfulInvoker.Response() {
-
-                    public void onResponseReceived(Request request, Response response) {
-                        remove(id);
+                    	public void onResponseReceived(Request request, Response response) {
+                    		remove(id);
                     }
                 });
             }
         });
-        
+                
         maxBtn.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				maximizeWindow(id, portalId);
