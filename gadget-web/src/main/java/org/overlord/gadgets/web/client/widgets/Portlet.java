@@ -36,6 +36,7 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -95,13 +96,15 @@ public class Portlet extends Composite {
 
         removeBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
-                String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
-                RestfulInvoker.invoke(RequestBuilder.POST, theURL,
-                        null, new RestfulInvoker.Response() {
-                    	public void onResponseReceived(Request request, Response response) {
-                    		remove(id);
-                    }
-                });
+            	if (Window.confirm("Are you sure to delete this widget?")) {
+	                String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
+	                RestfulInvoker.invoke(RequestBuilder.POST, theURL,
+	                        null, new RestfulInvoker.Response() {
+	                    	public void onResponseReceived(Request request, Response response) {
+	                    		remove(id);
+	                    }
+	                });
+            	}
             }
         });
                 

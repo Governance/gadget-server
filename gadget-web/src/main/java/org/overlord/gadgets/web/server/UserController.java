@@ -28,6 +28,7 @@ import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.web.shared.dto.PageModel;
 import org.overlord.gadgets.web.shared.dto.UserModel;
+import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
 
 import javax.servlet.http.HttpServletRequest;
@@ -125,6 +126,9 @@ public class UserController {
                 WidgetModel widgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
                 widgetModel.setWidgetId(widget.getId());
                 widgetModel.setOrder(widget.getOrder());
+                
+                populateWidgetsDefaultValue(widget, widgetModel);
+                
                 pageModel.addModel(widgetModel);
             }
 
@@ -133,6 +137,18 @@ public class UserController {
         
         return pageModels;
     }
+
+	private void populateWidgetsDefaultValue(Widget widget, WidgetModel widgetModel) {
+		if (widget.getPrefs() != null && widget.getPrefs().size() > 0) {
+			for(UserPreferenceSetting ups : widgetModel.getUserPreference().getData()) {
+				for(WidgetPreference wp: widget.getPrefs()) {
+					if (ups.getName().equals(wp.getName())) {
+						ups.setDefaultValue(wp.getValue());
+					}
+				}
+			}
+		}
+	}
     
     @POST
     @Path("widget/{widgetId}/remove")

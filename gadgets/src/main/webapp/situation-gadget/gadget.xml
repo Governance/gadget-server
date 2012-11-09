@@ -48,7 +48,7 @@
 	
 	function updateResponse(result) {
 	    var jsondata, slaResult, i, rowData, theUpdatedTime;
-	    if (result.data == "undefined") {
+	    if (result.data == undefined) {
 	    	return;
 	    }
 	    theUpdatedTime = new Date();

@@ -109,12 +109,14 @@
 	  var min = [], max = [], duration = [];
 	  var jsondata, rtResult, i, ts;
 	  jsondata = response.data;
-	  for (i = 0; i < jsondata.length; i++) {
-		rtResult = jsondata[i];
-		ts = getDateTime(new Date(rtResult.timestamp));
-		min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
-		max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
-		duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts]);
+	  if (jsondata != undefined) {
+		  for (i = 0; i < jsondata.length; i++) {
+			rtResult = jsondata[i];
+			ts = getDateTime(new Date(rtResult.timestamp));
+			min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
+			max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
+			duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts]);
+		  }
 	  }
 	  
 	  return [{data:min, label:"Min"},

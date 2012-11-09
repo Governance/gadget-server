@@ -260,7 +260,7 @@ public class TabLayout extends Composite {
         $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){     	
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$(this).parent().index();
-            if (index > -1) {
+            if (index > -1 && confirm('Are you sure to delete the page?')) {
                 layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
                 theTabs.tabs('remove', index);
             }
