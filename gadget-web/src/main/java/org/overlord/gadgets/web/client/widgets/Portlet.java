@@ -166,7 +166,16 @@ public class Portlet extends Composite {
     			prefTable.setWidget(row, 1, textBox);
     		} else if (UserPreference.Type.ENUM.equals(prefSet.getType())) {
     			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
-    			Widget listBox = createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), prefSet.getEnumOptions());
+    			List<String> options = new ArrayList<String>();
+    			for (Option option : prefSet.getEnumOptions()) {
+    				options.add(option.getValue());
+    			}
+    			Widget listBox = createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), options);
+    			prefs.add(listBox);
+    			prefTable.setWidget(row, 1, listBox);
+    		} else if (UserPreference.Type.LIST.equals(prefSet.getType())) {
+    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    			Widget listBox = createSelectBox(prefSet.getName(), prefSet.getDefaultValue(), prefSet.getListOptions());
     			prefs.add(listBox);
     			prefTable.setWidget(row, 1, listBox);
     		}
@@ -183,15 +192,19 @@ public class Portlet extends Composite {
     	return textBox;
     }
     
-    private Widget createSelectBox(String name, String defaultVal, List<Option> options) {
+    private Widget createSelectBox(String name, String defaultVal, List<String> options) {
     	ListBox listBox = new ListBox(false);
     	listBox.setName(name);
-    	for (Option option : options) {
-    		listBox.addItem(option.getValue());
+    	listBox.getElement().setId(name);
+    	for (String option : options) {
+    		listBox.addItem(option);
+    	}
+    	if (options.size() == 0) {
+    		listBox.addItem(" ");
     	}
     	int index = 0;
     	for (int i = 0; i < options.size(); i ++) {
-    		if (options.get(i).getValue().equals(defaultVal)) {
+    		if (options.get(i).equals(defaultVal)) {
     			index = i;
     		}
     	}

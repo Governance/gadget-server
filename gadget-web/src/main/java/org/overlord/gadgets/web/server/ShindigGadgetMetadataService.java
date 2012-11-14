@@ -191,9 +191,9 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
         //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
         //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
-        //svc.getGadgetMetadata("http://rt-gadget.googlecode.com/git/gadget.xml");
+        svc.getGadgetMetadata("http://rt-gadget.googlecode.com/git/gadget.xml");
         //svc.getGadgetMetadata("http://www.labpixies.com/campaigns/todo/todo.xml");
         //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
-        svc.getGadgetMetadata("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
+        //svc.getGadgetMetadata("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
     }
 }

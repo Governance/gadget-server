@@ -109,6 +109,8 @@ public class UserPreference {
         private String name;
         
         private List<Option> enumOptions = new ArrayList<Option>();
+        
+        private List<String> listOptions = new ArrayList<String>();
 
         private String defaultValue;
         
@@ -163,8 +165,21 @@ public class UserPreference {
         public String getDisplayName() {
             return displayName;
         }
+        
+        
+		public List<String> getListOptions() {
+			return listOptions;
+		}
 
-        public void setDisplayName(String displayName) {
+		public void setListOptions(List<String> listOptions) {
+			this.listOptions = listOptions;
+		}
+		
+		public void addListOption(String option) {
+			this.listOptions.add(option);
+		}
+
+		public void setDisplayName(String displayName) {
             this.displayName = displayName;
         }
         
@@ -177,6 +192,7 @@ public class UserPreference {
                    .append(" displayName=>" + displayName)
                    .append(" isRequired=>" + isRequired)
                    .append(" enumOption size => " + enumOptions.size())
+                   .append(" listOption size => " + listOptions.size())
                    .append("]");
             return builder.toString();
         }

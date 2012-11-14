@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Response Time" description="Response Time gadget"
+  <ModulePrefs title="Call Trace" description="Call Trace gadget"
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
 	 <Require feature="setprefs" />
   </ModulePrefs>
   <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
-  <UserPref name="serviceType" display_name="Service Type:" datatype="list"></UserPref>
-  <UserPref name="operations" display_name="Operations:" datatype="list"></UserPref>
   <UserPref name="record" display_name="record:" default_value="10" datatype="enum">
 		<EnumValue value="10" />
 		<EnumValue value="15" />
