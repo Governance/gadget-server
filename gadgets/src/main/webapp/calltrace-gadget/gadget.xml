@@ -31,16 +31,26 @@
    <script type="text/javascript">
 	
 	function makeJSONRequest(){
-	  $.getJSON("calltrace.json", function(data){
-	    	var treeData = new Array(data.tasks.length);
-	    	for(var i = 0; i < treeData.length; i++) {
-	    		var task = data.tasks[i];
-	    		treeData[i] = convertJsonToTreeData(task);
-	    	}
-
-	    	initialiseTree(treeData);
-	    	$("#detail").hide();
-	    });
+	    var restUrl = "http://localhost:8080/gadgets/calltrace-gadget/calltrace.json";
+		var params = {};
+		var prefs = new gadgets.Prefs();
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
+		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.GET;
+   		
+   		gadgets.io.makeRequest(restUrl, updateResponse, params);
+	}
+	
+	function updateResponse(response) {
+		var data = response.data;
+	   	var treeData = new Array(data.tasks.length);
+	   	for(var i = 0; i < treeData.length; i++) {
+	   		var task = data.tasks[i];
+	   		treeData[i] = convertJsonToTreeData(task);
+	   	}
+	
+	   	initialiseTree(treeData);
+	   	$("#detail").hide();
 	}
 	
 	  function convertJsonToTreeData(task) {
@@ -135,9 +145,13 @@
 
    </script>
    
-   
-    
-    
+  	<div id="tree"></div>
+  	<div id="detail">
+		<table style="width:100%" border="0" cellspacing="3" cellpadding="5">
+			<tbody id="detail-body">						
+			</tbody>
+	   </table>
+  	</div>
 ]]>
 	</Content>
 </Module>
