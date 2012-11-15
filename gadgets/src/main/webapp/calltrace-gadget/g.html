@@ -6,39 +6,119 @@
 		<script type="text/javascript" src="jquery.cookie.js"></script>
 		<script type="text/javascript" src="jquery-ui.custom.min.js"></script>
 		<script type="text/javascript" src="jquery.dynatree.min.js"></script>
+
+		<style type="text/css">
+			#tree {width:45%;float:left;}
+			#detail {float:right;border:1px solid black; width:50%;}
+			.tb-row {border:1px solid #98BF21;}
+	   </style>
 		
 	  <script type="text/javascript">
 	  $(function(){
-	    // Attach the dynatree widget to an existing <div id="tree"> element
-	    // and pass the tree options as an argument to the dynatree() function:
-	    $("#tree").dynatree({
-	      onActivate: function(node) {
-	        // A DynaTreeNode object is passed to the activation handler
-	        // Note: we also get this event, if persistence is on, and the page is reloaded.
-	        //alert("You activated " + node.data.title);
-	      },
-	      children: [
-	        {title: "Operation 1 [2000 ms]", isFolder: true, key: "o1",
-	        	children:[
-	        	          {title: "Assign Variable 1 [100ms]"}
-	        	          ]},
-	        {title: "Folder 2", isFolder: true, key: "folder2",
-	          children: [
-	            {title: "Sub-item 2.1"},
-	            {title: "Sub-item 2.2"}
-	          ]
-	        },
-	        {title: "Item 3"}
-	      ]
+	    $.getJSON("calltrace.json", function(data){
+	    	var treeData = new Array(data.tasks.length);
+	    	for(var i = 0; i < treeData.length; i++) {
+	    		var task = data.tasks[i];
+	    		treeData[i] = convertJsonToTreeData(task);
+	    	}
+
+	    	initialiseTree(treeData);
+	    	$("#detail").hide();
 	    });
 	  });
+
+	  function convertJsonToTreeData(task) {
+	  	    var treeObject = {};
+	  		var isCall = (task.type == "Call");
+	  		if (isCall) {
+	  			treeObject["title"] = task.component + " " + task.operation + " [" + task.duration + " ms] (" + task.percentage + "%)";
+	  			treeObject["isFolder"] = true;
+	  			treeObject["request"] = task.request;
+	  			treeObject["response"] = task.response;
+	  			treeObject["fault"] = task.fault;
+	  			treeObject['component'] = task.component;
+	  			treeObject['operation'] = task.operation;
+	  			treeObject['duration'] = task.duration;
+	  			treeObject['percentage'] = task.percentage;
+	  			treeObject['type'] = task.type;
+
+	  		} else {
+	  			treeObject["title"] = task.description + " [" + task.duration + "ms] (" + task.percentage + "%)";
+	  			treeObject["isFolder"] = false;
+	  			treeObject['description'] = task.description;
+	  			treeObject['duration'] = task.duration;
+	  			treeObject['percentage'] = task.percentage;
+	  			treeObject['type'] = task.type;
+	  		}
+
+	  		if (task.tasks != undefined) {
+	  			var children = new Array(task.tasks.length);
+	  			for (var i = 0; i < task.tasks.length; i++) {
+	  				var theTask = task.tasks[i];
+	  				children[i] = convertJsonToTreeData(theTask);
+	  			}
+	  			treeObject["children"] = children;
+	  		}
+	  		return treeObject;
+
+	  }
+
+	  function initialiseTree(data) {	  	
+	    // Attach the dynatree widget to an existing <div id="tree"> element
+	    // and pass the tree options as an argument to the dynatree() function:
+	  	$("#tree").dynatree({
+	  		onActivate: function(node) {showTheDetail(node);},
+	  		children: data
+	  	});
+	  }
+
+	  function showTheDetail(node) {
+	  	  $("#detail").show();
+	  	  var properties = ['type', 'component', 'operation', 'request', 'response', 'requestLatency', 'responseLatency', 'duration', 'percentage'];
+	  	  var thedata = node.data;
+	  	  deleteRows();
+	  	  for(i = 0; i < properties.length; i++) {
+	  	  	var theProperty = properties[i];
+	  	  	if (thedata[theProperty] != undefined) {
+	  	  		insertRow([theProperty + " :" , thedata[theProperty]]);
+	  	  	}
+	  	  }
+	  }
+
+	   function deleteRows() {
+			var theBody, theSize, i;
+			theBody = document.getElementById("detail-body");
+			theSize = theBody.rows.length;
+			for (i = 0; i < theSize; i++) {
+				theBody.deleteRow(theBody.rows[i]);
+			}
+		}
+
+		function insertRow(data) {
+			var theBody, theRow, theCell, i;
+			theBody = document.getElementById("detail-body");
+			theRow = document.createElement("TR");
+			theRow.setAttribute("class", "tb-row");
+			theBody.appendChild(theRow);
+			for (i = 0; i < data.length; i++) {
+				theCell = document.createElement("TD");
+				theCell.innerHTML = data[i];
+				theRow.appendChild(theCell);
+			}
+		}
+
 	  </script>
 		
 	</head>
 	<body>
 
-<body class="example">
-  <h1>Example: Default</h1>
-  	<div id="tree"></div>	   
+<body>
+  	<div id="tree"></div>
+  	<div id="detail">
+		<table style="width:100%" border="0" cellspacing="3" cellpadding="5">
+			<tbody id="detail-body">						
+			</tbody>
+	   </table>
+  	</div>	   
 </body>
 </html>

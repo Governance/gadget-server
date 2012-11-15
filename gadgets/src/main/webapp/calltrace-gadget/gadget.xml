@@ -1,159 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Call Trace" description="Call Trace gadget"
-	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
-	 <Require feature="setprefs" />
-  </ModulePrefs>
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
-  <UserPref name="record" display_name="record:" default_value="10" datatype="enum">
-		<EnumValue value="10" />
-		<EnumValue value="15" />
-		<EnumValue value="20" />
-  </UserPref>
-  <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
+	<ModulePrefs title="Call Trace" description="Call Trace gadget"
+		author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
+		<Require feature="setprefs" />
+	</ModulePrefs>
+	<UserPref name="serviceUrl" display_name="Service URL:"
+		default_value="http://localhost:8080/overlord-bam/acm/query" />
+	<UserPref name="refreshCycle" display_name="Refresh Interval(sec):"
+		default_value="30" datatype="enum">
 		<EnumValue value="30" />
 		<EnumValue value="60" />
 		<EnumValue value="120" />
 		<EnumValue value="180" />
 		<EnumValue value="300" />
-  </UserPref>
+	</UserPref>
 
-  <Content type="html"><![CDATA[
-  <link href="d3.css" rel="stylesheet" type="text/css">
-   <style type="text/css">
-	#rtchart {
-	margin: 0;
-    padding: 0;
-    overflow: none;
-	}
+	<Content type="html"><![CDATA[
+	<style type="text/css">
+		#tree {width:45%;float:left;}
+		#detail {float:right;border:1px solid black; width:50%;}
+		.tb-row {border:1px solid #98BF21;}
    </style>
-
-   <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
-   <script type="text/javascript" src="d3.v2.js"></script>
-   <script type="text/javascript" src="d3line.js"></script>
-   <script type="text/javascript" src="d3legend.js"></script>
-   <script type="text/javascript" src="d3linewithlegend.js"></script>
-   <script type="text/javascript" src="nvtooltip.js"></script>
+   
+	<link href="skin/ui.dynatree.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.cookie.js"></script>
+	<script type="text/javascript" src="jquery-ui.custom.min.js"></script>
+	<script type="text/javascript" src="jquery.dynatree.min.js"></script>
    
    <script type="text/javascript">
 	
-	var serviceDefs;
-	
-	function makeJSONRequest() {
-		var prefs, params, restUrl, postdata, svcDef;
-	
-		prefs = new gadgets.Prefs();
-		postdata = "{\"collection\":\"ServiceResponseTimes\"}";
-		
-		params = {};
-		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
-		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
-		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
-   		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
-   		
-		restUrl = prefs.getString("serviceUrl");
-		
-		gadgets.io.makeRequest(restUrl, updateUI, params);
-		
-		svcDef = "{\"collection\":\"ServiceDefinitions\"}";
-		params[gadgets.io.RequestParameters.POST_DATA]= svcDef;
-		
-		gadgets.io.makeRequest(restUrl, updateServiceDefinition, params);	
+	function makeJSONRequest(){
+	  $.getJSON("calltrace.json", function(data){
+	    	var treeData = new Array(data.tasks.length);
+	    	for(var i = 0; i < treeData.length; i++) {
+	    		var task = data.tasks[i];
+	    		treeData[i] = convertJsonToTreeData(task);
+	    	}
+
+	    	initialiseTree(treeData);
+	    	$("#detail").hide();
+	    });
 	}
 	
-	function getDateTime(theDate) {
-		return theDate.getFullYear() + "-" + (theDate.getMonth() +1) + "-" + theDate.getDate() + " " + theDate.getHours()
-				+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
-	}
-	
-	function updateServiceDefinition(response) {
-		if (response.data == undefined) {
-			return;
-		}
-		serviceDefs = response.data;
-		var st = new Array(serviceDefs.length);
-		var i = 0;
-		for (i =0; i < st.length; i++) {
-			st[i] = serviceDefs[i].value.serviceType;
-		}
-		var prefs = new gadgets.Prefs();
-		var testData = new Array(2);
-		testData[0] = "test1";
-		testData[1] = "test2";
-		window.alert(prefs);
-		window.alert(prefs.getString("serviceUrl"));
-		window.alert(prefs.getArray("serviceType"));
-		prefs.setArray("serviceType", testData);
-		prefs.setArray("operations", testData);
-		window.alert("done");
-	}
-	
-	function updateUI(response) {
-		if (response.data == undefined) {
-			return;
-		}
-		var margin = {top: 30, right: 10, bottom: 50, left: 60};
-	    var chart = d3LineWithLegend()
-	                .xAxis.label('Number')
-	                .width(width(margin))
-	                .height(height(margin))
-	                .yAxis.label('Response Time (sec)');
-	
-	  var svg = d3.select('#rtchart svg')
-	      .datum(getData(response));
-	  	
-	  svg.transition().duration(500)
-	      .attr('width', width(margin))
-	      .attr('height', height(margin))
-	      .call(chart);
-	  
- 	  chart.dispatch.on('showTooltip', function(e) {
-		  var offset = $('#rtchart').offset(), // { left: 0, top: 0 }
-		      left = e.pos[0] + offset.left,
-		      top = e.pos[1] + offset.top;
+	  function convertJsonToTreeData(task) {
+  	    var treeObject = {};
+  		var isCall = (task.type == "Call");
+  		if (isCall) {
+  			treeObject["title"] = task.component + " " + task.operation + " [" + task.duration + " ms] (" + task.percentage + "%)";
+  			treeObject["isFolder"] = true;
+  			treeObject["request"] = task.request;
+  			treeObject["response"] = task.response;
+  			treeObject["fault"] = task.fault;
+  			treeObject['component'] = task.component;
+  			treeObject['operation'] = task.operation;
+  			treeObject['duration'] = task.duration;
+  			treeObject['percentage'] = task.percentage;
+  			treeObject['type'] = task.type;
 
-		   	var content = '<p>serviceType:<b>' + e.point[2] + '</b></p>'
-						  + '<p>operation:<b>' + e.point[3] + '</b></p>'
-						  + '<p>' + e.series.label + ':<b>' + e.point[1] + '</b></p>'
-						  + '<p>time:<b>' + e.point[4] + '</b></p>';
+  		} else {
+  			treeObject["title"] = task.description + " [" + task.duration + "ms] (" + task.percentage + "%)";
+  			treeObject["isFolder"] = false;
+  			treeObject['description'] = task.description;
+  			treeObject['duration'] = task.duration;
+  			treeObject['percentage'] = task.percentage;
+  			treeObject['type'] = task.type;
+  		}
 
-		   nvtooltip.show([left, top], content);
-		  });
+  		if (task.tasks != undefined) {
+  			var children = new Array(task.tasks.length);
+  			for (var i = 0; i < task.tasks.length; i++) {
+  				var theTask = task.tasks[i];
+  				children[i] = convertJsonToTreeData(theTask);
+  			}
+  			treeObject["children"] = children;
+  		}
+  		return treeObject;
 
-	  chart.dispatch.on('hideTooltip', function(e) {
-	    	nvtooltip.cleanup();
-	  });
-		
-	}
-	
-	function width(margin) {
-      var w = $(window).width() - 20;
-      return ( (w - margin.left - margin.right - 20) < 0 ) ? margin.left + margin.right + 2 : w;
-    }
+  }
 
-    function height(margin) {
-      var h = $(window).height() - 20;
-      return ( h - margin.top - margin.bottom - 20 < 0 ) ? margin.top + margin.bottom + 2 : h;
-    }
-
-    function getData(response) {
-	  var min = [], max = [], duration = [];
-	  var jsondata, rtResult, i, ts;
-	  jsondata = response.data;
-	  if (jsondata != undefined) {
-		  for (i = 0; i < jsondata.length; i++) {
-			rtResult = jsondata[i];
-			ts = getDateTime(new Date(rtResult.timestamp));
-			min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
-			max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
-			duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts]);
-		  }
+	  function initialiseTree(data) {	  	
+	    // Attach the dynatree widget to an existing <div id="tree"> element
+	    // and pass the tree options as an argument to the dynatree() function:
+	  	$("#tree").dynatree({
+	  		onActivate: function(node) {showTheDetail(node);},
+	  		children: data
+	  	});
 	  }
-	  
-	  return [{data:min, label:"Min"},
-			  {data:max, label:"Max"},
-			  {data:duration, label:"Average"}];
-	  	
+	
+	  function showTheDetail(node) {
+	  	  $("#detail").show();
+	  	  var properties = ['type', 'component', 'operation', 'request', 'response', 'requestLatency', 'responseLatency', 'duration', 'percentage'];
+	  	  var thedata = node.data;
+	  	  deleteRows();
+	  	  for(i = 0; i < properties.length; i++) {
+	  	  	var theProperty = properties[i];
+	  	  	if (thedata[theProperty] != undefined) {
+	  	  		insertRow([theProperty + " :" , thedata[theProperty]]);
+	  	  	}
+	  	  }
+	  }
+	
+	   function deleteRows() {
+			var theBody, theSize, i;
+			theBody = document.getElementById("detail-body");
+			theSize = theBody.rows.length;
+			for (i = 0; i < theSize; i++) {
+				theBody.deleteRow(theBody.rows[i]);
+			}
+		}
+
+	function insertRow(data) {
+		var theBody, theRow, theCell, i;
+		theBody = document.getElementById("detail-body");
+		theRow = document.createElement("TR");
+		theRow.setAttribute("class", "tb-row");
+		theBody.appendChild(theRow);
+		for (i = 0; i < data.length; i++) {
+			theCell = document.createElement("TD");
+			theCell.innerHTML = data[i];
+			theRow.appendChild(theCell);
+		}
 	}
 	
 	function loadData() {
@@ -167,12 +134,10 @@
     gadgets.util.registerOnLoadHandler(loadData);
 
    </script>
-	
-	<div id="rtchart">
-	  <svg></svg>
-	</div>
+   
+   
     
     
-]]> 
-  </Content>
+]]>
+	</Content>
 </Module>
