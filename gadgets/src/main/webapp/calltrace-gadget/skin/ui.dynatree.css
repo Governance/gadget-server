@@ -9,7 +9,7 @@ ul.dynatree-container
 	padding: 3px;
 	margin: 0; /* issue 201 */
 	background-color: white;
-	border: 1px dotted gray;
+	border: 0px dotted gray;
 	overflow: auto;
 	height: 100%; /* issue 263 */
 }
@@ -433,8 +433,25 @@ span.dynatree-drop-target.dynatree-drop-after a
  * Custom node classes (sample)
  */
 
-span.custom1 a
+span.success span.dynatree-icon
 {
-	background-color: maroon;
-	color: yellow;
+    background-position: 0 0;
+    background-image: url("green-circle.png");
+}
+
+span.error span.dynatree-icon
+{
+    background-position: 0 0;
+    background-image: url("red-circle.png");
+}
+
+span.warning span.dynatree-icon
+{
+    background-position: 0 0;
+    background-image: url("warning.png");
+}
+
+span.task span.dynatree-icon
+{
+    background-position: 0px 0px;
 }
