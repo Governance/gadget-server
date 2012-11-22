@@ -82,9 +82,6 @@
 		var testData = new Array(2);
 		testData[0] = "test1";
 		testData[1] = "test2";
-		window.alert(prefs);
-		window.alert(prefs.getString("serviceUrl"));
-		window.alert(prefs.getArray("serviceType"));
 		prefs.setArray("serviceType", testData);
 		prefs.setArray("operations", testData);
 		window.alert("done");
