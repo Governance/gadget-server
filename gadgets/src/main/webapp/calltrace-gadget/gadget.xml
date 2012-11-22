@@ -2,12 +2,10 @@
 <Module>
 	<ModulePrefs title="Call Trace" description="Call Trace gadget"
 		author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
-		<Require feature="views"/>
-		<Require feature="setprefs"/>
 		<Require feature="tabs"/>
 	</ModulePrefs>
 	<UserPref name="serviceUrl" display_name="Service URL:"
-		default_value="http://localhost:8080/overlord-bam/acm/query" />
+		default_value="http://localhost:8080/overlord-bam-services/call/trace/instance?correlation=test" />
 	<UserPref name="refreshCycle" display_name="Refresh Interval(sec):"
 		default_value="30" datatype="enum">
 		<EnumValue value="30" />
@@ -20,13 +18,15 @@
 	<Content type="html"><![CDATA[
 	<style type="text/css">
 		#tree {width:90%;}
-		#detail {border:1px solid #69C; border-collapse: collapse;font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif; font-size: 9pt;margin:10px;}
+		#detail {width:90%; border:1px solid #69C; border-collapse: collapse;font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif; font-size: 9pt;margin:10px;}
 		#detail thead th {font-weight: normal;font-size: 9pt; color:#039;border-bottom: 1px dashed #69C; text-align: left;}
-		#detail tbody td {text-align: left;vertical-align: top;color: #669; padding: 2px 2px; }
-		#detail tbody th {text-align: right;vertical-align: top;color: #669; padding: 2px 2px; }
+		#detail tbody td {text-align:left; font-size:9pt; vertical-align: top;color: #669; padding: 2px 2px; }
+		#detail tbody th {text-align: right; font-size:9pt; vertical-align: top;color: #669; padding: 2px 2px; }
+		.detail-properties {border-bottom: 1px dashed #69C; font-size:9pt; }
    </style>
    
 	<link href="skin/ui.dynatree.css" rel="stylesheet" type="text/css">
+	<link href="tabs.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="jquery.cookie.js"></script>
 	<script type="text/javascript" src="jquery-ui.custom.min.js"></script>
@@ -34,10 +34,12 @@
    
    <script type="text/javascript">
 	
+	var tabset;
+	
 	function makeJSONRequest(){
-	    var restUrl = "http://localhost:8080/gadgets/calltrace-gadget/calltrace.json";
-		var params = {};
 		var prefs = new gadgets.Prefs();
+	    var restUrl = prefs.getString("serviceUrl");
+		var params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
 		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
 		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.GET;
@@ -47,6 +49,9 @@
 	
 	function updateResponse(response) {
 		var data = response.data;
+		if (response.data == undefined) {
+			return ;
+		}
 	   	var treeData = new Array(data.tasks.length);
 	   	for(var i = 0; i < treeData.length; i++) {
 	   		var task = data.tasks[i];
@@ -54,7 +59,7 @@
 	   	}
 	
 	   	initialiseTree(treeData);
-	   	$("#detail").hide();
+	   	//$("#detail").hide();
 	}
 	
 	  function convertJsonToTreeData(task) {
@@ -84,6 +89,11 @@
 	  			treeObject['duration'] = task.duration;
 	  			treeObject['percentage'] = task.percentage;
 	  			treeObject['type'] = task.type;
+	  			treeObject['addClass'] = '';
+	  		}
+	  		
+	  		if (task.properties != undefined) {
+	  			treeObject['properties'] = task.properties;
 	  		}
 
 	  		if (task.tasks != undefined) {
@@ -108,7 +118,8 @@
 	  }
 	
 	  function showTheDetail(node) {
-	  	  $("#detail").show();
+	  	  //$("#detail").show();
+	  	  tabset.setSelectedTab(1);
 	  	  var properties = ['type', 'component', 'operation', 'request', 'response', 'fault', 'requestLatency', 'responseLatency', 'duration', 'percentage'];
 	  	  var thedata = node.data;
 	  	  deleteRows();
@@ -118,6 +129,16 @@
 	  	  		insertRow([theProperty + " :" , thedata[theProperty]]);
 	  	  	}
 	  	  }
+	  	  
+	  	  if (thedata.properties != undefined) {
+	  	  	    insertPropertiesTitle();
+ 				for (var pname in thedata.properties) {
+ 					if (thedata.properties.hasOwnProperty(pname)) {
+ 						insertRow([pname + ":", thedata.properties[pname]]);
+ 					}
+ 				}
+	  	  }
+	  	  
 	  }
 	
 	   function deleteRows() {
@@ -137,6 +158,7 @@
 		
 		theHead = document.createElement("TH");
 		theHead.innerHTML = data[0];
+		theHead.setAttribute("width", "35%");
 		theRow.appendChild(theHead);
 
 		theCell = document.createElement("TD");
@@ -154,19 +176,29 @@
    		else return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	}
 	
+	function insertPropertiesTitle() {
+	  	var theBody, theRow, theCell;
+	  	theBody = document.getElementById("detail-body");
+	  	theRow = document.createElement("TR");
+	  	theBody.appendChild(theRow);
+
+	  	theCell = document.createElement("TD");
+	  	theCell.setAttribute("colspan", "2");
+	  	theCell.setAttribute("class", "detail-properties");
+	  	theCell.innerHTML = "Properties";
+	  	theRow.appendChild(theCell);
+	 }
+	
 	function loadData() {
-         var prefs, refreshInterval, tabset, theName;
+         var prefs, refreshInterval;
          prefs = new gadgets.Prefs();
          refreshInterval = prefs.getInt("refreshCycle")
-         theName = getViewName();
-         window.alert(theName);
-         if (theName == "home") {
-	         tabset = new gadgets.TabSet();
-	         tabset.alignTabs('left');
-	         tabset.addTab("Call Trace Tree", {contentContainer:document.getElementById("tree")});
-	         tabset.addTab("Summary", {contentContainer:document.getElementById("detail")});
-	         window.alert("done");
-         }
+         
+         tabset = new gadgets.TabSet();
+         tabset.alignTabs('left');
+         tabset.addTab("Call Trace Tree", {contentContainer:document.getElementById("tree")});
+         tabset.addTab("Summary", {contentContainer:document.getElementById("detail")});
+         
          makeJSONRequest();
          setInterval(makeJSONRequest, refreshInterval * 1000);
     }
@@ -181,8 +213,8 @@
    
   	<div id="tree"></div>
   	<div id="detail">
-		<table style="width:100%" summary="Summary">
-			<thead><tr><th width="30%">Summary</th><th></th></tr></thead>
+		<table style="width:95%" summary="Summary">
+			<thead><tr><th colspan="2">Summary</th></tr></thead>
 			<tbody id="detail-body">						
 			</tbody>
 	   </table>

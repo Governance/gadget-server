@@ -142,6 +142,8 @@ public class TabLayout extends Composite {
 
         tabsBar.add(addTabAnchorItem);
         
+        updateUserCurrentPageId(Long.valueOf(pageId));
+        
         hidePrompt(promptId);
 
     }
