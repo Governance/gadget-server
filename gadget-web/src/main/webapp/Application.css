@@ -93,7 +93,7 @@ a {
 .portlet-header .portlet-setting {float:right;}
 .portlet-header .portlet-close {float:right;}
 .portlet-header .portlet-restore {float:right;}
-.portlet-content { padding: 0.4em; height:95%}
+.portlet-content { padding: 0.4em; height:100%;}
 .ui-sortable-placeholder { border: 1px dashed black; visibility: visible !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
 

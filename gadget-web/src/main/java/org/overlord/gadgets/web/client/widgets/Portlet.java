@@ -36,6 +36,7 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -126,7 +127,7 @@ public class Portlet extends Composite {
 				hideRestoreButton(id);
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("250px");
-				gadgetSpec.getElement().setAttribute("scrolling", "no");
+				gadgetSpec.getElement().setAttribute("scrolling", "auto");
 				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
 			}        	
         });
@@ -147,7 +148,7 @@ public class Portlet extends Composite {
         
         generateUserPref(model);
         
-        gadgetSpec.getElement().setAttribute("scrolling", "no");
+        gadgetSpec.getElement().setAttribute("scrolling", "auto");
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setWidth(width - 20 + "px");
         gadgetSpec.setHeight("250px");
@@ -249,6 +250,7 @@ public class Portlet extends Composite {
 					public void onResponseReceived(Request request, Response response) {
 						hideUserPref(id);
 						gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
+						reloadIFrame(gadgetSpec.getElement());
 					}
 					
 				});
@@ -342,6 +344,15 @@ public class Portlet extends Composite {
     
     private static native void showUserPref(String id) /*-{
 		$wnd.$('#' + id).find(".portlet-preference").show();
-	}-*/; 
+	}-*/;
+    
+    private static native void reloadIFrame(Element iframeEl) /*-{
+    	iframeEl.contentWindow.location.reload(true);
+    }-*/;
+    
+    private static native void setPreference(String name, String value) /*-{
+		var prefs = new gadgets.Prefs();
+		prefs.set(name, value);
+}-*/;
 
 }

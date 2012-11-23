@@ -40,7 +40,7 @@ public class PortalLayout extends Composite {
     private List<FlowPanel> columnPanel;
     
     public static final int THREE_COLUMN_WIDTH = 325;
-    public static final int TWO_COLUMN_WIDTH = 480;
+    public static final int TWO_COLUMN_WIDTH = 500;
     public static final int ONE_COLUMN_WIDTH = 980;
     
     private int columnWidth = TWO_COLUMN_WIDTH;

@@ -453,5 +453,12 @@ span.warning span.dynatree-icon
 
 span.task span.dynatree-icon
 {
-    background-position: 0px 0px;
+	width: 16px;
+	height: 16px;
+	display: inline-block; /* Required to make a span sizeable */
+	vertical-align: top;
+	background-repeat: no-repeat;
+	background-position: left;
+	background-image: url("icons.gif");
+	background-position: 0 0;
 }
