@@ -126,7 +126,7 @@
   }
   
   	  function getCallTypeTitle(task) {
-  	  	var title = getTruncatedTitle(task.component + " " + task.operation);
+  	  	var title = getTruncatedTitle(task.operation + ":" + task.component);
   	  	if (task.duration != undefined) {
   	  		title = title + "[" + task.duration + "ms]";
   	  	}
@@ -196,8 +196,8 @@
 	}
 	
 	function getTruncatedTitle(title) {
-		if (title.length < 20) return title;
-		else return title.substring(0, 20) + "...";
+		if (title.length < 25) return title;
+		else return title.substring(0, 25) + "...";
 	}
 
 	function escapeHTML(str) {
