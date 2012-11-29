@@ -4,7 +4,7 @@
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
   	<Require feature="views" />
   </ModulePrefs>
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam-services/service/dependency/overview" />
+  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/service/dependency/overview" />
   <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
 		<EnumValue value="30" />
 		<EnumValue value="60" />

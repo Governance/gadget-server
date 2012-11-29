@@ -84,7 +84,6 @@
 		testData[1] = "test2";
 		prefs.setArray("serviceType", testData);
 		prefs.setArray("operations", testData);
-		window.alert("done");
 	}
 	
 	function updateUI(response) {
