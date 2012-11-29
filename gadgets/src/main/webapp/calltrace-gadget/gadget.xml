@@ -6,7 +6,7 @@
 		<Require feature="setprefs"/>
 		<Require feature="dynamic-height" />
 	</ModulePrefs>
-	<UserPref name="host" display_name="Host:" default_value="http://localhost:8080" />
+	<UserPref name="host" display_name="Host:" default_value="localhost:8080" />
 	<UserPref name="identifier" display_name="Identifier:" default_value="test" />
 	<UserPref name="refreshCycle" display_name="Refresh Interval(sec):"
 		default_value="30" datatype="enum">
@@ -41,17 +41,18 @@
 	
 	function makeJSONRequest(){
 		var prefs = new gadgets.Prefs();
-	    var host = prefs.getString("host");
-	    var ident = prefs.getString("identifier");
+		//hack for now.
+	    var host = parent.document.getElementById("host");
+	    var ident = parent.document.getElementById("identifier");
 	    
-	    if (ident == "") {
+	    if (ident.value == "") {
 	    	$("#promptDiv").show();
 	    	return;
 	    } else {
 	    	$("#promptDiv").hide();
 	    }
 	    
-	    var restUrl = host + "/overlord-bam/call/trace/instance?identifier=" + ident;
+	    var restUrl = "http://" + host.value + "/overlord-bam/call/trace/instance?identifier=" + ident.value;
 	    
 		var params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;

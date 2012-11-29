@@ -188,6 +188,8 @@ public class Portlet extends Composite {
     
     private Widget createTextBox(String name, String defaultVal) {
     	TextBox textBox = new TextBox();
+    	//hack, set the name to id as well for jquery retrieval.
+    	textBox.getElement().setId(name);
     	textBox.setName(name);
     	textBox.setValue(defaultVal);
     	return textBox;
