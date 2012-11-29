@@ -7,7 +7,7 @@
 		<Require feature="dynamic-height" />
 	</ModulePrefs>
 	<UserPref name="host" display_name="Host:" default_value="localhost:8080" />
-	<UserPref name="identifier" display_name="Identifier:" default_value="test" />
+	<UserPref name="identifier" display_name="Identifier:" default_value="" />
 	<UserPref name="refreshCycle" display_name="Refresh Interval(sec):"
 		default_value="30" datatype="enum">
 		<EnumValue value="30" />
