@@ -100,13 +100,19 @@
 	  			}
 
 	  		} else {
-	  			treeObject["title"] = getTruncatedTitle(task.description) + " [" + task.duration + "ms] (" + task.percentage + "%)";
+	  			treeObject["title"] = getTaskTypeTitle(task);
 	  			treeObject["isFolder"] = false;
 	  			treeObject['description'] = task.description;
 	  			treeObject['duration'] = task.duration;
 	  			treeObject['percentage'] = task.percentage;
 	  			treeObject['type'] = task.type;
-	  			treeObject['addClass'] = 'task';
+	  			if (task.status == "Warning") {
+	  				treeObject['addClass'] = 'warning';
+	  			} else if (task.status == "Fail") {
+	  				treeObject['addClass'] = 'error';
+	  			} else {
+		  			treeObject['addClass'] = 'task';
+				}
 	  		}
 	  		
 	  		if (task.properties != undefined) {
@@ -127,6 +133,17 @@
   
   	  function getCallTypeTitle(task) {
   	  	var title = getTruncatedTitle(task.operation + ":" + task.component);
+  	  	if (task.duration != undefined) {
+  	  		title = title + "[" + task.duration + "ms]";
+  	  	}
+  	  	if (task.percentage != undefined) {
+  	  		title = title + "(" + task.percentage + "%)";
+  	  	}
+  	  	return title;
+  	  }
+
+  	  function getTaskTypeTitle(task) {
+  	  	var title = getTruncatedTitle(task.description);
   	  	if (task.duration != undefined) {
   	  		title = title + "[" + task.duration + "ms]";
   	  	}
