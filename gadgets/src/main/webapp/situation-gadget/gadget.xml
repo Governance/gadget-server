@@ -2,7 +2,6 @@
 <Module>
   <ModulePrefs title="Situation" description="Situation gadget"
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
   <UserPref name="pageSize" display_name="Size:" default_value="10" datatype="enum">
 		<EnumValue value="5" />
 		<EnumValue value="10" />
@@ -30,7 +29,7 @@
    <script type="text/javascript">
 	
 	function makeJSONRequest() {
-		var prefs, params, restUrl, postdata;
+		var prefs, params, restUrl, postdata, host;
 		
 		prefs = new gadgets.Prefs();
 		postdata = "{\"collection\":\"Situations\"}";
@@ -41,7 +40,8 @@
 		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
    		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
 		
-		restUrl = prefs.getString("serviceUrl");
+		host = parent.window.location.host;
+		restUrl = "http://" + host + "/overlord-bam/acm/query";
 		
 		gadgets.io.makeRequest(restUrl, updateResponse, params);
 	}

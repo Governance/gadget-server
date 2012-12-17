@@ -4,7 +4,6 @@
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
   	<Require feature="views" />
   </ModulePrefs>
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/service/dependency/overview" />
   <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
 		<EnumValue value="30" />
 		<EnumValue value="60" />
@@ -16,14 +15,16 @@
    <script type="text/javascript">
 	
 	function makeJSONRequest() {
-		var prefs, params, restUrl, postdata;
+		var prefs, params, restUrl, postdata, host;
 		
 		prefs = new gadgets.Prefs();
 		
 		params = {};
 		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
 		
-		restUrl = prefs.getString("serviceUrl");
+		host = parent.window.location.host;
+		restUrl = "http://" + host + "/overlord-bam-services/service/dependency/overview";
+
 		if (getViewName() == "default") {
 			restUrl = restUrl + "?width=300";
 		}

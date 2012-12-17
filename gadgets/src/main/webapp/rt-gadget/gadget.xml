@@ -4,7 +4,6 @@
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
 	 <Require feature="setprefs" />
   </ModulePrefs>
-  <UserPref name="serviceUrl" display_name="Service URL:" default_value="http://localhost:8080/overlord-bam/acm/query" />
   <UserPref name="serviceType" display_name="Service Type:" datatype="list"></UserPref>
   <UserPref name="operations" display_name="Operations:" datatype="list"></UserPref>
   <UserPref name="record" display_name="record:" default_value="10" datatype="enum">
@@ -42,7 +41,7 @@
 	var serviceDefs;
 	
 	function makeJSONRequest() {
-		var prefs, params, restUrl, postdata, svcDef;
+		var prefs, params, restUrl, postdata, svcDef, host;
 	
 		prefs = new gadgets.Prefs();
 		postdata = "{\"collection\":\"ServiceResponseTimes\"}";
@@ -53,7 +52,8 @@
 		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
    		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
    		
-		restUrl = prefs.getString("serviceUrl");
+   		host = parent.window.location.host;
+		restUrl = "http://" + host + "/overlord-bam/acm/query";
 		
 		gadgets.io.makeRequest(restUrl, updateUI, params);
 		
