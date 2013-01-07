@@ -2,12 +2,6 @@
 <Module>
   <ModulePrefs title="Situation" description="Situation gadget"
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com" />
-  <UserPref name="pageSize" display_name="Size:" default_value="10" datatype="enum">
-		<EnumValue value="5" />
-		<EnumValue value="10" />
-		<EnumValue value="15" />
-		<EnumValue value="20" />
-  </UserPref>
   <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
 		<EnumValue value="30" />
 		<EnumValue value="60" />
