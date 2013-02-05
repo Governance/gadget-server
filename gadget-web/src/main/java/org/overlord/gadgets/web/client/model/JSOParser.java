@@ -17,6 +17,7 @@
  */
 package org.overlord.gadgets.web.client.model;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 
 import org.overlord.gadgets.web.shared.dto.*;
@@ -92,14 +93,15 @@ public class JSOParser {
         JsArray<JSOModel> resultSets = model.getArray("resultSet");
 
         List<StoreItemModel> items = new ArrayList<StoreItemModel>();
-
+        String baseUrl = getBaseUrl();
         for (int i = 0; i < resultSets.length(); i++) {
             StoreItemModel itemModel = new StoreItemModel();
             JSOModel theItem = resultSets.get(i);
             itemModel.setId(theItem.getLong("id"));
             itemModel.setName(theItem.get("title"));
             itemModel.setDescription(theItem.get("description"));
-            itemModel.setThumbnailUrl(theItem.get("thumbnailUrl"));
+            
+            itemModel.setThumbnailUrl(theItem.get("thumbnailUrl").replace("${server}", baseUrl));
             itemModel.setAuthor(theItem.get("author"));
 
             items.add(itemModel);
@@ -113,6 +115,13 @@ public class JSOParser {
         response.setPageSize(pageSize);
 
         return response;
+    }
+    
+    private static String getBaseUrl() {
+    	String pageBaseUrl = GWT.getHostPageBaseURL();
+    	int end = pageBaseUrl.indexOf("gadget-web");
+    	//remote the end slash.
+    	return pageBaseUrl.substring(0, end-1);
     }
     
     public static UserModel getUserModel(String jsonValue) {

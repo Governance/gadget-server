@@ -40,8 +40,16 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
     
     public static final String USER_PREFS = "userPrefs";
     public static final String DATA_TYPE = "dataType";
+    
+    //This is default one when no value was set.
+    private String rpcUrl = "http://localhost:8080/gadget-server/rpc";
 
-
+    
+	public void setGadgetServerRPCUrl(String rpcUrl) {
+		this.rpcUrl = rpcUrl;
+		
+	}
+    
     public WidgetModel getGadgetMetadata(String gadgetUrl) {
 
         String responseString = getMetadata(gadgetUrl);
@@ -146,7 +154,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
             logger.debug("requestContent: {}", postData);
         }
 
-        ClientRequest request = new ClientRequest(ConfigurationUtil.SHINDIG_RPC_URL);
+        ClientRequest request = new ClientRequest(this.rpcUrl);
         request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
 
         String responseString = null;
@@ -196,4 +204,5 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
         //svc.getGadgetMetadata("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
     }
+    
 }

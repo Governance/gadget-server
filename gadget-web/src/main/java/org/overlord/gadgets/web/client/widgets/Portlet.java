@@ -60,6 +60,8 @@ public class Portlet extends Composite {
 
     private static PortletUiBinder uiBinder = GWT.create(PortletUiBinder.class);
     
+    private static String urlBase;
+    
     private String id;
 
     private String widgetId;
@@ -88,6 +90,8 @@ public class Portlet extends Composite {
         this.portalId = pid;
         initWidget(uiBinder.createAndBindUi(this));
         getElement().setId(id);
+        
+        urlBase = getGadgetServerUrlBase();
 
         minBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
@@ -117,7 +121,7 @@ public class Portlet extends Composite {
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("90%");
 				gadgetSpec.getElement().setAttribute("scrolling", "auto");
-				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getCanvasView());
+				gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getCanvasView());
 			}        	
         });
         
@@ -128,7 +132,7 @@ public class Portlet extends Composite {
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("250px");
 				gadgetSpec.getElement().setAttribute("scrolling", "auto");
-				gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
+				gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
 			}        	
         });
         
@@ -152,7 +156,13 @@ public class Portlet extends Composite {
         gadgetSpec.getElement().setAttribute("frameborder", "0");
         gadgetSpec.setWidth(width - 20 + "px");
         gadgetSpec.setHeight("250px");
-        gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + model.getSpecUrl() + "&" + getHomeView());
+        gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + model.getSpecUrl() + "&" + getHomeView());
+    }
+    
+    private String getGadgetServerUrlBase() {
+    	String gadgetWebUrlBase = GWT.getHostPageBaseURL();
+    	int end = gadgetWebUrlBase.indexOf("gadget-web");
+    	return gadgetWebUrlBase.substring(0, end);
     }
     
     
@@ -251,7 +261,7 @@ public class Portlet extends Composite {
 				RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.updatePreferenceURL(Long.valueOf(widgetId)), sbuffer.toString(), new RestfulInvoker.Response(){
 					public void onResponseReceived(Request request, Response response) {
 						hideUserPref(id);
-						gadgetSpec.setUrl("http://localhost:8080/gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
+						gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView());
 						reloadIFrame(gadgetSpec.getElement());
 					}
 					

@@ -18,5 +18,8 @@ public interface GadgetMetadataService {
     public WidgetModel getGadgetMetadata(String gadgetUrl);
     
     
+    public void setGadgetServerRPCUrl(String rpcUrl);
+    
+    
     public Gadget getGadgetData(String gadgetUrl);
 }

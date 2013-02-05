@@ -110,10 +110,12 @@ public class UserController {
     @GET
     @Path("user/{userId}/pages")
     @Produces("application/json")
-    public List<PageModel> getPageModels(@PathParam("userId") long userId) {
+    public List<PageModel> getPageModels(@PathParam("userId") long userId, @Context HttpServletRequest request) {
         List<Page> pages = userManager.getPages(userId);
         
         List<PageModel> pageModels = new ArrayList<PageModel>();
+        String serverBaseUrl = getServerBaseUrl(request);
+        metadataService.setGadgetServerRPCUrl(serverBaseUrl + "/gadget-server/rpc");
         
         for (Page page : pages) {
             PageModel pageModel = new PageModel();
@@ -121,9 +123,9 @@ public class UserController {
             pageModel.setOrder(page.getPageOrder());
             pageModel.setColumns(page.getColumns());
             pageModel.setId(page.getId());
-
+            
             for (Widget widget :page.getWidgets()) {
-                WidgetModel widgetModel = metadataService.getGadgetMetadata(widget.getAppUrl());
+                WidgetModel widgetModel = metadataService.getGadgetMetadata(widget.getAppUrl().replace("${server}", serverBaseUrl));
                 widgetModel.setWidgetId(widget.getId());
                 widgetModel.setOrder(widget.getOrder());
                 
@@ -136,6 +138,18 @@ public class UserController {
         }
         
         return pageModels;
+    }
+    
+    private String getServerBaseUrl(HttpServletRequest request) {
+    	String scheme = request.getScheme();
+    	String serverName = request.getServerName();
+    	int serverPort = request.getServerPort();
+    	StringBuilder sbuilder = new StringBuilder();
+    	sbuilder.append(scheme).append("://").append(serverName);
+    	if ((serverPort != 80) && (serverPort != 443)) {
+    		sbuilder.append(":" + serverPort);
+    	}
+    	return sbuilder.toString();
     }
 
 	private void populateWidgetsDefaultValue(Widget widget, WidgetModel widgetModel) {
@@ -214,6 +228,10 @@ public class UserController {
         Gson gson = GsonFactory.createInstance();
         String json = gson.toJson(wrapper);
         return Response.ok(json).type("application/json").build();
+    }
+    
+    public static void main(String[] args) throws Exception {
+    	System.out.println("${server}/gadgets-server/test".replace("${server}", "http://localhost:8080"));
     }
 
 }

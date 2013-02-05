@@ -3,7 +3,7 @@
 <project name="GadgetServer_Installer">
 
   <!-- DEFAULT PROPERTY VALUES -->
-  <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.6" />
+  <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.7" />
   <property name="deploy.dir" value="${as7.home}/standalone/deployments" />
   <property name="version" value="1.0.0-SNAPSHOT" />
   <property name="database" value="h2"/>
