@@ -16,7 +16,7 @@
     
     <antcall target="internal.install.gs.db.${database}" />
 
-    <copy todir="${deploy.dir}" overwrite="true">
+    <copy tofile="${deploy.dir}/gs-ds.xml" overwrite="true">
 	     <fileset dir="datasource">
 		   <include name="gs-${database}-ds.xml" />
 		 </fileset>
@@ -37,7 +37,7 @@
     <delete file="${deploy.dir}/gadget-server.war"/>
 	<delete file="${deploy.dir}/gadget-web.war"/>
 	<delete file="${deploy.dir}/gadgets.war"/>
-	<delete file="${deploy.dir}/gs-${database}-ds.xml"/>
+	<delete file="${deploy.dir}/gs-ds.xml"/>
   </target>   
 
 </project>
