@@ -16,10 +16,13 @@
 	#sla-body tr{background-color:#FFFFFF;}
 	.tb-header {background:#A7C942;color: #FFFFFF; font-weight:bold;border:1px solid #98BF21;}
 	.tb-header td {}
-	.tb-row {border:1px solid #98BF21;}
-	.violation-text {color: red;} 
+	.table-row {border:1px solid #98BF21;}
+	.violation-text {color: red;}
+	.clickable {cursor: pointer;}
+	 div.arrows {background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;} 
+	 div.up {background-position:0px 0px;} 
    </style>
-
+   <script type="text/javascript" src="jquery.min.js"></script>
    <script type="text/javascript">
 	
 	function makeJSONRequest() {
@@ -55,8 +58,15 @@
 		for (i = 0; i < jsondata.length; i++) {
 			slaResult = jsondata[i];
 			rowData = [slaResult.type, slaResult.severity, slaResult.description, getDateTime(new Date(slaResult.timestamp))];
-			insertRow(rowData);
+			insertRow(rowData, i, slaResult);
 		}
+
+		$("tr.detail").hide();
+			$("td.clickable").click(function(){
+				$(this).parent().find(".arrows").toggleClass("up");
+				var parentId = $(this).parent().prop("id");
+				$(".child-" + parentId).toggle();
+			});
 	}
 	
 	function getDateTime(theDate) {
@@ -64,20 +74,75 @@
 				+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
 	}
 	
-	function insertRow(data) {
+	function insertRow(data, rowId, rawData) {
 		var theBody, theRow, theCell, i;
 		theBody = document.getElementById("sla-body");
 		theRow = document.createElement("TR");
-		theRow.setAttribute("class", "tb-row");
+		theRow.setAttribute("class", "table-row");
+		theRow.setAttribute("id", rowId);
 		theBody.appendChild(theRow);
 		for (i = 0; i < data.length; i++) {
 			theCell = document.createElement("TD");
 			theCell.innerHTML = data[i];
+			theCell.setAttribute("class", "clickable");
 			if (i == 2) {
-				theCell.setAttribute("class", "violation-text");
+				theCell.setAttribute("class", "clickable violation-text");
 			}
 			theRow.appendChild(theCell);
 		}
+
+		theCell = document.createElement("TD");
+		theCell.setAttribute("class", "clickable");
+		theCell.innerHTML="<div class='arrows'></div>";
+		theRow.appendChild(theCell);
+
+		appendContextHeader(theBody, rowId);
+		appendContext(rawData.context, rowId, theBody, "Context");
+		appendContext(rawData.properties, rowId, theBody, "Properties");
+	}
+
+	function appendContextHeader(theBody, rowId){
+		var theRow, cell;
+		theRow = document.createElement("TR");
+		theRow.setAttribute("class", "table-row detail child-" + rowId);
+		theBody.appendChild(theRow);
+
+		cell = document.createElement("TD");
+		theRow.appendChild(cell);
+
+		cell = document.createElement("TD");
+		cell.innerHTML="Type";
+		theRow.appendChild(cell);
+
+		cell = document.createElement("TD");
+		cell.setAttribute("colspan", "3");
+		cell.innerHTML="Value";
+		theRow.appendChild(cell);
+	}
+
+	function appendContext(data, rowId, theBody, description) {
+		var i, contextRow, cell;
+		if (data.length > 0) {
+			for (i = 0; i < data.length; i++) {
+				contextRow = document.createElement("TR");
+				contextRow.setAttribute("class", "table-row detail child-" + rowId);
+				theBody.appendChild(contextRow);
+				cell = document.createElement("TD");
+				if (i == 0) {
+					cell.innerHTML="<b>" + description + "</b>";
+				}
+				contextRow.appendChild(cell);
+
+				cell = document.createElement("TD");
+				cell.innerHTML=data[i].type;
+				contextRow.appendChild(cell);
+
+				cell = document.createElement("TD");
+				cell.setAttribute("colspan", "3");
+				cell.innerHTML=data[i].value;
+				contextRow.appendChild(cell);
+			}
+		}	
 	}
 	
 	function deleteRows() {
@@ -105,7 +170,7 @@
    <table style="width:100%" id="sla-table" border="0" cellspacing="3" cellpadding="5">
 		<thead>
 			<tr class="tb-header">
-				<td>Type</td><td>Severity</td><td>Description</td><td>Time</td>
+				<td>Type</td><td>Severity</td><td>Description</td><td>Time</td><td>Details</td>
 			</tr>			
 		</thead>
 		<tbody id="sla-body">
