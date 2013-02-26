@@ -4,6 +4,8 @@
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
 	 <Require feature="setprefs" />
   </ModulePrefs>
+  <UserPref name="services" display_name="Service Types:" datatype="list"></UserPref>
+  <UserPref name="operations" display_name="Operations:" datatype="list"></UserPref>
   <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
 		<EnumValue value="30" />
 		<EnumValue value="60" />
@@ -31,13 +33,26 @@
    
    <script type="text/javascript">
 	
-	var serviceDefs;
-	
 	function makeJSONRequest() {
-		var prefs, params, restUrl, postdata, svcDef, host;
+		var prefs, params, restUrl, postdata, svcDef, host, service, operation;
 	
 		prefs = new gadgets.Prefs();
-		postdata = "{\"collection\":\"ServiceResponseTimes\"}";
+		service = prefs.getString("services");
+		operation = prefs.getString("operations");
+		
+		if (!isNotEmpty(service) && !isNotEmpty(operation)) {
+			postdata = "{\"collection\":\"ServiceResponseTimes\"}";		
+		} else {
+			postdata = "{\"parent\":\"ServiceResponseTimes\", \"collection\":\"CustomCollection\",\"predicate\":{\"type\":\"MVEL\",\"expression\":";
+			if (isNotEmpty(service) && isNotEmpty(operation)) {
+				postdata = postdata + "\"serviceType==\\\"" + service + "\\\" && operation == \\\"" + operation + "\\\"\""; 
+			} else if (isNotEmpty(service)) {
+				postdata = postdata + "\"serviceType==\\\"" + service + "\\\"\"";
+			} else if (isNotEmpty(operation)) {
+				postdata = postdata + "\"operation == \\\"" + operation + "\\\"\"";
+			}
+			postdata = postdata + "} }";
+		}
 		
 		params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
@@ -56,27 +71,58 @@
 		gadgets.io.makeRequest(restUrl, updateServiceDefinition, params);	
 	}
 	
+	function isNotEmpty(value) {
+		if (value != undefined && value != " " && value!= "" && value != "all" );
+	}
+	
 	function getDateTime(theDate) {
 		return theDate.getFullYear() + "-" + (theDate.getMonth() +1) + "-" + theDate.getDate() + " " + theDate.getHours()
 				+ ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
 	}
 	
 	function updateServiceDefinition(response) {
-		if (response.data == undefined) {
-			return;
+		var i, theobj, serviceDefs, prefs;
+		
+		var thesvc = parent.$("#services");
+		thesvc.empty();
+		thesvc.append($("<option></option>").attr("value","all").text("all"));
+		if (response.data != undefined){
+			serviceDefs = new Array(response.data.length);
+			for (i = 0; i < serviceDefs.length; i++) {
+				theobj = new Object();
+				theobj.serviceType = response.data[i].value.serviceType;
+				theobj.operations = response.data[i].value.operations;
+				serviceDefs[i] = theobj;
+			}
+			$.each(serviceDefs, function(index, value){
+				thesvc.append($("<option></option>").attr("value",serviceDefs[index].serviceType).text(serviceDefs[index].serviceType));
+			});
 		}
-		serviceDefs = response.data;
-		var st = new Array(serviceDefs.length);
-		var i = 0;
-		for (i =0; i < st.length; i++) {
-			st[i] = serviceDefs[i].value.serviceType;
+
+		refreshOperationsOptions(serviceDefs);
+		thesvc.on('change', function(){
+			refreshOperationsOptions(serviceDefs);
+		});
+	
+	}
+	
+	function refreshOperationsOptions(serviceDefs) {
+		var opdata, i, selectedValue;
+		var theop = parent.$("#operations");
+		selectedValue = parent.$("#services").val();
+		theop.empty();
+		theop.append($("<option></option>").attr("value","all").text("all"));
+		if (selectedValue != " " && serviceDefs != undefined) {
+			for (i = 0; i < serviceDefs.length; i++) {
+				if (selectedValue == serviceDefs[i].serviceType) {
+					opdata = serviceDefs[i].operations;
+					$.each(opdata, function(index,value){
+						theop.append($("<option></option>").attr("value",opdata[index].name).text(opdata[index].name));
+					});
+				}
+			}
 		}
-		var prefs = new gadgets.Prefs();
-		var testData = new Array(2);
-		testData[0] = "test1";
-		testData[1] = "test2";
-		prefs.setArray("serviceType", testData);
-		prefs.setArray("operations", testData);
+				
 	}
 	
 	function updateUI(response) {

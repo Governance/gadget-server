@@ -228,6 +228,7 @@ public class Portlet extends Composite {
     private Widget createPrefSettingButtons() {
     	HorizontalPanel btnPanel = new HorizontalPanel();
     	Button saveBtn = new Button("Save");
+    	saveBtn.getElement().setId("pref-save");
     	Button cancelBtn = new Button("Cancel");
     	btnPanel.add(saveBtn);
     	saveBtn.addClickHandler(new ClickHandler(){

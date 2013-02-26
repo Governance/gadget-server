@@ -1,9 +1,10 @@
+var container;
 
 $(function(){
     var containerConfig = {};
     containerConfig[osapi.container.ServiceConfig.API_PATH] = "/rpc";
     containerConfig[osapi.container.ContainerConfig.RENDER_DEBUG] = "1";
-    var container = new osapi.container.Container(containerConfig);
+    container = new osapi.container.Container(containerConfig);
     container.rpcRegister('resize_iframe', resizeIframe);
     container.rpcRegister('set_pref', setPref);
 });
