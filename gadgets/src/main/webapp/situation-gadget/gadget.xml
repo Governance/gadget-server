@@ -38,7 +38,7 @@
    		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
 		
 		host = parent.window.location.host;
-		restUrl = "http://" + host + "/overlord-bam/acm/query";
+		restUrl = "http://" + host + "/overlord-rtgov/acm/query";
 		
 		gadgets.io.makeRequest(restUrl, updateResponse, params);
 	}

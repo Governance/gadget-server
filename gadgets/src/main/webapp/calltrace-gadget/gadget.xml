@@ -51,7 +51,7 @@
 	    	$("#promptDiv").hide();
 	    }
 	    
-	    var restUrl = "http://" + host + "/overlord-bam/call/trace/instance?identifier=" + ident.value;
+	    var restUrl = "http://" + host + "/overlord-rtgov/call/trace/instance?identifier=" + ident.value;
 	    
 		var params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
