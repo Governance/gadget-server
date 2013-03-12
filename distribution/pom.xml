@@ -84,7 +84,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>gadget-server-${project.version}</finalName>
+                            <finalName>gadget-server</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>src/main/assembly/bin.xml</descriptor>
