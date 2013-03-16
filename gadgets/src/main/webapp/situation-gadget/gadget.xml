@@ -23,6 +23,8 @@
 	 div.up {background-position:0px 0px;} 
    </style>
    <script type="text/javascript" src="jquery.min.js"></script>
+   <script type="text/javascript" src="gs-common.js"></script>
+   
    <script type="text/javascript">
 	
 	function makeJSONRequest() {
@@ -33,7 +35,7 @@
 		
 		params = {};
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
-		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = prefs.getInt("refreshCycle");
+		params[gadgets.io.RequestParameters.REFRESH_INTERVAL] = parseInt(getUserPreferenceValue("refreshCycle"));
 		params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
    		params[gadgets.io.RequestParameters.POST_DATA]= postdata;
 		
@@ -157,7 +159,7 @@
 	function loadData() {
 		var prefs, refreshInterval;
 		prefs = new gadgets.Prefs();
-		refreshInterval = prefs.getInt("refreshCycle")
+		refreshInterval = parseInt(getUserPreferenceValue("refreshCycle"));
 		makeJSONRequest();
 		setInterval(makeJSONRequest, refreshInterval * 1000);
 	}

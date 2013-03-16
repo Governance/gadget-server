@@ -23,6 +23,7 @@ import org.overlord.gadgets.server.model.Widget;
 import org.overlord.gadgets.server.model.WidgetPreference;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jeff Yu
@@ -55,6 +56,8 @@ public interface UserManager {
     void removeWidget(long widgetId);
     
     void updateWidgetPreference(long widgetId, List<WidgetPreference> prefs);
+    
+    Map<String, String> getWidgetPreference(long widgetId);
 
     Widget getWidgetById(long widgetId);
 }

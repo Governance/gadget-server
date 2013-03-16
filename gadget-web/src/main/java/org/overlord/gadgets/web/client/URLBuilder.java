@@ -78,5 +78,9 @@ public class URLBuilder {
     public static String updatePreferenceURL(long widgetId) {
     	return urlBase + "rs/users/widget/"+widgetId+"/update";
     }
+    
+    public static String getPreferenceValuesURL(long widgetId) {
+    	return urlBase + "rs/users/widget/" + widgetId;
+    }
 
 }

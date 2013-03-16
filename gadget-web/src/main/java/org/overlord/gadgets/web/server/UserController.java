@@ -27,6 +27,7 @@ import org.overlord.gadgets.server.model.WidgetPreference;
 import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.web.shared.dto.PageModel;
+import org.overlord.gadgets.web.shared.dto.Pair;
 import org.overlord.gadgets.web.shared.dto.UserModel;
 import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
@@ -196,6 +197,19 @@ public class UserController {
     	}
     	userManager.updateWidgetPreference(widgetId, wps);
         return Response.ok().build();
+    }
+    
+    @GET
+    @Path("widget/{widgetId}")
+    @Produces("application/json")
+    public List<Pair> getWidgetPreferenceValues(@PathParam("widgetId") long widgetId) {
+    	Map<String, String> result = userManager.getWidgetPreference(widgetId);
+    	List<Pair> pairs = new ArrayList<Pair>();
+    	for (String key : result.keySet()) {
+    		Pair pair = new Pair(key, result.get(key));
+    		pairs.add(pair);
+    	}
+        return pairs;
     }
 
     @POST

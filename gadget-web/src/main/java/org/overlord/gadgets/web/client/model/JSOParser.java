@@ -19,11 +19,14 @@ package org.overlord.gadgets.web.client.model;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayString;
 
 import org.overlord.gadgets.web.shared.dto.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jeff Yu
@@ -132,6 +135,17 @@ public class JSOParser {
         user.setCurrentPageId(model.getLong("currentPageId"));
         user.setDisplayName(model.get("displayName"));
         return user;
+    }
+    
+    public static Map<String, String> getPreferenceValues(String jsonValue) {
+    	Map<String, String> result = new HashMap<String, String>();
+    	JsArray<JSOModel> model = JSOModel.arrayFromJson(jsonValue);
+    	for (int i = 0; i < model.length(); i++) {
+    		JSOModel pairModel = model.get(i);
+    		result.put(pairModel.get("name"), pairModel.get("value"));
+    	}
+    	
+    	return result;
     }
 
 }

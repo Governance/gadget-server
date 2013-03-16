@@ -27,7 +27,9 @@ import org.overlord.gadgets.server.model.WidgetPreference;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jeff Yu
@@ -193,6 +195,21 @@ public class UserManagerImpl implements UserManager {
 		
 		widget.setPrefs(prefs);
 		entityManager.getTransaction().commit();
+	}
+
+	public Map<String, String> getWidgetPreference(long widgetId) {
+		Map<String, String> result = new HashMap<String, String>();
+		if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+		Widget widget = entityManager.find(Widget.class, widgetId);
+		if (widget.getPrefs() != null) {
+			for (WidgetPreference pref : widget.getPrefs()) {
+				result.put(pref.getName(), pref.getValue());
+			}
+		}
+		entityManager.getTransaction().commit();
+		return result;
 	}
 
 }
