@@ -66,8 +66,9 @@
 			
 			var theContext = [{"type":"Message", "value":"This is the first message"},
 			{"type":"message", "value":"Another message"}];
-			appendContext(theContext, rowId, theBody, "Context");
-			appendContext(theContext, rowId, theBody, "Properties");
+			var theProperty = {"customer":"Fred", "total":"240.0", "item":"JAM"};
+			appendContext(theContext, rowId, theBody);
+			appendProperties(theProperty, rowId, theBody);
 		}
 
 		function appendContextHeader(theBody, rowId){
@@ -88,7 +89,7 @@
 			theRow.appendChild(cell);
 		}
 
-		function appendContext(data, rowId, theBody, description) {
+		function appendContext(data, rowId, theBody) {
 			var i, contextRow, cell;
 			if (data.length > 0) {
 				for (i = 0; i < data.length; i++) {
@@ -97,20 +98,47 @@
 					theBody.appendChild(contextRow);
 					cell = document.createElement("TD");
 					if (i == 0) {
-						cell.innerHTML="<b>" + description + "</b>";
+						cell.innerHTML="<b>Context</b>";
 					}
 					contextRow.appendChild(cell);
 
 					cell = document.createElement("TD");
-					cell.innerHTML=data.type;
+					cell.innerHTML=data[i].type;
 					contextRow.appendChild(cell);
 
 					cell = document.createElement("TD");
 					cell.setAttribute("colspan", "3");
-					cell.innerHTML=data.message;
+					cell.innerHTML=data[i].value;
 					contextRow.appendChild(cell);
 				}
 			}	
+		}
+		
+		function appendProperties(data, rowId, theBody) {
+			var i, contextRow, cell, property;
+			i = 0;
+			for (property in data) {
+				contextRow = document.createElement("TR");
+				contextRow.setAttribute("class", "table-row detail child-" + rowId);
+				theBody.appendChild(contextRow);
+				cell = document.createElement("TD");
+				if (i == 0) {
+					cell.innerHTML="<b>Properties</b>";
+				}
+				contextRow.appendChild(cell);
+				
+				cell = document.createElement("TD");
+				cell.innerHTML=property;
+				contextRow.appendChild(cell);
+				
+				cell = document.createElement("TD");
+				cell.setAttribute("colspan", "3");
+				cell.innerHTML=data[property];
+				contextRow.appendChild(cell);
+				
+				i++;
+			}
+				
 		}
 		
 		function parseJSON(data) {
