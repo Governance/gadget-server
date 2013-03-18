@@ -18,7 +18,7 @@
 	}
 
 	function receiveOnChange(data){
-		window.alert(data[0].serviceType);
+		window.alert($("#services").val());
 	}
 	
 	function run() {
@@ -33,8 +33,28 @@
 	 		receiveOnChange(data);
 	 	});
  	}
+
+ 	function containsValue(selectId, selectValue) {
+ 		var exists = false;
+ 		$("#" + selectId + " option").each(function(){
+ 			if (this.value == selectValue) {
+ 				exists = true;
+ 			}
+ 		});
+ 		return exists;
+ 	}
+
+ 	function setDefaultValue(selectId, selectValue) {
+ 		if (!containsValue(selectId, selectValue)) {
+ 			$("#" + selectId).append($("<option></option>").attr("value", selectValue).text(selectValue));
+ 		}
+ 		$("#" + selectId).val(selectValue);
+ 	}
  	
  	run();
+ 	
+ 	setDefaultValue("services", "service type");
+
  	</script>
  </body>
 </html>
