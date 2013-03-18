@@ -153,6 +153,8 @@
 			}
 			if (defaultValue != "undefined" && defaultValue != undefined) {
 				theop.val(defaultValue);
+			} else {
+				theop.val("all");
 			}
 		}
 				
