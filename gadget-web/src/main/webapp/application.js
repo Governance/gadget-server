@@ -58,8 +58,6 @@ function addOverlay(jqElm) {
 window.reloadGadget = function(iframeId, iframeUrl) {
 	var theIframe = document.getElementById(iframeId);
 	theIframe.src = iframeUrl;
-	console.log("theIframe is: " + theIframe);
-	console.log("reload Done");
 }
 
 
