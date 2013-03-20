@@ -43,55 +43,64 @@ public class UserManagerImpl implements UserManager {
     public UserManagerImpl(EntityManager manager) {
         this.entityManager = manager;
     }
+    
+    protected boolean startTxn() {
+    	boolean started=false;
+    	
+        if (!entityManager.getTransaction().isActive()) {
+        	try {
+        		entityManager.getTransaction().begin();
+        		started = true;
+        	} catch (Throwable t) {
+        		// Ignore for now
+        	}
+        }
+    	
+        return (started);
+    }
+    
+    protected void endTxn(boolean started) {
+    	if (started) {
+            entityManager.getTransaction().commit();
+    	}
+    }
 
     public User createUser(User user) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         entityManager.persist(user);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return user;
     }
 
     public User getUserById(long userId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         User user = entityManager.find(User.class, userId);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return user;
     }
 
     public void updateUser(User user) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         entityManager.merge(user);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
     }
 
     public void removeUser(User user) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         entityManager.remove(user);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
     }
 
     public List<User> getAllUser() {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Query query = entityManager.createQuery("select user from User user");
         List<User> users = query.getResultList();
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return users;
     }
 
     public User getUser(String username, String password) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Query query = entityManager.createQuery("select user from User user where user.name = :username and user.password = :password");
         query.setParameter("username", username);
         query.setParameter("password", password);
@@ -101,19 +110,17 @@ public class UserManagerImpl implements UserManager {
         if (users.size() > 0) {
             user =  users.get(0);
         }
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
 
         return user;
     }
 
     public boolean isUsernameExist(String username) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Query query = entityManager.createQuery("select user from User user where user.name = :username");
         query.setParameter("username", username);
         List<User> users = query.getResultList();
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
 
         if (users != null && users.size() > 0) {
             return true;
@@ -124,66 +131,52 @@ public class UserManagerImpl implements UserManager {
     public List<Page> getPages(long userId) {
         Query query = entityManager.createQuery("select page from Page page where page.user.id = :userId order by page.pageOrder asc");
         query.setParameter("userId", userId);
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         List<Page> pages = query.getResultList();
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return pages;
     }
 
     public Page addPage(Page page, User user) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         page.setUser(user);
         entityManager.persist(page);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return page;
     }
 
     public Page getPage(long pageId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Page page = entityManager.find(Page.class, pageId);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return page;
     }
 
     public void removePage(long pageId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Page page = entityManager.find(Page.class, pageId);
         entityManager.remove(page);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
     }
 
     public void removeWidget(long widgetId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Widget widget = entityManager.find(Widget.class, widgetId);
         widget.getPage().getWidgets().remove(widget);
         entityManager.remove(widget);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
     }
 
     public Widget getWidgetById(long widgetId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+        boolean startedTxn=startTxn();
         Widget widget = entityManager.find(Widget.class, widgetId);
-        entityManager.getTransaction().commit();
+        endTxn(startedTxn);
         return widget;
     }
 
 	public void updateWidgetPreference(long widgetId,
 			List<WidgetPreference> prefs) {
-		if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+		boolean startedTxn=startTxn();
 		Query query = entityManager.createQuery("delete from WidgetPreference pref where pref.widget.id = :id");
 		query.setParameter("id", widgetId);
 		query.executeUpdate();
@@ -194,21 +187,19 @@ public class UserManagerImpl implements UserManager {
 		}
 		
 		widget.setPrefs(prefs);
-		entityManager.getTransaction().commit();
+        endTxn(startedTxn);
 	}
 
 	public Map<String, String> getWidgetPreference(long widgetId) {
 		Map<String, String> result = new HashMap<String, String>();
-		if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+		boolean startedTxn=startTxn();
 		Widget widget = entityManager.find(Widget.class, widgetId);
 		if (widget.getPrefs() != null) {
 			for (WidgetPreference pref : widget.getPrefs()) {
 				result.put(pref.getName(), pref.getValue());
 			}
 		}
-		entityManager.getTransaction().commit();
+        endTxn(startedTxn);
 		return result;
 	}
 
