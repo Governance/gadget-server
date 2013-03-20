@@ -5,14 +5,13 @@
   <!-- DEFAULT PROPERTY VALUES -->
   <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.7" />
   <property name="deploy.dir" value="${as7.home}/standalone/deployments" />
-  <property name="version" value="1.0.0-SNAPSHOT" />
   <property name="database" value="h2"/>
   
   <target name="deploy" description="Deploys the Gadget Server">
     <echo message="Deploying the Gadget Server" />
-    <copy file="modules/gadget-server-${version}.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
-    <copy file="modules/gadget-web-${version}.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
-    <copy file="modules/gadgets-${version}.war" toFile="${deploy.dir}/gadgets.war" overwrite="true" />
+    <copy file="modules/gadget-server.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
+    <copy file="modules/gadget-web.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
+    <copy file="modules/gadgets.war" toFile="${deploy.dir}/gadgets.war" overwrite="true" />
     
     <antcall target="internal.install.gs.db.${database}" />
 

@@ -51,6 +51,7 @@
                 <include>org.overlord.gadgets.server:gadget-web:war</include>
                 <include>org.overlord.gadgets.server:gadgets:war</include>
             </includes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
         </dependencySet>
 
         <dependencySet>
