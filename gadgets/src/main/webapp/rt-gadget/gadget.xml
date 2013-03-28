@@ -43,15 +43,15 @@
 		if (!isNotEmpty(service) && !isNotEmpty(operation)) {
 			postdata = "{\"collection\":\"ServiceResponseTimes\"}";		
 		} else {
-			postdata = "{\"parent\":\"ServiceResponseTimes\", \"collection\":\"CustomCollection\",\"predicate\":{\"type\":\"MVEL\",\"expression\":";
+			postdata = "{\"parent\":\"ServiceResponseTimes\",\"predicate\":{\"type\":\"MVEL\",\"expression\":";
 			if (isNotEmpty(service) && isNotEmpty(operation)) {
-				postdata = postdata + "\"serviceType==\\\"" + service + "\\\" && operation == \\\"" + operation + "\\\"\""; 
+				postdata = postdata + "\"serviceType==\\\"" + service + "\\\" && operation == \\\"" + operation + "\\\"\"},  \"collection\":\"service_" + service + "_" + operation+ "\" "; 
 			} else if (isNotEmpty(service)) {
-				postdata = postdata + "\"serviceType==\\\"" + service + "\\\"\"";
+				postdata = postdata + "\"serviceType==\\\"" + service + "\\\"\"},  \"collection\":\"service_" + service + "\"";
 			} else if (isNotEmpty(operation)) {
-				postdata = postdata + "\"operation == \\\"" + operation + "\\\"\"";
+				postdata = postdata + "\"operation == \\\"" + operation + "\\\"\",  \"collection\":\"operation_" + operation + "\" ";
 			}
-			postdata = postdata + "} }";
+			postdata = postdata + "}";
 		}
 		
 		console.log("the post data is: " + postdata);
@@ -87,9 +87,12 @@
 		var thesvcValue = getUserPreferenceValue("services");
 		var theopValue = getUserPreferenceValue("operations");
 		var thesvc = parent.$("#services");
+		var theop = parent.$("#operations");
 		exists = false;
 		thesvc.empty();
 		thesvc.append($("<option></option>").attr("value","all").text("all"));
+		theop.empty();
+		theop.append($("<option></option>").attr("value","all").text("all"));
 		if (response.data != undefined){
 			serviceDefs = new Array(response.data.length);
 			for (i = 0; i < serviceDefs.length; i++) {
@@ -131,7 +134,7 @@
 		selectedValue = parent.$("#services").val();
 		theop = parent.$("#operations");
 		
-		console.log("the op is: " + theop + " and the selected value is: " + selectedValue);
+		//console.log("the op is: " + theop + " and the selected value is: " + selectedValue);
 		
 		theop.empty();
 		theop.append($("<option></option>").attr("value","all").text("all"));
@@ -220,12 +223,13 @@
 			min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
 			max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
 			duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts]);
+			
 		  }
 	  }
 	  
-	  return [{data:min, label:"Min"},
-			  {data:max, label:"Max"},
-			  {data:duration, label:"Average"}];
+	  return [{data:duration, label:"Average"},
+	  		  {data:min, label:"Min"},
+	  		  {data:max, label:"Max"}];
 	  	
 	}
 	

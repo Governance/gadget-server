@@ -97,8 +97,10 @@ public class Portlet extends Composite {
         this.portalId = pid;
         this.iframeId = "iframe-" + widgetId;
         initWidget(uiBinder.createAndBindUi(this));
+        
         getElement().setId(id);
         gadgetSpec.getElement().setId(iframeId);
+        gadgetSpec.getElement().setAttribute("frameborder", "0");
         
         urlBase = getGadgetServerUrlBase();
 
