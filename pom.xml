@@ -67,6 +67,12 @@
        	<shindig.version>3.0.0-beta4</shindig.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<guava.version>10.0.1</guava.version>
+		<httpcore.version>4.1.2</httpcore.version>
+		<nekohtml.version>1.9.15</nekohtml.version>
+		<joda-time.version>2.0</joda-time.version>
+		<commons-codec.version>1.5</commons-codec.version>
+		<xerces.version>2.9.1-jbossas-1</xerces.version>
+
 	</properties>
 
 	<modules>
@@ -175,11 +181,37 @@
 				<artifactId>gson</artifactId>
 				<version>${gson.version}</version>
 			</dependency>
+			<!-- remove duplicated jars in gadget-server.war -->
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
 			</dependency>
+		  <dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>${joda-time.version}</version>
+		  </dependency>
+		  <dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		    <version>${commons-codec.version}</version>
+		  </dependency>
+		  <dependency>
+		    <groupId>xerces</groupId>
+		    <artifactId>xercesImpl</artifactId>
+		    <version>${xerces.version}</version>
+		  </dependency>
+		  <dependency>
+		    <groupId>net.sourceforge.nekohtml</groupId>
+		    <artifactId>nekohtml</artifactId>
+		    <version>${nekohtml.version}</version>
+		  </dependency>
+		  <dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>${httpcore.version}</version>
+		  </dependency>
 		</dependencies>
 	</dependencyManagement>
 
