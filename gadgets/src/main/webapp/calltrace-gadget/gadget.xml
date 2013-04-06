@@ -90,6 +90,7 @@
 	  			treeObject['operation'] = task.operation;
 	  			treeObject['duration'] = task.duration;
 	  			treeObject['percentage'] = task.percentage;
+	  			treeObject['interface'] = task.interface;
 	  			treeObject['type'] = task.type;
 	  			if (task.status == "Warning") {
 	  				treeObject['addClass'] = 'warning';
@@ -164,7 +165,7 @@
 	
 	  function showTheDetail(node) {
 	  	  tabset.setSelectedTab(1);
-	  	  var properties = ['type', 'component', 'operation', 'request', 'response', 'fault', 'requestLatency', 'responseLatency', 'duration', 'percentage'];
+	  	  var properties = ['type', 'component', 'interface', 'operation', 'request', 'response', 'fault', 'requestLatency', 'responseLatency', 'duration', 'percentage'];
 	  	  var thedata = node.data;
 	  	  deleteRows();
 	  	  for(i = 0; i < properties.length; i++) {

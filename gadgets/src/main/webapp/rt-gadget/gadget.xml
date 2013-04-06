@@ -189,6 +189,7 @@
 		      top = e.pos[1] + offset.top;
 
 		   	var content = '<p>serviceType:<b>' + e.point[2] + '</b></p>'
+		   				  + '<p>interface:<b>' + e.point[5] + '</b></p>'
 						  + '<p>operation:<b>' + e.point[3] + '</b></p>'
 						  + '<p>' + e.series.label + ':<b>' + e.point[1] + '</b></p>'
 						  + '<p>time:<b>' + e.point[4] + '</b></p>';
@@ -220,9 +221,9 @@
 		  for (i = 0; i < jsondata.length; i++) {
 			rtResult = jsondata[i];
 			ts = getDateTime(new Date(rtResult.timestamp));
-			min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts]);
-			max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts]);
-			duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts]);
+			min.push([i, rtResult.min, rtResult.serviceType, rtResult.operation, ts, rtResult.interface]);
+			max.push([i, rtResult.max, rtResult.serviceType, rtResult.operation, ts, rtResult.interface]);
+			duration.push([i, rtResult.average, rtResult.serviceType, rtResult.operation, ts, rtResult.interface]);
 			
 		  }
 	  }
