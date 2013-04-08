@@ -4,7 +4,7 @@
 	 author="Jeff Yu" author_email="jeff.yuchang@gmail.com">
 	 <Require feature="setprefs" />
   </ModulePrefs>
-  <UserPref name="services" display_name="Service Types:" default_value="all" datatype="list"></UserPref>
+  <UserPref name="interface" display_name="Interface:" default_value="all" datatype="list"></UserPref>
   <UserPref name="operations" display_name="Operations:" default_value="all" datatype="list"></UserPref>
   <UserPref name="refreshCycle" display_name="Refresh Interval(sec):" default_value="30" datatype="enum">
 		<EnumValue value="30" />
@@ -37,7 +37,7 @@
 	function makeJSONRequest() {
 		var params, restUrl, postdata, svcDef, host, service, operation;
 	
-		service = getUserPreferenceValue("services");
+		service = getUserPreferenceValue("interface");
 		operation = getUserPreferenceValue("operations");
 				
 		if (!isNotEmpty(service) && !isNotEmpty(operation)) {
@@ -45,9 +45,9 @@
 		} else {
 			postdata = "{\"parent\":\"ServiceResponseTimes\",\"predicate\":{\"type\":\"MVEL\",\"expression\":";
 			if (isNotEmpty(service) && isNotEmpty(operation)) {
-				postdata = postdata + "\"serviceType==\\\"" + service + "\\\" && operation == \\\"" + operation + "\\\"\"},  \"collection\":\"service_" + service + "_" + operation+ "\" "; 
+				postdata = postdata + "\"interface==\\\"" + service + "\\\" && operation == \\\"" + operation + "\\\"\"},  \"collection\":\"interface_" + service + "_" + operation+ "\" "; 
 			} else if (isNotEmpty(service)) {
-				postdata = postdata + "\"serviceType==\\\"" + service + "\\\"\"},  \"collection\":\"service_" + service + "\"";
+				postdata = postdata + "\"interface==\\\"" + service + "\\\"\"},  \"collection\":\"interface_" + service + "\"";
 			} else if (isNotEmpty(operation)) {
 				postdata = postdata + "\"operation == \\\"" + operation + "\\\"\",  \"collection\":\"operation_" + operation + "\" ";
 			}
@@ -84,9 +84,9 @@
 	
 	function updateServiceDefinition(response) {
 		var i, theobj, serviceDefs, exists;
-		var thesvcValue = getUserPreferenceValue("services");
+		var thesvcValue = getUserPreferenceValue("interface");
 		var theopValue = getUserPreferenceValue("operations");
-		var thesvc = parent.$("#services");
+		var thesvc = parent.$("#interface");
 		var theop = parent.$("#operations");
 		exists = false;
 		thesvc.empty();
@@ -97,15 +97,15 @@
 			serviceDefs = new Array(response.data.length);
 			for (i = 0; i < serviceDefs.length; i++) {
 				theobj = new Object();
-				theobj.serviceType = response.data[i].value.serviceType;
+				theobj.interface = response.data[i].value.interface;
 				theobj.operations = response.data[i].value.operations;
 				serviceDefs[i] = theobj;
-				if (thesvcValue == theobj.serviceType) {
+				if (thesvcValue == theobj.interface) {
 					exists = true;
 				}
 			}
 			$.each(serviceDefs, function(index, value){
-				thesvc.append($("<option></option>").attr("value",serviceDefs[index].serviceType).text(serviceDefs[index].serviceType));
+				thesvc.append($("<option></option>").attr("value",serviceDefs[index].interface).text(serviceDefs[index].interface));
 			});
 			
 			if (thesvcValue != "all" && !exists) {
@@ -120,18 +120,16 @@
 			});
 			
 		}
-
-		
 	
 	}
 	
 	function refreshOperationsOptions(serviceDefs, defaultValue) {
 		var opdata, i, selectedValue, theop, exists;
-		var thesvcValue = getUserPreferenceValue("services");
+		var thesvcValue = getUserPreferenceValue("interface");
 		var theopValue = getUserPreferenceValue("operations");
 		
 		exists = false;
-		selectedValue = parent.$("#services").val();
+		selectedValue = parent.$("#interface").val();
 		theop = parent.$("#operations");
 		
 		//console.log("the op is: " + theop + " and the selected value is: " + selectedValue);
@@ -140,7 +138,7 @@
 		theop.append($("<option></option>").attr("value","all").text("all"));
 		if (selectedValue != " " && serviceDefs != undefined) {
 			for (i = 0; i < serviceDefs.length; i++) {
-				if (selectedValue == serviceDefs[i].serviceType) {
+				if (selectedValue == serviceDefs[i].interface) {
 					opdata = serviceDefs[i].operations;
 					$.each(opdata, function(index,value){
 						if (opdata[index].name == theopValue) {
@@ -188,11 +186,14 @@
 		      left = e.pos[0] + offset.left,
 		      top = e.pos[1] + offset.top;
 
-		   	var content = '<p>serviceType:<b>' + e.point[2] + '</b></p>'
-		   				  + '<p>interface:<b>' + e.point[5] + '</b></p>'
+		   	var content = '<p>interface:<b>' + e.point[5] + '</b></p>'
 						  + '<p>operation:<b>' + e.point[3] + '</b></p>'
 						  + '<p>' + e.series.label + ':<b>' + e.point[1] + '</b></p>'
 						  + '<p>time:<b>' + e.point[4] + '</b></p>';
+						  
+			if (e.point[2] != undefined && e.point[2] != "undefined" ) {
+				content = '<p>serviceType:<b>' + e.point[2] + '</b></p>' + content;
+			}
 
 		   nvtooltip.show([left, top], content);
 		  });
@@ -217,6 +218,9 @@
 	  var min = [], max = [], duration = [];
 	  var jsondata, rtResult, i, ts;
 	  jsondata = response.data;
+	  
+	  console.log("respone data ->: " + JSON.stringify(jsondata));
+	  
 	  if (jsondata != undefined) {
 		  for (i = 0; i < jsondata.length; i++) {
 			rtResult = jsondata[i];
