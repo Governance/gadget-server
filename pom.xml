@@ -54,7 +54,6 @@
 	</developers>
 
 	<properties>
-		<json.version>20090211</json.version>
 		<gin.version>1.5_past22</gin.version>
 		<gson.version>1.2.2</gson.version>
 		<guice.version>3.0</guice.version>
@@ -170,11 +169,6 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-guice</artifactId>
 				<version>${resteasy.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.json</groupId>
-				<artifactId>json</artifactId>
-				<version>${json.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
