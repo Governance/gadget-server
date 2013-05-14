@@ -11,7 +11,6 @@
     <echo message="Deploying the Gadget Server" />
     <copy file="modules/gadget-server.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
     <copy file="modules/gadget-web.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
-    <copy file="modules/gadgets.war" toFile="${deploy.dir}/gadgets.war" overwrite="true" />
     
     <antcall target="internal.install.gs.db.${database}" />
 
@@ -35,7 +34,6 @@
 	<echo message="Undeploying the Gadget Server" />
     <delete file="${deploy.dir}/gadget-server.war"/>
 	<delete file="${deploy.dir}/gadget-web.war"/>
-	<delete file="${deploy.dir}/gadgets.war"/>
 	<delete file="${deploy.dir}/gs-ds.xml"/>
   </target>   
 

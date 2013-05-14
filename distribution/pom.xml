@@ -52,12 +52,6 @@
 			    <type>war</type>
 	        <version>${project.version}</version>
 	    </dependency>
-	    <dependency>
-	        <groupId>org.overlord.gadgets.server</groupId>
-	        <artifactId>gadgets</artifactId>
-			    <type>war</type>
-	        <version>${project.version}</version>
-	    </dependency>
       <dependency>
           <groupId>mysql</groupId>
           <artifactId>mysql-connector-java</artifactId>
