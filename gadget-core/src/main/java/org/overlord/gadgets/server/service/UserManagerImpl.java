@@ -68,14 +68,17 @@ public class UserManagerImpl implements UserManager {
     public User createUser(User user) {
         boolean startedTxn=startTxn();
         entityManager.persist(user);
-        
+
         Page page = new Page();
         page.setName("Home");
         page.setColumns(2);
         page.setUser(user);
         entityManager.persist(page);
         
+        user.setCurrentPageId(page.getId());
+        
         endTxn(startedTxn);
+        
         return user;
     }
 
