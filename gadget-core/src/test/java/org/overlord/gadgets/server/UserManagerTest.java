@@ -17,10 +17,12 @@
  */
 package org.overlord.gadgets.server;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.overlord.gadgets.server.CoreModule;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
@@ -28,12 +30,9 @@ import org.overlord.gadgets.server.model.Widget;
 import org.overlord.gadgets.server.model.WidgetPreference;
 import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * @author: Jeff Yu

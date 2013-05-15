@@ -1,8 +1,8 @@
 package org.overlord.gadgets.server.service;
 
-import org.overlord.gadgets.server.model.ApplicationData;
-
 import java.util.List;
+
+import org.overlord.gadgets.server.model.ApplicationData;
 
 /**
  * @author: Jeff Yu

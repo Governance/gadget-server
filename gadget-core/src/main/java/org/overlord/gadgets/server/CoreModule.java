@@ -17,16 +17,22 @@
  */
 package org.overlord.gadgets.server;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.name.Names;
-
-import org.overlord.gadgets.server.service.*;
-
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import javax.persistence.EntityManager;
+
+import org.overlord.gadgets.server.service.ApplicationDataManager;
+import org.overlord.gadgets.server.service.ApplicationDataManagerImpl;
+import org.overlord.gadgets.server.service.GadgetService;
+import org.overlord.gadgets.server.service.GadgetServiceImpl;
+import org.overlord.gadgets.server.service.UserManager;
+import org.overlord.gadgets.server.service.UserManagerImpl;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
+import com.google.inject.name.Names;
 
 /**
  * @author: Jeff Yu

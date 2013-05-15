@@ -17,17 +17,17 @@
  */
 package org.overlord.gadgets.web.client.view;
 
+import org.overlord.gadgets.web.client.ApplicationEntryPoint;
+import org.overlord.gadgets.web.client.auth.CurrentUser;
+import org.overlord.gadgets.web.client.presenter.LoginPresenter;
+import org.overlord.gadgets.web.client.widgets.LoginForm;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-
-import org.overlord.gadgets.web.client.ApplicationEntryPoint;
-import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.presenter.LoginPresenter;
-import org.overlord.gadgets.web.client.widgets.LoginForm;
 
 /**
  * @author: Jeff Yu
@@ -39,14 +39,14 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
     private DockLayoutPanel panel;
     private LayoutPanel footerPanel;
     private LayoutPanel mainPanel;
-    
-    private LoginPresenter presenter;
-    
+
+//    private LoginPresenter presenter;
+
     private LoginForm loginForm;
 
     @Inject
     public LoginViewImpl(CurrentUser user) {
-        
+
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
 
@@ -71,11 +71,13 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
 
     }
 
+    @Override
     public void setPresenter(LoginPresenter presenter) {
-        this.presenter = presenter;
+//        this.presenter = presenter;
         loginForm.setPresenter(presenter);
     }
 
+    @Override
     public Widget asWidget() {
         return panel;
     }

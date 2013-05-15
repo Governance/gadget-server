@@ -17,14 +17,24 @@
  */
 package org.overlord.gadgets.web.server;
 
-import com.google.gson.Gson;
-import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
 import org.overlord.gadgets.server.model.WidgetPreference;
-import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.web.shared.dto.PageModel;
 import org.overlord.gadgets.web.shared.dto.Pair;
@@ -32,13 +42,8 @@ import org.overlord.gadgets.web.shared.dto.UserModel;
 import org.overlord.gadgets.web.shared.dto.UserPreference.UserPreferenceSetting;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
 
 /**
  * @author: Jeff Yu
