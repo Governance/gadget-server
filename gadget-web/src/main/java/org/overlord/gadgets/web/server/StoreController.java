@@ -17,7 +17,14 @@
  */
 package org.overlord.gadgets.web.server;
 
-import com.google.inject.Inject;
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.server.model.Page;
@@ -25,9 +32,7 @@ import org.overlord.gadgets.server.service.GadgetService;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.web.shared.dto.PageResponse;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import java.util.List;
+import com.google.inject.Inject;
 
 /**
  * @author: Jeff Yu

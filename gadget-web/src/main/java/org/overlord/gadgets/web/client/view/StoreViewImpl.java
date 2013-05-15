@@ -17,18 +17,6 @@
  */
 package org.overlord.gadgets.web.client.view;
 
-import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.ui.*;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewImpl;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-
 import org.overlord.gadgets.web.client.ApplicationEntryPoint;
 import org.overlord.gadgets.web.client.NameTokens;
 import org.overlord.gadgets.web.client.URLBuilder;
@@ -38,6 +26,22 @@ import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.client.widgets.StoreItem;
 import org.overlord.gadgets.web.shared.dto.PageResponse;
 import org.overlord.gadgets.web.shared.dto.StoreItemModel;
+
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
 /**
  * @author: Jeff Yu
@@ -49,11 +53,11 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
     private DockLayoutPanel panel;
     private LayoutPanel footerPanel;
     private LayoutPanel mainPanel;
-    
-    private StorePresenter presenter;
+
+//    private StorePresenter presenter;
 
     private CurrentUser currentUser;
-    
+
     private Label messageBar = new Label();
 
     @Inject
@@ -67,9 +71,11 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         HTML logout = new HTML("Logout");
         logout.addStyleName("header-link");
         logout.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
                 RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getInvalidSessionURL(), null,
                         new RestfulInvoker.Response() {
+                            @Override
                             public void onResponseReceived(Request request, Response response) {
                                 currentUser.setLoggedIn(false);
                                 ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
@@ -94,6 +100,7 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         HTML backToTabs = new HTML("Back to Tabs");
         backToTabs.addStyleName("header-link");
         backToTabs.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
                 ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
                         new PlaceRequest(NameTokens.INDEX_VIEW)
@@ -122,6 +129,7 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         footerPanel.add(ApplicationEntryPoint.MODULES.getFooter().asWidget());
     }
 
+    @Override
     public void loadStoreItems(PageResponse<StoreItemModel> storeItems) {
         mainPanel.clear();
 
@@ -138,14 +146,17 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         mainPanel.add(storesList);
     }
 
+    @Override
     public Widget asWidget() {
         return panel;
     }
 
+    @Override
     public void setPresenter(StorePresenter presenter) {
-        this.presenter = presenter;
+//        this.presenter = presenter;
     }
 
+    @Override
     public void clearMessageBar() {
         messageBar.setText("");
     }

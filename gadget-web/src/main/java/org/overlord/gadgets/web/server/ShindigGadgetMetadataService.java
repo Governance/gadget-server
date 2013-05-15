@@ -17,18 +17,19 @@
  */
 package org.overlord.gadgets.web.server;
 
-import org.overlord.gadgets.server.model.Gadget;
-import org.overlord.gadgets.web.shared.dto.UserPreference;
-import org.overlord.gadgets.web.shared.dto.WidgetModel;
+import java.util.Iterator;
+
+import javax.ws.rs.core.MediaType;
+
 import org.jboss.resteasy.client.ClientRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.overlord.gadgets.server.model.Gadget;
+import org.overlord.gadgets.web.shared.dto.UserPreference;
+import org.overlord.gadgets.web.shared.dto.WidgetModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.core.MediaType;
-import java.util.Iterator;
 
 /**
  * @author: Jeff Yu
@@ -37,19 +38,21 @@ import java.util.Iterator;
 public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
     private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataService.class);
-    
+
     public static final String USER_PREFS = "userPrefs";
     public static final String DATA_TYPE = "dataType";
-    
+
     //This is default one when no value was set.
     private String rpcUrl = "http://localhost:8080/gadget-server/rpc";
 
-    
-	public void setGadgetServerRPCUrl(String rpcUrl) {
+
+	@Override
+    public void setGadgetServerRPCUrl(String rpcUrl) {
 		this.rpcUrl = rpcUrl;
-		
+
 	}
-    
+
+    @Override
     public WidgetModel getGadgetMetadata(String gadgetUrl) {
 
         String responseString = getMetadata(gadgetUrl);
@@ -77,7 +80,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
             if (responseObject.has(USER_PREFS)) {
                 UserPreference userPref = new UserPreference();
                 JSONObject userPrefs = responseObject.getJSONObject(USER_PREFS);
-                Iterator keys = userPrefs.keys();
+                Iterator<?> keys = userPrefs.keys();
                 while(keys.hasNext()) {
                     String settingName = (String) keys.next();
                     UserPreference.UserPreferenceSetting theSetting = new UserPreference.UserPreferenceSetting();
@@ -166,9 +169,10 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         return responseString;
     }
 
+    @Override
     public Gadget getGadgetData(String gadgetUrl) {
         String responseString = getMetadata(gadgetUrl);
-        
+
         //now trim back the response to just the metadata for the single gadget
         try {
             JSONObject responseObject = new JSONArray(responseString).
@@ -177,7 +181,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
                     getJSONObject(gadgetUrl);
 
             JSONObject modulePref = responseObject.getJSONObject("modulePrefs");
-            
+
             Gadget gadget = new Gadget();
             gadget.setTitle(modulePref.getString("title"));
             gadget.setScreenshotUrl(modulePref.getString("screenshot"));
@@ -191,7 +195,7 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         } catch (JSONException e) {
             throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
         }
-        
+
     }
 
 
@@ -204,5 +208,5 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
         //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
         //svc.getGadgetMetadata("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
     }
-    
+
 }

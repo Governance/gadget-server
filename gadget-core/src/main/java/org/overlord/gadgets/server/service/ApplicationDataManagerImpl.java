@@ -17,14 +17,15 @@
  */
 package org.overlord.gadgets.server.service;
 
-import com.google.inject.Inject;
-
-import org.overlord.gadgets.server.model.ApplicationData;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.overlord.gadgets.server.model.ApplicationData;
+
+import com.google.inject.Inject;
 
 /**
  * @author: Jeff Yu
@@ -39,6 +40,7 @@ public class ApplicationDataManagerImpl implements ApplicationDataManager{
         this.entityManager = em;
     }
 
+    @Override
     public ApplicationData getApplicationData(String userId, String appUrl) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
@@ -46,6 +48,7 @@ public class ApplicationDataManagerImpl implements ApplicationDataManager{
         Query query = entityManager.createQuery("select app from ApplicationData app where app.userId = :userId and app.appUrl = :appUrl");
         query.setParameter("userId", userId);
         query.setParameter("appUrl", appUrl);
+        @SuppressWarnings("unchecked")
         List<ApplicationData> data = query.getResultList();
 
         entityManager.getTransaction().commit();
@@ -57,17 +60,18 @@ public class ApplicationDataManagerImpl implements ApplicationDataManager{
         return data.get(0);
     }
 
+    @Override
     public List<ApplicationData> getApplicationData(Long userId) {
         List<ApplicationData> data = new ArrayList<ApplicationData>();
-        
+
         ApplicationData d = new ApplicationData();
         d.setUserId(userId);
         d.setAppUrl("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
-        
+
         ApplicationData d2 = new ApplicationData();
         d2.setUserId(userId);
         d2.setAppUrl("http://www.gstatic.com/ig/modules/tabnews/kennedy/tabnews.xml");
-        
+
         ApplicationData d3 = new ApplicationData();
         d3.setUserId(userId);
         d3.setAppUrl("http://hosting.gmodules.com/ig/gadgets/file/112016200750717054421/currency-converter.xml");
@@ -75,7 +79,7 @@ public class ApplicationDataManagerImpl implements ApplicationDataManager{
         data.add(d);
         data.add(d2);
         data.add(d3);
-        
+
         return data;
     }
 }

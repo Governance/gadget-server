@@ -17,13 +17,13 @@
  */
 package org.overlord.gadgets.server.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.User;
 import org.overlord.gadgets.server.model.Widget;
 import org.overlord.gadgets.server.model.WidgetPreference;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Jeff Yu

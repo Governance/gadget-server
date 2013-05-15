@@ -1,9 +1,9 @@
 package org.overlord.gadgets.server.service;
 
+import java.util.List;
+
 import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.server.model.Page;
-
-import java.util.List;
 
 /**
  * @author: Jeff Yu

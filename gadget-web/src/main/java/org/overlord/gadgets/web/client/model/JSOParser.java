@@ -17,16 +17,20 @@
  */
 package org.overlord.gadgets.web.client.model;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsArrayString;
-
-import org.overlord.gadgets.web.shared.dto.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.overlord.gadgets.web.shared.dto.PageModel;
+import org.overlord.gadgets.web.shared.dto.PageResponse;
+import org.overlord.gadgets.web.shared.dto.StoreItemModel;
+import org.overlord.gadgets.web.shared.dto.UserModel;
+import org.overlord.gadgets.web.shared.dto.UserPreference;
+import org.overlord.gadgets.web.shared.dto.WidgetModel;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 
 /**
  * @author: Jeff Yu

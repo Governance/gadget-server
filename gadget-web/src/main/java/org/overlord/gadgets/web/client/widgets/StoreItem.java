@@ -17,6 +17,11 @@
  */
 package org.overlord.gadgets.web.client.widgets;
 
+import org.overlord.gadgets.web.client.URLBuilder;
+import org.overlord.gadgets.web.client.auth.CurrentUser;
+import org.overlord.gadgets.web.client.util.RestfulInvoker;
+import org.overlord.gadgets.web.shared.dto.StoreItemModel;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -25,12 +30,11 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
-
-import org.overlord.gadgets.web.client.URLBuilder;
-import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.util.RestfulInvoker;
-import org.overlord.gadgets.web.shared.dto.StoreItemModel;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author: Jeff Yu
