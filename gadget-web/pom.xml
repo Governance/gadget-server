@@ -21,6 +21,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.overlord</groupId>
+      <artifactId>overlord-commons-uiheader</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
       <scope>runtime</scope>

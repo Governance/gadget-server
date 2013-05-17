@@ -27,10 +27,12 @@ import org.overlord.gadgets.web.client.model.JSOParser;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.shared.dto.PageModel;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -58,17 +60,20 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
     @Override
     protected void revealInParent() {
         RevealRootLayoutContentEvent.fire(this, this);
+        RootLayoutPanel.get().getElement().getStyle().setTop(80, Unit.PX);
+        RootLayoutPanel.get().getElement().getStyle().setBottom(5, Unit.PX);
     }
 
     public interface IndexView extends View {
         public void setPresenter(IndexPresenter presenter);
         public void initializePages(List<PageModel> models);
     }
-    
+
     public void getPages() {
         RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPagesURL(currentUser.getUserId()), null,
                 new RestfulInvoker.Response(){
 
+                    @Override
                     public void onResponseReceived(Request request, Response response) {
                         List<PageModel> pageModels = JSOParser.getPageModels(response.getText());
                         getView().initializePages(pageModels);

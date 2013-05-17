@@ -21,10 +21,12 @@ import org.overlord.gadgets.web.client.NameTokens;
 import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -43,7 +45,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         LoginPresenter.LoginProxy>{
 
     private PlaceManager placeManager;
-    
+
     @Inject
     public LoginPresenter(EventBus bus, LoginView view, LoginProxy proxy, PlaceManager manager){
          super(bus, view, proxy);
@@ -53,12 +55,14 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
     @Override
     protected void revealInParent() {
         RevealRootLayoutContentEvent.fire(this, this);
+        RootLayoutPanel.get().getElement().getStyle().setTop(80, Unit.PX);
+        RootLayoutPanel.get().getElement().getStyle().setBottom(5, Unit.PX);
     }
 
     public interface LoginView extends View {
 
         void setPresenter(LoginPresenter presenter);
-        
+
     }
 
     @ProxyCodeSplit
@@ -79,7 +83,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
     public void forwardToLogin() {
         placeManager.revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
     }
-    
+
     public void authenticateUser(String username, String password, RestfulInvoker.Response callback) {
 
         JSONObject postData = new JSONObject();
@@ -89,12 +93,12 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getAuthenticationURL(),
                 postData.toString(), callback);
     }
-    
+
     public void checkUserName(String username, RestfulInvoker.Response callback) {
         RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getCheckUserNameURL(username),
                 null, callback);
     }
-    
+
     public void registerUser(String username, String password, String email,
                              String displayName, RestfulInvoker.Response callback) {
 
@@ -103,9 +107,9 @@ public class LoginPresenter extends Presenter<LoginPresenter.LoginView,
         postData.put("password", new JSONString(password));
         postData.put("email", new JSONString(email));
         postData.put("displayName", new JSONString(displayName));
-        
+
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRegisterUserURL(),
                 postData.toString(), callback);
     }
-    
+
 }

@@ -77,6 +77,9 @@ public class LoginViewImpl extends ViewImpl implements LoginPresenter.LoginView 
         loginForm.setPresenter(presenter);
     }
 
+    /**
+     * @see com.gwtplatform.mvp.client.View#asWidget()
+     */
     @Override
     public Widget asWidget() {
         return panel;
