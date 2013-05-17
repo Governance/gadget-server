@@ -17,15 +17,16 @@
  */
 package org.overlord.gadgets.server.service;
 
-import com.google.inject.Inject;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.server.model.Page;
 import org.overlord.gadgets.server.model.Widget;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
+import com.google.inject.Inject;
 
 /**
  * @author: Jeff Yu
@@ -34,25 +35,28 @@ import java.util.List;
 public class GadgetServiceImpl implements GadgetService{
 
     private EntityManager entityManager;
-    
+
     @Inject
     public GadgetServiceImpl(EntityManager em) {
         this.entityManager = em;
     }
-    
 
+
+    @Override
     public List<Gadget> getAllGadgets(int offset, int pageSize) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
         }
-        
+
         Query query = entityManager.createQuery("select gadget from Gadget gadget");
         query.setFirstResult(offset).setMaxResults(pageSize);
+        @SuppressWarnings("unchecked")
         List<Gadget> gadgets = query.getResultList();
         entityManager.getTransaction().commit();
         return gadgets;
     }
 
+    @Override
     public int getAllGadgetsNum() {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
@@ -64,6 +68,7 @@ public class GadgetServiceImpl implements GadgetService{
         return result.intValue();
     }
 
+    @Override
     public void addGadgetToPage(Gadget gadget, Page page) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
@@ -83,6 +88,7 @@ public class GadgetServiceImpl implements GadgetService{
         entityManager.getTransaction().commit();
     }
 
+    @Override
     public Gadget getGadgetById(long gadgetId) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();

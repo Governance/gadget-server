@@ -17,12 +17,12 @@
  */
 package org.overlord.gadgets.web.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Dictionary;
 import com.google.inject.Inject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author: Jeff Yu

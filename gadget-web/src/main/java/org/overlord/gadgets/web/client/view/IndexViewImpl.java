@@ -17,19 +17,7 @@
  */
 package org.overlord.gadgets.web.client.view;
 
-import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewImpl;
-
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import java.util.List;
 
 import org.overlord.gadgets.web.client.ApplicationEntryPoint;
 import org.overlord.gadgets.web.client.BootstrapContext;
@@ -38,11 +26,29 @@ import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.auth.CurrentUser;
 import org.overlord.gadgets.web.client.presenter.IndexPresenter;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
-import org.overlord.gadgets.web.client.widgets.*;
+import org.overlord.gadgets.web.client.widgets.AddTabForm;
+import org.overlord.gadgets.web.client.widgets.PortalLayout;
+import org.overlord.gadgets.web.client.widgets.Portlet;
+import org.overlord.gadgets.web.client.widgets.TabLayout;
 import org.overlord.gadgets.web.shared.dto.PageModel;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
 
-import java.util.List;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
 /**
  * @author: Jeff Yu

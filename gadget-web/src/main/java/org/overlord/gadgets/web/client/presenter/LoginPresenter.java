@@ -17,8 +17,12 @@
  */
 package org.overlord.gadgets.web.client.presenter;
 
+import org.overlord.gadgets.web.client.NameTokens;
+import org.overlord.gadgets.web.client.URLBuilder;
+import org.overlord.gadgets.web.client.util.RestfulInvoker;
+
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.*;
+import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.inject.Inject;
@@ -31,10 +35,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
-
-import org.overlord.gadgets.web.client.NameTokens;
-import org.overlord.gadgets.web.client.URLBuilder;
-import org.overlord.gadgets.web.client.util.RestfulInvoker;
 
 /**
  *

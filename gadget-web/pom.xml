@@ -7,7 +7,6 @@
     <groupId>org.overlord.gadgets.server</groupId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.overlord.gadgets.server</groupId>
   <artifactId>gadget-web</artifactId>
   <packaging>war</packaging>
   <name>Gadget Server::Web</name>

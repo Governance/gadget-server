@@ -22,7 +22,10 @@ import org.overlord.gadgets.web.client.auth.LoggedInGateKeeper;
 import org.overlord.gadgets.web.client.presenter.IndexPresenter;
 import org.overlord.gadgets.web.client.presenter.LoginPresenter;
 import org.overlord.gadgets.web.client.presenter.StorePresenter;
-import org.overlord.gadgets.web.client.view.*;
+import org.overlord.gadgets.web.client.view.Footer;
+import org.overlord.gadgets.web.client.view.IndexViewImpl;
+import org.overlord.gadgets.web.client.view.LoginViewImpl;
+import org.overlord.gadgets.web.client.view.StoreViewImpl;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
