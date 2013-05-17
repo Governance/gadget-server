@@ -18,7 +18,10 @@
 package org.overlord.gadgets.web.client.util;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.http.client.*;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
 
 /**
  * @author: Jeff Yu

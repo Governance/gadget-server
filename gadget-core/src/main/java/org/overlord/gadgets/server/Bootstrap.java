@@ -18,14 +18,15 @@
 
 package org.overlord.gadgets.server;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Bootstrap {
     private static final String DB_URL = "db.url";
     private static final String DB_USER = "db.user";
     private static final String DB_PASSWORD = "db.password";
-    private static final String ENVIRONMENT = "environment";
+//    private static final String ENVIRONMENT = "environment";
 
     private EntityManager entityManager;
 

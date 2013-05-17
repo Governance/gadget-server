@@ -17,11 +17,19 @@
  */
 package org.overlord.gadgets.web.server;
 
-import com.google.gson.*;
-
-import java.util.Date;
-import java.text.*;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  * A default type adapter for a {@link java.util.Date} object.<br>

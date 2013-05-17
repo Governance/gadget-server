@@ -26,12 +26,14 @@ import java.util.List;
  */
 public class PageResponse<T> implements Serializable {
 
+    private static final long serialVersionUID = 2412181515947943577L;
+
     private List<T> resultSet;
 
     private int totalResults;
-    
+
     private int pageSize;
-    
+
     private int offset;
 
     public PageResponse(List<T> resultset, int totalResults) {

@@ -17,11 +17,11 @@
  */
 package org.overlord.gadgets.server;
 
+import javax.persistence.EntityManager;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-
-import javax.persistence.EntityManager;
 
 /**
  * Creates an Hibernate Entity Manager.
