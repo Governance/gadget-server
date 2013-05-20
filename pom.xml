@@ -71,7 +71,7 @@
 		<joda-time.version>2.0</joda-time.version>
 		<commons-codec.version>1.5</commons-codec.version>
 		<xerces.version>2.9.1-jbossas-1</xerces.version>
-
+        <overlord-commons.version>1.0.6</overlord-commons.version>
 	</properties>
 
 	<modules>
@@ -92,7 +92,12 @@
 				<scope>import</scope>
 			</dependency>
 
- 			<dependency>
+			<dependency>
+			  <groupId>org.overlord</groupId>
+			  <artifactId>overlord-commons-uiheader</artifactId>
+			  <version>${overlord-commons.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.shindig</groupId>
 				<artifactId>shindig-common</artifactId>
 				<type>jar</type>

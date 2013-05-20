@@ -1,45 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-        "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0">
 
-<web-app>
+  <display-name>Gadget Web</display-name>
 
-    <display-name>Gadget Web</display-name>
+  <context-param>
+    <param-name>resteasy.guice.modules</param-name>
+    <param-value>
+      org.overlord.gadgets.web.server.GadgetServerModule,
+      org.overlord.gadgets.server.CoreModule
+    </param-value>
+  </context-param>
 
-    <context-param>
-        <param-name>resteasy.guice.modules</param-name>
-        <param-value>
-            org.overlord.gadgets.web.server.GadgetServerModule,
-            org.overlord.gadgets.server.CoreModule
-        </param-value>
-    </context-param>
+  <context-param>
+    <param-name>resteasy.servlet.mapping.prefix</param-name>
+    <param-value>/rs</param-value>
+  </context-param>
 
-    <context-param>
-        <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/rs</param-value>
-    </context-param>
+  <listener>
+    <listener-class>
+      org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
+    </listener-class>
+  </listener>
 
-    <listener>
-        <listener-class>
-            org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
-        </listener-class>
-    </listener>
+  <filter>
+    <filter-name>JSONP</filter-name>
+    <filter-class>org.overlord.gadgets.web.server.filters.JSONPFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>JSONP</filter-name>
+    <url-pattern>/rs/*</url-pattern>
+  </filter-mapping>
 
-    <servlet>
-        <servlet-name>Resteasy</servlet-name>
-        <servlet-class>
-            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-        </servlet-class>
-    </servlet>
+  <servlet>
+    <servlet-name>Resteasy</servlet-name>
+    <servlet-class>
+      org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+    </servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OverlordHeaderDataJS</servlet-name>
+    <servlet-class>org.overlord.commons.ui.header.OverlordHeaderDataJS</servlet-class>
+    <init-param>
+      <param-name>app-id</param-name>
+      <param-value>gadget-server</param-value>
+    </init-param>
+  </servlet>
 
-    <servlet-mapping>
-        <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/rs/*</url-pattern>
-    </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Resteasy</servlet-name>
+    <url-pattern>/rs/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OverlordHeaderDataJS</servlet-name>
+    <url-pattern>/js/overlord-header-data.js</url-pattern>
+  </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>Application.html</welcome-file>
-    </welcome-file-list>
+  <!-- Define a Security Constraint on this Application -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Gadget Server</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>overlorduser</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <!-- Define the Login Configuration for this Application -->
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <realm-name>Overlord</realm-name>
+    <form-login-config>
+      <form-login-page>/login.html</form-login-page>
+      <form-error-page>/loginerror.html</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <!-- Security roles referenced by this web application -->
+  <security-role>
+    <description>
+        The role that is required to log in to the Gadget Server.
+    </description>
+    <role-name>overlorduser</role-name>
+  </security-role>
+
+  <welcome-file-list>
+    <welcome-file>Application.html</welcome-file>
+  </welcome-file-list>
 
 </web-app>

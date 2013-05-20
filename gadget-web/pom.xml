@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -16,10 +17,18 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-	
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.overlord</groupId>
+      <artifactId>overlord-commons-uiheader</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
@@ -56,63 +65,62 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
-        <groupId>javax.enterprise</groupId>
-        <artifactId>cdi-api</artifactId>
-        <scope>provided</scope>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
 
     <dependency>
-        <groupId>org.overlord.gadgets.server</groupId>
-        <artifactId>gadget-core</artifactId>
-        <version>${project.version}</version>
+      <groupId>org.overlord.gadgets.server</groupId>
+      <artifactId>gadget-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
-      <dependency>
-          <groupId>org.jboss.resteasy</groupId>
-          <artifactId>resteasy-jaxrs</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.jboss.resteasy</groupId>
-          <artifactId>resteasy-jackson-provider</artifactId>
-      </dependency>
-	<dependency>
-		<groupId>org.jboss.spec.javax.ws.rs</groupId>
-		<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
-	</dependency>
-      <dependency>
-          <groupId>org.jboss.resteasy</groupId>
-          <artifactId>resteasy-guice</artifactId>
-          <exclusions>
-              <exclusion>
-                  <groupId>com.google.code.guice</groupId>
-                  <artifactId>guice</artifactId>
-              </exclusion>
-          </exclusions>
-      </dependency>
-      <dependency>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-      </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson-provider</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.ws.rs</groupId>
+      <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-guice</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.guice</groupId>
+          <artifactId>guice</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
 
+    <!-- JSON Support -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
 
-      <!-- JSON Support -->
-      <dependency>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-          <version>20090211</version>
-      </dependency>
-
-      <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-      </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
 
   </dependencies>
 
@@ -130,7 +138,7 @@
           <execution>
             <goals>
               <goal>compile</goal>
-              <goal>generateAsync</goal>             
+              <goal>generateAsync</goal>
             </goals>
           </execution>
         </executions>
@@ -157,6 +165,31 @@
         </configuration>
       </plugin>
 
+     <!-- Extra stuff to delete on a clean -->
+     <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-clean-plugin</artifactId>
+       <configuration>
+         <filesets>
+           <fileset>
+             <directory>${basedir}</directory>
+             <includes>
+               <include>www-test/**</include>
+               <include>.gwt/**</include>
+               <include>.errai/**</include>
+               <include>src/main/webapp/.errai/**</include>
+               <include>src/main/webapp/Application/**</include>
+               <include>src/main/webapp/WEB-INF/deploy/**</include>
+               <include>src/main/webapp/WEB-INF/lib/**</include>
+               <include>src/main/webapp/WEB-INF/classes/**</include>
+               <include>**/gwt-unitCache/**</include>
+               <include>**/*.JUnit/**</include>
+             </includes>
+           </fileset>
+         </filesets>
+       </configuration>
+     </plugin>
+     
     </plugins>
   </build>
 

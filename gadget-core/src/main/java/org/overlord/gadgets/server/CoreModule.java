@@ -58,11 +58,23 @@ public class CoreModule extends AbstractModule{
         try {
             is = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_PROPERTIES);
             if (is == null) {
-                System.err.println("Cant locate properties");
+                System.err.println("Can't locate properties");
                 throw new IOException("Failed to open " + DEFAULT_PROPERTIES);
             }
             properties = new Properties();
             properties.load(is);
+
+            // Now override with system properties
+            if (System.getProperty(Bootstrap.DB_DRIVER) != null)
+                properties.put(Bootstrap.DB_DRIVER, System.getProperty(Bootstrap.DB_DRIVER));
+            if (System.getProperty(Bootstrap.DB_URL) != null)
+                properties.put(Bootstrap.DB_URL, System.getProperty(Bootstrap.DB_URL));
+            if (System.getProperty(Bootstrap.DB_USER) != null)
+                properties.put(Bootstrap.DB_USER, System.getProperty(Bootstrap.DB_USER));
+            if (System.getProperty(Bootstrap.DB_PASSWORD) != null)
+                properties.put(Bootstrap.DB_PASSWORD, System.getProperty(Bootstrap.DB_PASSWORD));
+            if (System.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO) != null)
+                properties.put(Bootstrap.HIBERNATE_HBM2DDL_AUTO, System.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO));
         } catch (IOException e) {
             throw new RuntimeException( "Unable to load properties: " + DEFAULT_PROPERTIES);
         } finally {
@@ -72,9 +84,9 @@ public class CoreModule extends AbstractModule{
                 } catch(Exception e) {
                     System.err.println("closed inputstream error.");
                 }
-                
+
             }
-           
+
         }
     }
 
