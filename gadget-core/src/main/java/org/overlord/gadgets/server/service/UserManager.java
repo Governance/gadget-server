@@ -30,33 +30,31 @@ import org.overlord.gadgets.server.model.WidgetPreference;
  * @date: 16/03/12
  */
 public interface UserManager {
-    
+
     User createUser(User user);
-    
+
     User getUserById(long userId);
-    
+
     void updateUser(User user);
-    
+
     void removeUser(User user);
 
     List<User> getAllUser();
 
-    User getUser(String username, String password);
-    
-    boolean isUsernameExist(String username);
+    User getUser(String username);
 
     List<Page> getPages(long userId);
-    
+
     Page addPage(Page page, User user);
-    
+
     Page getPage(long pageId);
 
     void removePage(long pageId);
 
     void removeWidget(long widgetId);
-    
+
     void updateWidgetPreference(long widgetId, List<WidgetPreference> prefs);
-    
+
     Map<String, String> getWidgetPreference(long widgetId);
 
     Widget getWidgetById(long widgetId);

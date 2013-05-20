@@ -22,7 +22,6 @@ import java.util.List;
 import org.overlord.gadgets.web.client.NameTokens;
 import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.auth.LoggedInGateKeeper;
 import org.overlord.gadgets.web.client.model.JSOParser;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.shared.dto.PageModel;
@@ -38,7 +37,6 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
@@ -84,7 +82,6 @@ public class IndexPresenter extends Presenter<IndexPresenter.IndexView,
 
     @ProxyCodeSplit
     @NameToken(NameTokens.INDEX_VIEW)
-    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface IndexProxy extends ProxyPlace<IndexPresenter> {}
 
 

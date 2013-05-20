@@ -18,13 +18,10 @@
 package org.overlord.gadgets.web.client;
 
 import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.auth.LoggedInGateKeeper;
 import org.overlord.gadgets.web.client.presenter.IndexPresenter;
-import org.overlord.gadgets.web.client.presenter.LoginPresenter;
 import org.overlord.gadgets.web.client.presenter.StorePresenter;
 import org.overlord.gadgets.web.client.view.Footer;
 import org.overlord.gadgets.web.client.view.IndexViewImpl;
-import org.overlord.gadgets.web.client.view.LoginViewImpl;
 import org.overlord.gadgets.web.client.view.StoreViewImpl;
 
 import com.google.gwt.event.shared.EventBus;
@@ -32,7 +29,6 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.RootPresenter;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
@@ -50,18 +46,15 @@ public class ApplicationModule extends AbstractPresenterModule {
         bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
         bind(RootPresenter.class).asEagerSingleton();
 
-        bind(Gatekeeper.class).to(LoggedInGateKeeper.class);
         bind(CurrentUser.class).in(Singleton.class);
         bind(BootstrapContext.class).in(Singleton.class);
         bind(ApplicationProperties.class).to(BootstrapContext.class).in(Singleton.class);
-        
+
         bind(Footer.class).in(Singleton.class);
 
         //Presenters
         bindPresenter(IndexPresenter.class, IndexPresenter.IndexView.class, IndexViewImpl.class,
                 IndexPresenter.IndexProxy.class);
-        bindPresenter(LoginPresenter.class, LoginPresenter.LoginView.class, LoginViewImpl.class,
-                LoginPresenter.LoginProxy.class);
         bindPresenter(StorePresenter.class, StorePresenter.StoreView.class, StoreViewImpl.class,
                 StorePresenter.StoreProxy.class);
     }

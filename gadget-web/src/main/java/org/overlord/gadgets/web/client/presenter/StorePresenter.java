@@ -20,7 +20,6 @@ package org.overlord.gadgets.web.client.presenter;
 import org.overlord.gadgets.web.client.NameTokens;
 import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.auth.LoggedInGateKeeper;
 import org.overlord.gadgets.web.client.model.JSOParser;
 import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.shared.dto.PageResponse;
@@ -37,7 +36,6 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
@@ -72,7 +70,6 @@ public class StorePresenter extends Presenter<StorePresenter.StoreView, StorePre
 
     @ProxyCodeSplit
     @NameToken(NameTokens.WIDGET_STORE)
-    @UseGatekeeper(LoggedInGateKeeper.class)
     public interface StoreProxy extends ProxyPlace<StorePresenter> {}
 
 
