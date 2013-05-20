@@ -22,10 +22,8 @@ import java.util.List;
 import org.overlord.gadgets.web.client.ApplicationEntryPoint;
 import org.overlord.gadgets.web.client.BootstrapContext;
 import org.overlord.gadgets.web.client.NameTokens;
-import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.auth.CurrentUser;
 import org.overlord.gadgets.web.client.presenter.IndexPresenter;
-import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.client.widgets.AddTabForm;
 import org.overlord.gadgets.web.client.widgets.PortalLayout;
 import org.overlord.gadgets.web.client.widgets.Portlet;
@@ -36,14 +34,10 @@ import org.overlord.gadgets.web.shared.dto.WidgetModel;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -64,9 +58,9 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
     private DockLayoutPanel panel;
 
     private BootstrapContext context;
-    
+
     private IndexPresenter presenter;
-    
+
     private CurrentUser currentUser;
 
     @Inject
@@ -76,36 +70,10 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
 
-        HTML logout = new HTML("Logout");
-        logout.addStyleName("header-link");
-        logout.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getInvalidSessionURL(), null,
-                        new RestfulInvoker.Response() {
-                            public void onResponseReceived(Request request, Response response) {
-                                currentUser.setLoggedIn(false);
-                                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
-                                        new PlaceRequest(NameTokens.LOGIN_VIEW));
-                            }
-                        });
-            }
-        });
-
-        headerPanel.add(logout);
-
-        headerPanel.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
-        
-        Label userLabel = new Label(currentUser.getDisplayName());
-        userLabel.setStyleName("userinfo");
-        headerPanel.add(userLabel);
-
-        headerPanel.setWidgetRightWidth(userLabel, 55, Style.Unit.PX, 150, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(userLabel, 2, Style.Unit.PX, 28, Style.Unit.PX);
-
         HTML store = new HTML("Widget Store");
         store.addStyleName("header-link");
         store.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
             	if (currentUser.getCurrentPage() != 0) {
 	                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
@@ -136,6 +104,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         Anchor anchor = new Anchor();
         anchor.setText("+");
         anchor.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent clickEvent) {
                 addTabForm.show();
             }
@@ -154,6 +123,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
 
     }
 
+    @Override
     public void initializePages(List<PageModel> pageModels) {
 
         mainContentPanel.clearAllTabs();
@@ -174,17 +144,19 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         mainContentPanel.selectCurrentActiveTab();
     }
 
+    @Override
     public Widget asWidget() {
         return panel;
     }
 
+    @Override
     public void setPresenter(IndexPresenter presenter) {
         this.presenter = presenter;
     }
-    
+
     /**
      * JNSI methods
-     * 
+     *
      * @param alertMsg
      */
     private static native void alertWindow(String alertMsg) /*-{

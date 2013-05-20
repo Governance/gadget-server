@@ -34,7 +34,8 @@ public class ApplicationPlaceManager extends PlaceManagerImpl {
         super(bus, formatter);
     }
 
+    @Override
     public void revealDefaultPlace() {
-        revealPlace(new PlaceRequest(NameTokens.LOGIN_VIEW));
+        revealPlace(new PlaceRequest(NameTokens.INDEX_VIEW));
     }
 }

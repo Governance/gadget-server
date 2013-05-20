@@ -24,29 +24,9 @@ import com.google.gwt.core.client.GWT;
  * @date: 20/03/12
  */
 public class URLBuilder {
-    
+
     private final static String urlBase = GWT.getHostPageBaseURL();
 
-    public static String getAllUsersURL() {
-        return urlBase + "rs/users/all";
-    }
-    
-    public static String getRegisterUserURL() {
-        return urlBase + "rs/users/user";
-    }
-    
-    public static String getCheckUserNameURL(String username) {
-        return urlBase + "rs/users/user/username/check";
-    }
-    
-    public static String getInvalidSessionURL() {
-        return urlBase + "rs/users/user/invalid";
-    }
-    
-    public static String getAuthenticationURL() {
-        return urlBase + "rs/users/authentication";
-    }
-    
     public static String getPagesURL(long userId) {
         return urlBase + "rs/users/user/" + userId + "/pages";
     }
@@ -54,31 +34,31 @@ public class URLBuilder {
     public static String getAddPageURL(long userId) {
         return urlBase + "rs/users/user/" + userId + "/page";
     }
-    
+
     public static String updateCurrentPageId(long userId, long pageId) {
     	return urlBase + "rs/users/user/" + userId + "/current/" + pageId;
     }
-    
+
     public static String getStoreURL(int offset, int pageSize) {
         return urlBase + "rs/stores/all/" + offset + "/" + pageSize;
     }
-    
+
     public static String getAddGadgetToPageURL(long pageId, long gadgetId) {
         return urlBase + "rs/stores/page/" + pageId + "/gadget/" + gadgetId;
     }
-    
+
     public static String getRemoveWidgetURL(long widgetId) {
         return urlBase + "rs/users/widget/" + widgetId + "/remove";
     }
-    
+
     public static String getRemovePageURL(long pageId) {
         return urlBase + "rs/users/user/page/" + pageId + "/remove";
     }
-    
+
     public static String updatePreferenceURL(long widgetId) {
     	return urlBase + "rs/users/widget/"+widgetId+"/update";
     }
-    
+
     public static String getPreferenceValuesURL(long widgetId) {
     	return urlBase + "rs/users/widget/" + widgetId;
     }

@@ -33,11 +33,11 @@ import com.google.inject.name.Named;
  */
 public class Bootstrap {
 
-    private static final String DB_DRIVER = "db.driver";
-    private static final String DB_URL = "db.url";
-    private static final String DB_USER = "db.user";
-    private static final String DB_PASSWORD = "db.password";
-    private static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+    protected static final String DB_DRIVER = "db.driver";
+    protected static final String DB_URL = "db.url";
+    protected static final String DB_USER = "db.user";
+    protected static final String DB_PASSWORD = "db.password";
+    protected static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
     private EntityManager entityManager;
 

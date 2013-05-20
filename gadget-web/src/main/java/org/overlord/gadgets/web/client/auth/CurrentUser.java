@@ -17,28 +17,55 @@
  */
 package org.overlord.gadgets.web.client.auth;
 
+
 /**
  * @author: Jeff Yu
  * @date: 10/05/11
  */
 public class CurrentUser {
 
-    private boolean loggedIn;
-
     private String userName;
-    
+
     private String displayName;
 
     private long userId;
 
     private long currentPage;
 
-    public boolean isLoggedIn() {
-        return loggedIn;
+    /**
+     * Constructor.
+     */
+    public CurrentUser() {
+        initFromJS();
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    /**
+     * Initialize the current user from information in a well-known javascript
+     * variable.
+     */
+    private native final void initFromJS() /*-{
+        try {
+            this.@org.overlord.gadgets.web.client.auth.CurrentUser::init(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(
+                $wnd.g_currentUser.userName, $wnd.g_currentUser.displayName,
+                '' + $wnd.g_currentUser.userId, '' + $wnd.g_currentUser.currentPageId);
+        } catch (e) {
+            this.@org.overlord.gadgets.web.client.auth.CurrentUser::init(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(
+                "<unknown>", "Unknown", "-1", "0");
+        }
+    }-*/;
+
+    /**
+     * Init from values.
+     * @param userName
+     * @param displayName
+     * @param userId
+     * @param currentPage
+     */
+    private void init(String userName, String displayName, String userId, String currentPage) {
+        this.userName = userName;
+        this.displayName = displayName;
+        this.userId = Long.parseLong(userId);
+        this.currentPage = Long.parseLong(currentPage);
     }
 
     public String getUserName() {

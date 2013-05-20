@@ -18,9 +18,7 @@
 package org.overlord.gadgets.web.client;
 
 import org.overlord.gadgets.web.client.auth.CurrentUser;
-import org.overlord.gadgets.web.client.auth.LoggedInGateKeeper;
 import org.overlord.gadgets.web.client.presenter.IndexPresenter;
-import org.overlord.gadgets.web.client.presenter.LoginPresenter;
 import org.overlord.gadgets.web.client.presenter.StorePresenter;
 import org.overlord.gadgets.web.client.view.Footer;
 
@@ -28,7 +26,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 /**
@@ -45,13 +42,9 @@ public interface ApplicationUI extends Ginjector {
     EventBus getEventBus();
 
     AsyncProvider<IndexPresenter> getIndexPresenter();
-    AsyncProvider<LoginPresenter> getLoginPresenter();
     AsyncProvider<StorePresenter> getStorePresenter();
-    
-    Footer getFooter();
 
-    @DefaultGatekeeper
-    LoggedInGateKeeper getLoggedInGateKeeper();
+    Footer getFooter();
 
     CurrentUser getCurrentUser();
 }

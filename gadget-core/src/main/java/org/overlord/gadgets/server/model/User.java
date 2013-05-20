@@ -55,12 +55,9 @@ public class User implements Serializable{
     @Column(name="EMAIL")
     private String email;
 
-    @Column(name="PASSWD")
-    private String password;
-
     @OneToMany(orphanRemoval = true, mappedBy = "user")
     private List<Page> pages = new ArrayList<Page>();
-    
+
     @ManyToMany
     @JoinTable(name="GS_USER_GROUP", joinColumns = {
     		@JoinColumn(name="USER_ID")
@@ -68,7 +65,7 @@ public class User implements Serializable{
     		@JoinColumn(name="GROUP_ID")
     })
     private List<Group> groups = new ArrayList<Group>();
-    
+
     @Column(name="USER_ROLE")
     private String role;
 
@@ -107,16 +104,8 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Long getCurrentPageId() {
-    	if (null == currentPageId) 
+    	if (null == currentPageId)
     		currentPageId = new Long(0);
         return currentPageId;
     }
@@ -160,5 +149,5 @@ public class User implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
-    
+
 }

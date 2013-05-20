@@ -19,10 +19,8 @@ package org.overlord.gadgets.web.client.view;
 
 import org.overlord.gadgets.web.client.ApplicationEntryPoint;
 import org.overlord.gadgets.web.client.NameTokens;
-import org.overlord.gadgets.web.client.URLBuilder;
 import org.overlord.gadgets.web.client.auth.CurrentUser;
 import org.overlord.gadgets.web.client.presenter.StorePresenter;
-import org.overlord.gadgets.web.client.util.RestfulInvoker;
 import org.overlord.gadgets.web.client.widgets.StoreItem;
 import org.overlord.gadgets.web.shared.dto.PageResponse;
 import org.overlord.gadgets.web.shared.dto.StoreItemModel;
@@ -30,9 +28,6 @@ import org.overlord.gadgets.web.shared.dto.StoreItemModel;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -67,35 +62,6 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
 
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
-
-        HTML logout = new HTML("Logout");
-        logout.addStyleName("header-link");
-        logout.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getInvalidSessionURL(), null,
-                        new RestfulInvoker.Response() {
-                            @Override
-                            public void onResponseReceived(Request request, Response response) {
-                                currentUser.setLoggedIn(false);
-                                ApplicationEntryPoint.MODULES.getPlaceManager().revealPlace(
-                                        new PlaceRequest(NameTokens.LOGIN_VIEW));
-                            }
-                        });
-            }
-        });
-
-        headerPanel.add(logout);
-
-        headerPanel.setWidgetRightWidth(logout, 5, Style.Unit.PX, 60, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(logout, 2, Style.Unit.PX, 28, Style.Unit.PX);
-
-        Label userLabel = new Label(currentUser.getDisplayName());
-        userLabel.setStyleName("userinfo");
-        headerPanel.add(userLabel);
-
-        headerPanel.setWidgetRightWidth(userLabel, 55, Style.Unit.PX, 150, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(userLabel, 2, Style.Unit.PX, 28, Style.Unit.PX);
 
         HTML backToTabs = new HTML("Back to Tabs");
         backToTabs.addStyleName("header-link");

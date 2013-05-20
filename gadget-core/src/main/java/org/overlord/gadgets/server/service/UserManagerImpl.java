@@ -75,11 +75,11 @@ public class UserManagerImpl implements UserManager {
         page.setColumns(2);
         page.setUser(user);
         entityManager.persist(page);
-        
+
         user.setCurrentPageId(page.getId());
-        
+
         endTxn(startedTxn);
-        
+
         return user;
     }
 
@@ -116,11 +116,10 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public User getUser(String username, String password) {
+    public User getUser(String username) {
         boolean startedTxn=startTxn();
-        Query query = entityManager.createQuery("select user from User user where user.name = :username and user.password = :password");
+        Query query = entityManager.createQuery("select user from User user where user.name = :username");
         query.setParameter("username", username);
-        query.setParameter("password", password);
 
         @SuppressWarnings("unchecked")
         List<User> users = query.getResultList();
@@ -131,21 +130,6 @@ public class UserManagerImpl implements UserManager {
         endTxn(startedTxn);
 
         return user;
-    }
-
-    @Override
-    public boolean isUsernameExist(String username) {
-        boolean startedTxn=startTxn();
-        Query query = entityManager.createQuery("select user from User user where user.name = :username");
-        query.setParameter("username", username);
-        @SuppressWarnings("unchecked")
-        List<User> users = query.getResultList();
-        endTxn(startedTxn);
-
-        if (users != null && users.size() > 0) {
-            return true;
-        }
-        return false;
     }
 
     @Override
