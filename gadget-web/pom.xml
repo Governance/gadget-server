@@ -165,6 +165,31 @@
         </configuration>
       </plugin>
 
+     <!-- Extra stuff to delete on a clean -->
+     <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-clean-plugin</artifactId>
+       <configuration>
+         <filesets>
+           <fileset>
+             <directory>${basedir}</directory>
+             <includes>
+               <include>www-test/**</include>
+               <include>.gwt/**</include>
+               <include>.errai/**</include>
+               <include>src/main/webapp/.errai/**</include>
+               <include>src/main/webapp/Application/**</include>
+               <include>src/main/webapp/WEB-INF/deploy/**</include>
+               <include>src/main/webapp/WEB-INF/lib/**</include>
+               <include>src/main/webapp/WEB-INF/classes/**</include>
+               <include>**/gwt-unitCache/**</include>
+               <include>**/*.JUnit/**</include>
+             </includes>
+           </fileset>
+         </filesets>
+       </configuration>
+     </plugin>
+     
     </plugins>
   </build>
 

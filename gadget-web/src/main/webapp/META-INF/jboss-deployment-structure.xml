@@ -1,0 +1,8 @@
+<jboss-deployment-structure>
+  <deployment>
+    <dependencies>
+      <module name="org.picketlink" />
+      <module name="org.overlord.commons.overlord-commons-auth" />
+    </dependencies>
+  </deployment>
+</jboss-deployment-structure>
