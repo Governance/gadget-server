@@ -37,7 +37,7 @@ public class Bootstrap {
     private static final String DB_URL = "db.url";
     private static final String DB_USER = "db.user";
     private static final String DB_PASSWORD = "db.password";
-//    private static final String ENVIRONMENT = "environment";
+    private static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
     private EntityManager entityManager;
 
@@ -45,16 +45,19 @@ public class Bootstrap {
     private String dbUrl;
     private String dbUser;
     private String dbPassword;
+    private String hibernateHbm2DdlAuto;
 
     @Inject
     public Bootstrap(@Named(DB_DRIVER) String dbDriver,
                      @Named(DB_URL) String dbUrl, @Named(DB_USER) String dbUser,
-                     @Named(DB_PASSWORD) String dbPassword) {
+                     @Named(DB_PASSWORD) String dbPassword,
+                     @Named(HIBERNATE_HBM2DDL_AUTO) String hibernateHbm2DdlAuto) {
 
         this.dbDriver = dbDriver;
         this.dbUrl = dbUrl;
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
+        this.hibernateHbm2DdlAuto = hibernateHbm2DdlAuto;
 
     }
 
@@ -77,7 +80,9 @@ public class Bootstrap {
         if (isNotEmpty(dbPassword)) {
             properties.put("hibernate.connection.password", dbPassword);
         }
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+        if (isNotEmpty(hibernateHbm2DdlAuto)) {
+            properties.put("hibernate.hbm2ddl.auto", hibernateHbm2DdlAuto);
+        }
 
         EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(unitName, properties);
         entityManager = emFactory.createEntityManager();
