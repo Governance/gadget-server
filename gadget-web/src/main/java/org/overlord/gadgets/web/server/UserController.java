@@ -97,7 +97,6 @@ public class UserController {
 
         List<PageModel> pageModels = new ArrayList<PageModel>();
         String serverBaseUrl = getServerBaseUrl(request);
-        metadataService.setGadgetServerRPCUrl(serverBaseUrl + "/gadget-server/rpc");
 
         for (Page page : pages) {
             PageModel pageModel = new PageModel();

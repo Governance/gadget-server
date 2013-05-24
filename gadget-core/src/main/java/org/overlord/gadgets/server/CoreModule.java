@@ -17,8 +17,6 @@
  */
 package org.overlord.gadgets.server;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
@@ -30,7 +28,6 @@ import org.overlord.gadgets.server.service.GadgetServiceImpl;
 import org.overlord.gadgets.server.service.UserManager;
 import org.overlord.gadgets.server.service.UserManagerImpl;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 
@@ -38,56 +35,23 @@ import com.google.inject.name.Names;
  * @author: Jeff Yu
  * @date: 18/01/12
  */
-public class CoreModule extends AbstractModule{
+public class CoreModule extends ConfiguredModule {
 
-    private final static String DEFAULT_PROPERTIES = "gadget-server.properties";
-    private Properties properties;
     private EntityManager entityManager;
 
-
+    /**
+     * Constructor.
+     */
     public CoreModule() {
         this(null);
     }
 
     /**
-     *
+     * Constructor.
+     * @param entityManager
      */
     public CoreModule(EntityManager entityManager) {
         this.entityManager = entityManager;
-        InputStream is = null;
-        try {
-            is = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_PROPERTIES);
-            if (is == null) {
-                System.err.println("Can't locate properties");
-                throw new IOException("Failed to open " + DEFAULT_PROPERTIES);
-            }
-            properties = new Properties();
-            properties.load(is);
-
-            // Now override with system properties
-            if (System.getProperty(Bootstrap.DB_DRIVER) != null)
-                properties.put(Bootstrap.DB_DRIVER, System.getProperty(Bootstrap.DB_DRIVER));
-            if (System.getProperty(Bootstrap.DB_URL) != null)
-                properties.put(Bootstrap.DB_URL, System.getProperty(Bootstrap.DB_URL));
-            if (System.getProperty(Bootstrap.DB_USER) != null)
-                properties.put(Bootstrap.DB_USER, System.getProperty(Bootstrap.DB_USER));
-            if (System.getProperty(Bootstrap.DB_PASSWORD) != null)
-                properties.put(Bootstrap.DB_PASSWORD, System.getProperty(Bootstrap.DB_PASSWORD));
-            if (System.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO) != null)
-                properties.put(Bootstrap.HIBERNATE_HBM2DDL_AUTO, System.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO));
-        } catch (IOException e) {
-            throw new RuntimeException( "Unable to load properties: " + DEFAULT_PROPERTIES);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch(Exception e) {
-                    System.err.println("closed inputstream error.");
-                }
-
-            }
-
-        }
     }
 
     /**
@@ -97,7 +61,14 @@ public class CoreModule extends AbstractModule{
      */
     @Override
     protected void configure() {
-        Names.bindProperties(this.binder(), properties);
+        Properties names = new Properties();
+        names.put(Bootstrap.DB_DRIVER, properties.getProperty(Bootstrap.DB_DRIVER, ""));
+        names.put(Bootstrap.DB_URL, properties.getProperty(Bootstrap.DB_URL, ""));
+        names.put(Bootstrap.DB_USER, properties.getProperty(Bootstrap.DB_USER, ""));
+        names.put(Bootstrap.DB_PASSWORD, properties.getProperty(Bootstrap.DB_PASSWORD, ""));
+        names.put(Bootstrap.JPA_UNITNAME, properties.getProperty(Bootstrap.JPA_UNITNAME, ""));
+        names.put(Bootstrap.HIBERNATE_HBM2DDL_AUTO, properties.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO, ""));
+        Names.bindProperties(this.binder(), names);
 
         if (entityManager == null) {
             bind(EntityManager.class).toProvider(EntityManagerProvider.class).in(Scopes.SINGLETON);
@@ -108,7 +79,6 @@ public class CoreModule extends AbstractModule{
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
         bind(GadgetService.class).to(GadgetServiceImpl.class).in(Scopes.SINGLETON);
-
     }
 
 }

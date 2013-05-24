@@ -17,19 +17,31 @@
  */
 package org.overlord.gadgets.web.server;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.resteasy.client.ClientRequest;
-import org.json.JSONArray;
+import org.apache.shindig.auth.AnonymousSecurityToken;
+import org.apache.shindig.gadgets.servlet.GadgetsHandler;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.BaseResponse;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.EnumValuePair;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.Error;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.MetadataResponse;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.ModulePrefs;
+import org.apache.shindig.gadgets.servlet.GadgetsHandlerApi.UserPref;
+import org.apache.shindig.protocol.BaseRequestItem;
+import org.apache.shindig.protocol.conversion.BeanConverter;
+import org.apache.shindig.protocol.conversion.BeanJsonConverter;
+import org.apache.shindig.protocol.multipart.FormDataItem;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.overlord.gadgets.server.model.Gadget;
 import org.overlord.gadgets.web.shared.dto.UserPreference;
 import org.overlord.gadgets.web.shared.dto.WidgetModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * @author: Jeff Yu
@@ -37,72 +49,62 @@ import org.slf4j.LoggerFactory;
  */
 public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
-    private static Logger logger = LoggerFactory.getLogger(ShindigGadgetMetadataService.class);
-
     public static final String USER_PREFS = "userPrefs";
     public static final String DATA_TYPE = "dataType";
 
-    //This is default one when no value was set.
-    private String rpcUrl = "http://localhost:8080/gadget-server/rpc";
+    @Inject
+    private GadgetsHandler gadgetsHandler;
+    @Inject
+    @Named("shindig.bean.converter.json")
+    protected BeanConverter jsonConverter;
 
+    /**
+     * Constructor.
+     */
+    public ShindigGadgetMetadataService() {
+    }
 
-	@Override
-    public void setGadgetServerRPCUrl(String rpcUrl) {
-		this.rpcUrl = rpcUrl;
-
-	}
-
+    /**
+     * @see org.overlord.gadgets.web.server.GadgetMetadataService#getGadgetMetadata(java.lang.String)
+     */
     @Override
     public WidgetModel getGadgetMetadata(String gadgetUrl) {
-
-        String responseString = getMetadata(gadgetUrl);
-
-        logger.debug( "gadget url is: " + gadgetUrl +  ", gadget metadata is: " + responseString);
-
-        //now trim back the response to just the metadata for the single gadget
         try {
-            JSONObject responseObject = new JSONArray(responseString).
-                    getJSONObject(0).
-                    getJSONObject("result").
-                    getJSONObject(gadgetUrl);
-
+            MetadataResponse metaDataFromShindig = getMetaDataFromShindig(gadgetUrl);
             WidgetModel model = new WidgetModel();
-            model.setIframeUrl("http:" + responseObject.getString("iframeUrl"));
-            model.setName(responseObject.getJSONObject("modulePrefs").getString("title"));
+            model.setIframeUrl("http:" + metaDataFromShindig.getIframeUrl());
+            model.setName(metaDataFromShindig.getModulePrefs().getTitle());
             model.setSpecUrl(gadgetUrl);
-
-            logger.debug(responseObject.toString());
 
             // check to see if this gadget has at least one non-hidden user pref
             // to determine if we should display the edit prefs button
             boolean hasPrefsToEdit = false;
 
-            if (responseObject.has(USER_PREFS)) {
+            if (metaDataFromShindig.getUserPrefs() != null && metaDataFromShindig.getUserPrefs().size() > 0) {
                 UserPreference userPref = new UserPreference();
-                JSONObject userPrefs = responseObject.getJSONObject(USER_PREFS);
-                Iterator<?> keys = userPrefs.keys();
-                while(keys.hasNext()) {
-                    String settingName = (String) keys.next();
+                Map<String, UserPref> userPrefs = metaDataFromShindig.getUserPrefs();
+                Iterator<String> keys = userPrefs.keySet().iterator();
+                while (keys.hasNext()) {
+                    String settingName = keys.next();
                     UserPreference.UserPreferenceSetting theSetting = new UserPreference.UserPreferenceSetting();
-                    JSONObject setting = userPrefs.getJSONObject(settingName);
-                    String theType = setting.getString(DATA_TYPE);
+                    UserPref setting = userPrefs.get(settingName);
+                    String theType = String.valueOf(setting.getDataType());
                     if (!UserPreference.Type.HIDDEN.toString().equals(theType)) {
                         hasPrefsToEdit = true;
                     }
 
-                    theSetting.setName(setting.getString("name"));
-                    theSetting.setDefaultValue(setting.getString("defaultValue"));
-                    theSetting.setDisplayName(setting.getString("displayName"));
-                    theSetting.setRequired(Boolean.valueOf(setting.getString("required")));
+                    theSetting.setName(setting.getName());
+                    theSetting.setDefaultValue(setting.getDefaultValue());
+                    theSetting.setDisplayName(setting.getDisplayName());
+                    theSetting.setRequired(setting.getRequired());
                     theSetting.setType(UserPreference.Type.valueOf(theType));
 
-                    if (setting.has("orderedEnumValues")) {
-                        JSONArray enumValues = setting.getJSONArray("orderedEnumValues");
-                        for (int i =0; i < enumValues.length(); i++) {
+                    List<EnumValuePair> enumValues = setting.getOrderedEnumValues();
+                    if (enumValues != null && enumValues.size() > 0) {
+                        for (EnumValuePair enumValuePair : enumValues) {
                             UserPreference.Option option = new UserPreference.Option();
-                            JSONObject theOption = enumValues.getJSONObject(i);
-                            option.setValue(theOption.getString("value"));
-                            option.setDisplayValue(theOption.getString("displayValue"));
+                            option.setValue(enumValuePair.getValue());
+                            option.setDisplayValue(enumValuePair.getDisplayValue());
                             theSetting.addEnumOption(option);
                         }
                     }
@@ -114,99 +116,79 @@ public class ShindigGadgetMetadataService implements GadgetMetadataService {
 
             return model;
         } catch (JSONException e) {
-            throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
+            throw new IllegalArgumentException(
+                    "Error occurred while processing response from shindig metadata call", e);
         }
 
     }
 
-    private String getMetadata(String gadgetUrl) {
-        JSONArray rpcArray = new JSONArray();
-        try {
-            JSONObject fetchMetadataRpcOperation = new JSONObject()
-                    .put("method", "gadgets.metadata")
-                    .put("id", "gadgets.metadata")
-                    .put("params", new JSONObject()
-                            .put("container", "default")
-                            .put("view", "home")
-                            .put("st", "default")
-                            .put("debug", true)
-
-                            .append("ids", gadgetUrl)
-                            .append("fields", "iframeUrl")
-                            .append("fields", "modulePrefs.*")
-                            .append("fields", "needsTokenRefresh")
-                            .append("fields", "userPrefs.*")
-                            .append("fields", "views.preferredHeight")
-                            .append("fields", "views.preferredWidth")
-                            .append("fields", "expireTimeMs")
-                            .append("fields", "responseTimeMs")
-
-                            .put("userId", "@viewer")
-                            .put("groupId", "@self")
-                    );
-
-            rpcArray.put(fetchMetadataRpcOperation);
-        } catch (JSONException e) {
-            throw new IllegalArgumentException("Error occurred while generating data for shindig metadata call", e);
-        }
-
-        //convert the json object to a string
-        String postData = rpcArray.toString();
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("requestContent: {}", postData);
-        }
-
-        ClientRequest request = new ClientRequest(this.rpcUrl);
-        request.accept("application/json").body(MediaType.APPLICATION_JSON, postData);
-
-        String responseString = null;
-        try {
-            responseString = request.postTarget(String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return responseString;
-    }
-
+    /**
+     * @see org.overlord.gadgets.web.server.GadgetMetadataService#getGadgetData(java.lang.String)
+     */
     @Override
     public Gadget getGadgetData(String gadgetUrl) {
-        String responseString = getMetadata(gadgetUrl);
-
-        //now trim back the response to just the metadata for the single gadget
         try {
-            JSONObject responseObject = new JSONArray(responseString).
-                    getJSONObject(0).
-                    getJSONObject("result").
-                    getJSONObject(gadgetUrl);
+            MetadataResponse metaDataFromShindig = getMetaDataFromShindig(gadgetUrl);
 
-            JSONObject modulePref = responseObject.getJSONObject("modulePrefs");
+            ModulePrefs modulePref = metaDataFromShindig.getModulePrefs();
 
             Gadget gadget = new Gadget();
-            gadget.setTitle(modulePref.getString("title"));
-            gadget.setScreenshotUrl(modulePref.getString("screenshot"));
-            gadget.setAuthorEmail(modulePref.getString("authorEmail"));
-            gadget.setAuthor(modulePref.getString("author"));
-            gadget.setTitleUrl(modulePref.getString("titileUrl"));
-            gadget.setThumbnailUrl(modulePref.getString("thumbnail"));
-            gadget.setDescription(modulePref.getString("description"));
+            gadget.setTitle(modulePref.getTitle());
+            if (modulePref.getScreenshot() != null)
+                gadget.setScreenshotUrl(String.valueOf(modulePref.getScreenshot()));
+            gadget.setAuthorEmail(modulePref.getAuthorEmail());
+            gadget.setAuthor(modulePref.getAuthor());
+            if (modulePref.getTitleUrl() != null)
+                gadget.setTitleUrl(modulePref.getTitleUrl().toString());
+            if (modulePref.getThumbnail() != null)
+                gadget.setThumbnailUrl(modulePref.getThumbnail().toString());
+            gadget.setDescription(modulePref.getDescription());
 
             return gadget;
         } catch (JSONException e) {
-            throw new IllegalArgumentException("Error occurred while processing response from shindig metadata call", e);
+            throw new IllegalArgumentException(
+                    "Error occurred while processing response from shindig metadata call", e);
         }
-
     }
 
+    /**
+     * Gets the gadget meta-data as a JSON object (from the shindig meta-data service).
+     * @param gadgetUrl
+     * @throws JSONException
+     */
+    private MetadataResponse getMetaDataFromShindig(String gadgetUrl) throws JSONException {
+        JSONObject params = new JSONObject()
+                .put("container", "default")
+                .put("view", "home")
+                .put("st", "default")
+                .put("debug", true)
+                .append("ids", gadgetUrl)
+                .append("fields", "iframeUrl")
+                .append("fields", "modulePrefs.*")
+                .append("fields", "needsTokenRefresh")
+                .append("fields", "userPrefs.*")
+                .append("fields", "views.preferredHeight")
+                .append("fields", "views.preferredWidth")
+                .append("fields", "expireTimeMs")
+                .append("fields", "responseTimeMs")
+                .put("userId", "@viewer")
+                .put("groupId", "@self");
 
-    public static void main(String[] args) throws Exception {
-        ShindigGadgetMetadataService svc = new ShindigGadgetMetadataService();
-        //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/currency_converter/currency_converter_v2.xml");
-        //svc.getGadgetMetadata("http://www.gstatic.com/ig/modules/datetime_v3/datetime_v3.xml");
-        svc.getGadgetMetadata("http://rt-gadget.googlecode.com/git/gadget.xml");
-        //svc.getGadgetMetadata("http://www.labpixies.com/campaigns/todo/todo.xml");
-        //svc.getGadgetMetadata("http://sam-gadget.appspot.com/Gadget/SamGadget.gadget.xml");
-        //svc.getGadgetMetadata("http://localhost:8080/gadgets/rt-gadget/gadget.xml");
+        AnonymousSecurityToken securityToken = new AnonymousSecurityToken();
+        BaseRequestItem request = new BaseRequestItem(params, new HashMap<String, FormDataItem>(),
+                securityToken, this.jsonConverter, (BeanJsonConverter) this.jsonConverter);
+        Map<String, BaseResponse> responses = this.gadgetsHandler.metadata(request);
+        BaseResponse response = responses.get(gadgetUrl);
+        if (response instanceof MetadataResponse) {
+            return (MetadataResponse) response;
+        } else {
+            Error error = response.getError();
+            if (error != null) {
+                throw new JSONException(error.getMessage());
+            } else {
+                throw new JSONException("Unknown error:" + response.getUrl());
+            }
+        }
     }
 
 }
