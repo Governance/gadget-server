@@ -33,11 +33,12 @@ import com.google.inject.name.Named;
  */
 public class Bootstrap {
 
-    protected static final String DB_DRIVER = "db.driver";
-    protected static final String DB_URL = "db.url";
-    protected static final String DB_USER = "db.user";
-    protected static final String DB_PASSWORD = "db.password";
-    protected static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+    public static final String DB_DRIVER = "gadget-server.db.driver";
+    public static final String DB_URL = "gadget-server.db.url";
+    public static final String DB_USER = "gadget-server.db.user";
+    public static final String DB_PASSWORD = "gadget-server.db.password";
+    public static final String JPA_UNITNAME = "gadget-server.jpa.unitname";
+    public static final String HIBERNATE_HBM2DDL_AUTO = "gadget-server.hibernate.hbm2ddl.auto";
 
     private EntityManager entityManager;
 

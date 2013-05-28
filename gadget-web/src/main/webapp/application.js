@@ -2,7 +2,7 @@ var container;
 
 $(function(){
     var containerConfig = {};
-    containerConfig[osapi.container.ServiceConfig.API_PATH] = "/gadget-server/rpc";
+    containerConfig[osapi.container.ServiceConfig.API_PATH] = "/gadget-web/rpc";
     //containerConfig[osapi.container.ContainerConfig.RENDER_DEBUG] = "0";
     container = new osapi.container.Container(containerConfig);
     container.rpcRegister('resize_iframe', resizeIframe);
@@ -58,7 +58,7 @@ function addOverlay(jqElm) {
 window.reloadGadget = function(iframeId, iframeUrl) {
 	var theIframe = document.getElementById(iframeId);
 	theIframe.src = iframeUrl;
-}
+};
 
 
 

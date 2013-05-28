@@ -13,13 +13,14 @@ public interface GadgetMetadataService {
      * Fetches gadget metadata for the specified gadget URL.
      *
      * @param gadgetUrl The gadget to fetch metadata for.
-     * @return The GadgetModel that constructed from raw JSON response from the Shindig metadata RPC call.
+     * @return The WidgetModel that constructed from JSON response from the Shindig metadata RPC call.
      */
     public WidgetModel getGadgetMetadata(String gadgetUrl);
-    
-    
-    public void setGadgetServerRPCUrl(String rpcUrl);
-    
-    
+
+    /**
+     * Fetches gadget data fro the specified gadget URL.
+     *
+     * @param gadgetUrl
+     */
     public Gadget getGadgetData(String gadgetUrl);
 }

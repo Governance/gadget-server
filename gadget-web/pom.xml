@@ -20,6 +20,35 @@
   </properties>
 
   <dependencies>
+    <!-- We're going to Overlay on top of gadget-server -->
+    <dependency>
+      <groupId>org.overlord.gadgets.server</groupId>
+      <artifactId>gadget-server</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    
+    <!-- Need shindig! -->
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-gadgets</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>el-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <!-- Third party libs -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
@@ -165,31 +194,31 @@
         </configuration>
       </plugin>
 
-     <!-- Extra stuff to delete on a clean -->
-     <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-clean-plugin</artifactId>
-       <configuration>
-         <filesets>
-           <fileset>
-             <directory>${basedir}</directory>
-             <includes>
-               <include>www-test/**</include>
-               <include>.gwt/**</include>
-               <include>.errai/**</include>
-               <include>src/main/webapp/.errai/**</include>
-               <include>src/main/webapp/Application/**</include>
-               <include>src/main/webapp/WEB-INF/deploy/**</include>
-               <include>src/main/webapp/WEB-INF/lib/**</include>
-               <include>src/main/webapp/WEB-INF/classes/**</include>
-               <include>**/gwt-unitCache/**</include>
-               <include>**/*.JUnit/**</include>
-             </includes>
-           </fileset>
-         </filesets>
-       </configuration>
-     </plugin>
-     
+      <!-- Extra stuff to delete on a clean -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}</directory>
+              <includes>
+                <include>www-test/**</include>
+                <include>.gwt/**</include>
+                <include>.errai/**</include>
+                <include>src/main/webapp/.errai/**</include>
+                <include>src/main/webapp/Application/**</include>
+                <include>src/main/webapp/WEB-INF/deploy/**</include>
+                <include>src/main/webapp/WEB-INF/lib/**</include>
+                <include>src/main/webapp/WEB-INF/classes/**</include>
+                <include>**/gwt-unitCache/**</include>
+                <include>**/*.JUnit/**</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 

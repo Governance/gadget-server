@@ -27,6 +27,7 @@ import com.google.inject.Scopes;
  */
 public class GadgetServerModule implements Module {
 
+    @Override
     public void configure(Binder binder) {
         binder.bind(UserController.class);
         binder.bind(StoreController.class);

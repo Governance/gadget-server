@@ -28,26 +28,28 @@ import com.google.inject.name.Named;
  */
 public class EntityManagerProvider implements Provider<EntityManager> {
 
-  private Bootstrap bootstrap;
-  private String unitName;
+    private Bootstrap bootstrap;
+    private String unitName;
 
-  /**
-   * 
-   */
-  @Inject
-  public EntityManagerProvider(Bootstrap bootstrap,
-                               @Named("jpa.unitname") String unitName) {
-    this.unitName = unitName;
-    this.bootstrap = bootstrap;
-  }
+    /**
+     * Constructor.
+     * @param bootstrap
+     * @param unitName
+     */
+    @Inject
+    public EntityManagerProvider(Bootstrap bootstrap, @Named(Bootstrap.JPA_UNITNAME) String unitName) {
+        this.unitName = unitName;
+        this.bootstrap = bootstrap;
+    }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see com.google.inject.Provider#get()
-   */
-  public EntityManager get() {
-    return bootstrap.getEntityManager(unitName);
-  }
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.google.inject.Provider#get()
+     */
+    @Override
+    public EntityManager get() {
+        return bootstrap.getEntityManager(unitName);
+    }
 
 }

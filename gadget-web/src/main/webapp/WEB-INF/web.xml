@@ -6,6 +6,38 @@
   <display-name>Gadget Web</display-name>
 
   <context-param>
+    <param-name>guice-modules</param-name>
+    <param-value>
+            org.overlord.gadgets.web.server.GadgetServerModule:
+            org.overlord.gadgets.server.CoreModule:
+            org.overlord.gadgets.web.server.http.auth.AuthenticationModule:
+            org.apache.shindig.common.PropertiesModule:
+            org.apache.shindig.gadgets.DefaultGuiceModule:
+            org.apache.shindig.social.core.config.SocialApiGuiceModule:
+            org.apache.shindig.social.sample.SampleModule:
+            org.apache.shindig.gadgets.oauth.OAuthModule:
+            org.apache.shindig.gadgets.oauth2.OAuth2Module:
+            org.apache.shindig.gadgets.oauth2.OAuth2MessageModule:
+            org.apache.shindig.gadgets.oauth2.handler.OAuth2HandlerModule:
+            org.apache.shindig.gadgets.oauth2.persistence.sample.OAuth2PersistenceModule:
+            org.apache.shindig.common.cache.ehcache.EhCacheModule:
+            org.apache.shindig.sample.shiro.ShiroGuiceModule:
+            org.apache.shindig.sample.container.SampleContainerGuiceModule:
+            org.apache.shindig.extras.ShindigExtrasGuiceModule:
+            org.apache.shindig.gadgets.admin.GadgetAdminModule
+        </param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>system.properties</param-name>
+    <param-value><![CDATA[
+        shindig.host=
+        shindig.port=
+        aKey=/shindig/gadgets/proxy?container=default&url=
+     ]]></param-value>
+  </context-param>
+
+  <context-param>
     <param-name>resteasy.guice.modules</param-name>
     <param-value>
       org.overlord.gadgets.web.server.GadgetServerModule,
@@ -19,10 +51,93 @@
   </context-param>
 
   <listener>
-    <listener-class>
-      org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
-    </listener-class>
+    <listener-class>org.apache.shindig.common.servlet.GuiceServletContextListener</listener-class>
   </listener>
+  <listener>
+    <listener-class>org.overlord.gadgets.web.server.listeners.ShindigResteasyBootstrapServletContextListener</listener-class>
+  </listener>
+
+
+  <filter>
+    <filter-name>hostFilter</filter-name>
+    <filter-class>org.apache.shindig.common.servlet.HostFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hostFilter</filter-name>
+    <url-pattern>/gadgets/ifr</url-pattern>
+    <url-pattern>/gadgets/js/*</url-pattern>
+    <url-pattern>/gadgets/proxy/*</url-pattern>
+    <url-pattern>/gadgets/concat</url-pattern>
+    <url-pattern>/gadgets/makeRequest</url-pattern>
+    <url-pattern>/rpc/*</url-pattern>
+    <url-pattern>/rest/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>ShiroFilter</filter-name>
+    <filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>
+                <![CDATA[
+                # The ShiroFilter configuration is very powerful and flexible, while still remaining succinct.
+                # Please read the comprehensive example, with full comments and explanations, in the JavaDoc:
+                #
+                # http://www.jsecurity.org/api/org/jsecurity/web/servlet/JSecurityFilter.html
+                [main]
+                shindigSampleRealm = org.apache.shindig.sample.shiro.SampleShiroRealm
+                securityManager.realm = $shindigSampleRealm
+                authc.loginUrl = /login.jsp
+
+                [urls]
+                # The /login.jsp is not restricted to authenticated users (otherwise no one could log in!), but
+                # the 'authc' filter must still be specified for it so it can process that url's
+                # login submissions. It is 'smart' enough to allow those requests through as specified by the
+                # shiro.loginUrl above.
+                /login.jsp = authc
+
+                /oauth/authorize/** = authc
+                /oauth2/authorize/** = authc
+            ]]>
+            </param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>ShiroFilter</filter-name>
+    <url-pattern>/oauth/authorize</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>authFilter</filter-name>
+    <filter-class>org.apache.shindig.auth.AuthenticationServletFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>authFilter</filter-name>
+    <url-pattern>/social/*</url-pattern>
+    <url-pattern>/gadgets/ifr</url-pattern>
+    <url-pattern>/gadgets/makeRequest</url-pattern>
+    <url-pattern>/gadgets/api/rpc/*</url-pattern>
+    <url-pattern>/gadgets/api/rest/*</url-pattern>
+    <url-pattern>/rpc/*</url-pattern>
+    <url-pattern>/rest/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ShiroFilter</filter-name>
+    <url-pattern>/oauth2/authorize</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>ShiroFilter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>etagFilter</filter-name>
+    <filter-class>org.apache.shindig.gadgets.servlet.ETagFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>etagFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 
   <filter>
     <filter-name>JSONP</filter-name>
@@ -33,12 +148,179 @@
     <url-pattern>/rs/*</url-pattern>
   </filter-mapping>
 
+    <servlet>
+        <servlet-name>xml-to-html</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.GadgetRenderingServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>xml-to-html</servlet-name>
+        <url-pattern>/gadgets/ifr</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>accel</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.HtmlAccelServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>accel</servlet-name>
+        <url-pattern>/gadgets/accel</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>proxy</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.ProxyServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>proxy</servlet-name>
+        <url-pattern>/gadgets/proxy/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>makeRequest</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.MakeRequestServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>makeRequest</servlet-name>
+        <url-pattern>/gadgets/makeRequest</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>concat</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.ConcatProxyServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>concat</servlet-name>
+        <url-pattern>/gadgets/concat</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>oauthCallback</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.OAuthCallbackServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>oauthCallback</servlet-name>
+        <url-pattern>/gadgets/oauthcallback</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>oauth2callback</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.OAuth2CallbackServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>oauth2callback</servlet-name>
+        <url-pattern>/gadgets/oauth2callback</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>metadata</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.RpcServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>metadata</servlet-name>
+        <url-pattern>/gadgets/metadata</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>js</servlet-name>
+        <servlet-class>org.apache.shindig.gadgets.servlet.JsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>js</servlet-name>
+        <url-pattern>/gadgets/js/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>restapiServlet</servlet-name>
+        <servlet-class>
+            org.apache.shindig.protocol.DataServiceServlet
+        </servlet-class>
+        <init-param>
+            <param-name>handlers</param-name>
+            <param-value>org.apache.shindig.handlers</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>restapiServlet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+        <url-pattern>/gadgets/api/rest/*</url-pattern>
+        <url-pattern>/social/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>jsonRpcServlet</servlet-name>
+        <servlet-class>
+            org.apache.shindig.protocol.JsonRpcServlet
+        </servlet-class>
+        <init-param>
+            <param-name>handlers</param-name>
+            <param-value>org.apache.shindig.handlers</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jsonRpcServlet</servlet-name>
+        <url-pattern>/rpc/*</url-pattern>
+        <url-pattern>/gadgets/api/rpc/*</url-pattern>
+        <url-pattern>/social/rpc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>sampleOAuth</servlet-name>
+        <servlet-class>
+            org.apache.shindig.social.sample.oauth.SampleOAuthServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sampleOAuth</servlet-name>
+        <url-pattern>/oauth/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OAuth2Servlet</servlet-name>
+        <servlet-class>
+            org.apache.shindig.social.core.oauth2.OAuth2Servlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OAuth2Servlet</servlet-name>
+        <url-pattern>/oauth2/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>rpcSwf</servlet-name>
+        <servlet-class>
+            org.apache.shindig.gadgets.servlet.RpcSwfServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rpcSwf</servlet-name>
+        <url-pattern>/xpc*</url-pattern>
+    </servlet-mapping>
+
   <servlet>
     <servlet-name>Resteasy</servlet-name>
-    <servlet-class>
-      org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-    </servlet-class>
+    <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>Resteasy</servlet-name>
+    <url-pattern>/rs/*</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>OverlordHeaderDataJS</servlet-name>
     <servlet-class>org.overlord.commons.ui.header.OverlordHeaderDataJS</servlet-class>
@@ -47,11 +329,6 @@
       <param-value>gadget-server</param-value>
     </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Resteasy</servlet-name>
-    <url-pattern>/rs/*</url-pattern>
-  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OverlordHeaderDataJS</servlet-name>
     <url-pattern>/js/overlord-header-data.js</url-pattern>
