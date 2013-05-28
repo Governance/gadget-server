@@ -60,22 +60,22 @@ public class Portlet extends Composite {
     interface PortletUiBinder extends UiBinder<Widget, Portlet> {}
 
     private static PortletUiBinder uiBinder = GWT.create(PortletUiBinder.class);
-    
+
     private static String urlBase;
-    
+
     private String id;
 
     private String widgetId;
-    
+
     //This is the portalLayout Id.
     private String portalId;
-    
+
     private String iframeId;
-    
+
     private WidgetModel wmodel;
-    
+
     private String userPreferenceValues;
-    
+
     private List<Widget> prefs = new ArrayList<Widget>();
 
     @UiField InlineLabel minBtn;
@@ -95,60 +95,66 @@ public class Portlet extends Composite {
         this.portalId = pid;
         this.iframeId = "iframe-" + widgetId;
         initWidget(uiBinder.createAndBindUi(this));
-        
+
         getElement().setId(id);
         gadgetSpec.getElement().setId(iframeId);
         gadgetSpec.getElement().setAttribute("frameborder", "0");
-        
+
         urlBase = getGadgetServerUrlBase();
 
         minBtn.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent clickEvent) {
                  toggle(id);
             }
         });
 
         removeBtn.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent clickEvent) {
             	if (Window.confirm("Are you sure to delete this widget?")) {
 	                String theURL =  URLBuilder.getRemoveWidgetURL(Long.valueOf(widgetId));
 	                RestfulInvoker.invoke(RequestBuilder.POST, theURL,
 	                        null, new RestfulInvoker.Response() {
-	                    	public void onResponseReceived(Request request, Response response) {
+	                    	@Override
+                            public void onResponseReceived(Request request, Response response) {
 	                    		remove(id);
 	                    }
 	                });
             	}
             }
         });
-                
+
         maxBtn.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+			@Override
+            public void onClick(ClickEvent event) {
 				maximizeWindow(id, portalId);
 				hideUserPref(id);
 				showRestoreButton(id);
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("90%");
 				gadgetSpec.getElement().setAttribute("scrolling", "auto");
-				gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getCanvasView() + "&" + userPreferenceValues);
-			}        	
+				gadgetSpec.setUrl(urlBase + "gadget-web/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getCanvasView() + "&" + userPreferenceValues);
+			}
         });
-        
+
         restoreBtn.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+			@Override
+            public void onClick(ClickEvent event) {
 				restoreWindow(id);
 				hideRestoreButton(id);
 				gadgetSpec.setWidth("100%");
 				gadgetSpec.setHeight("250px");
 				gadgetSpec.getElement().setAttribute("scrolling", "auto");
-				gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues);
-			}        	
+				gadgetSpec.setUrl(urlBase + "gadget-web/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues);
+			}
         });
-        
+
         settingBtn.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+			@Override
+            public void onClick(ClickEvent event) {
 				showUserPref(id);
-			}        	
+			}
         });
 
         gadgetSpec.getElement().setId(widgetId);
@@ -158,11 +164,12 @@ public class Portlet extends Composite {
         this(String.valueOf(model.getWidgetId()), portalId);
         title.setText(model.getName());
         wmodel = model;
-        
-        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPreferenceValuesURL(Long.valueOf(widgetId)), null, 
+
+        RestfulInvoker.invoke(RequestBuilder.GET, URLBuilder.getPreferenceValuesURL(Long.valueOf(widgetId)), null,
         		new RestfulInvoker.Response() {
-					
-					public void onResponseReceived(Request request, Response response) {
+
+					@Override
+                    public void onResponseReceived(Request request, Response response) {
 						Map<String, String> defaultValues = JSOParser.getPreferenceValues(response.getText());
 				        generateUserPref(wmodel, defaultValues);
 				        generatePreferenceValuesString(defaultValues);
@@ -170,12 +177,12 @@ public class Portlet extends Composite {
 				        gadgetSpec.getElement().setAttribute("frameborder", "0");
 				        gadgetSpec.setWidth(width - 20 + "px");
 				        gadgetSpec.setHeight("250px");
-				        gadgetSpec.setUrl(urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues);
+				        gadgetSpec.setUrl(urlBase + "gadget-web/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues);
 					}
 				});
-        
+
     }
-    
+
     private void generatePreferenceValuesString(Map<String, String> value) {
     	StringBuilder sbuilder = new StringBuilder();
     	int i = 1;
@@ -186,21 +193,21 @@ public class Portlet extends Composite {
     		}
     		i++;
     	}
-    	
+
     	this.userPreferenceValues = sbuilder.toString();
     }
-    
+
     private String getGadgetServerUrlBase() {
     	String gadgetWebUrlBase = GWT.getHostPageBaseURL();
     	int end = gadgetWebUrlBase.indexOf("gadget-web");
     	return gadgetWebUrlBase.substring(0, end);
     }
-    
-    
+
+
     private void generateUserPref(WidgetModel model, Map<String, String> values) {
     	UserPreference pref = model.getUserPreference();
     	int row = 0;
-    	for (UserPreferenceSetting prefSet : pref.getData()) { 		
+    	for (UserPreferenceSetting prefSet : pref.getData()) {
     		if (UserPreference.Type.STRING.equals(prefSet.getType())) {
     			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
     			Widget textBox = createTextBox(prefSet.getName(), getDefaultValue(values, prefSet.getName(),prefSet.getDefaultValue()));
@@ -224,16 +231,16 @@ public class Portlet extends Composite {
     		row ++;
     	}
     	prefTable.setWidget(row, 1, createPrefSettingButtons());
-    	
+
     }
-    
+
     private String getDefaultValue(Map<String, String> values, String name, String defaultValue) {
     	if (values.get(name) != null) {
     		return values.get(name);
     	}
     	return defaultValue;
     }
-    
+
     private Widget createTextBox(String name, String defaultVal) {
     	TextBox textBox = new TextBox();
     	//hack, set the name to id as well for jquery retrieval.
@@ -242,7 +249,7 @@ public class Portlet extends Composite {
     	textBox.setValue(defaultVal);
     	return textBox;
     }
-    
+
     private Widget createSelectBox(String name, String defaultVal, List<String> options) {
     	ListBox listBox = new ListBox(false);
     	listBox.setName(name);
@@ -259,10 +266,10 @@ public class Portlet extends Composite {
     			index = i;
     		}
     	}
-    	listBox.setSelectedIndex(index);   	
+    	listBox.setSelectedIndex(index);
     	return listBox;
     }
-    
+
     private Widget createPrefSettingButtons() {
     	HorizontalPanel btnPanel = new HorizontalPanel();
     	Button saveBtn = new Button("Save");
@@ -270,10 +277,11 @@ public class Portlet extends Composite {
     	Button cancelBtn = new Button("Cancel");
     	btnPanel.add(saveBtn);
     	saveBtn.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+			@Override
+            public void onClick(ClickEvent event) {
 				StringBuilder sbuffer = new StringBuilder();
 				sbuffer.append("{");
-				
+
 				StringBuilder updatedValue = new StringBuilder();
 				for (int i = 0; i < prefs.size(); i++) {
 					Widget theWidget = prefs.get(i);
@@ -299,37 +307,39 @@ public class Portlet extends Composite {
 				}
 				sbuffer.append("}");
 				Log.debug("The map value is: " + sbuffer.toString());
-				
+
 				userPreferenceValues = updatedValue.toString();
 				Log.debug("The userPreferenceValues is : " + userPreferenceValues );
-				
+
 				RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.updatePreferenceURL(Long.valueOf(widgetId)), sbuffer.toString(), new RestfulInvoker.Response(){
-					public void onResponseReceived(Request request, Response response) {
+					@Override
+                    public void onResponseReceived(Request request, Response response) {
 						hideUserPref(id);
-						String newUrl = urlBase + "gadget-server/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues;
+						String newUrl = urlBase + "gadget-web/gadgets/ifr?url=" + wmodel.getSpecUrl() + "&" + getHomeView() + "&" + userPreferenceValues;
 						//gadgetSpec.setUrl(newUrl);
 						Log.debug("the new url is: " + newUrl);
 						//reloadIFrame(gadgetSpec.getElement().getId());
 						reloadGadget(gadgetSpec.getElement().getId(), newUrl);
 					}
-					
+
 				});
-				
-			}  		
+
+			}
     	});
     	btnPanel.add(cancelBtn);
     	cancelBtn.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+			@Override
+            public void onClick(ClickEvent event) {
 				hideUserPref(id);
-			}   		
+			}
     	});
     	return btnPanel;
     }
-    
+
     public String getHomeView() {
     	return "view=home";
     }
-    
+
     public String getCanvasView() {
     	return "view=canvas";
     }
@@ -359,21 +369,21 @@ public class Portlet extends Composite {
     private static native void showUserPreference(String id) /*-{
         $wnd.$('#' + id).find(".portlet-menu").show();
     }-*/;
-    
+
     private static native void hideRestoreButton(String id) /*-{
     	$wnd.$('#'+id).find(".portlet-restore").hide();
     	$wnd.$('#'+id).find(".portlet-max").show();
     	$wnd.$('#'+id).find(".portlet-setting").show();
     	$wnd.$('#'+id).find(".portlet-close").show();
     }-*/;
-    
+
     private static native void showRestoreButton(String id) /*-{
     	$wnd.$('#'+id).find(".portlet-restore").show();
     	$wnd.$('#'+id).find(".portlet-max").hide();
     	$wnd.$('#'+id).find(".portlet-setting").hide();
     	$wnd.$('#'+id).find(".portlet-close").hide();
     }-*/;
-    
+
     private static native void maximizeWindow(String id, String portalId) /*-{
 	    var overlay = $wnd.$('<div></div>');
 	    var jqElm = $wnd.$('#' + portalId);
@@ -391,29 +401,29 @@ public class Portlet extends Composite {
 		$wnd.$(".column").sortable( "option", "disabled", true);
 		$wnd.$('#' + id).removeClass("portlet").addClass("portlet-canvas");
 	}-*/;
-    
+
     private static native void restoreWindow(String id) /*-{
 		$wnd.$(".added-overlay").remove();
 		$wnd.$(".column").sortable( "option", "disabled", false);
 		$wnd.$('#' + id).removeClass("portlet-canvas").addClass("portlet");
 	}-*/;
-    
+
     private static native void hideUserPref(String id) /*-{
 		$wnd.$('#' + id).find(".portlet-preference").hide();
 	}-*/;
-    
+
     private static native void showUserPref(String id) /*-{
 		$wnd.$('#' + id).find(".portlet-preference").show();
 	}-*/;
-    
+
     private static native void reloadIFrame(String iframeId) /*-{
     	$wnd.document.getElementById(iframeId).reload(true);
     }-*/;
-    
+
     private static native void reloadGadget(String iframeId, String url) /*-{
 		$wnd.reloadGadget(iframeId, url);
 	}-*/;
-    
+
     private static native void setPreference(String name, String value) /*-{
 		var prefs = new gadgets.Prefs();
 		prefs.set(name, value);

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>gadget-server</artifactId>
   <packaging>war</packaging>
@@ -11,83 +12,83 @@
   </parent>
 
   <dependencies>
-	<dependency>
-        <groupId>org.apache.shindig</groupId>
-        <artifactId>shindig-server</artifactId>
-        <type>war</type>
-        <exclusions>
-            <exclusion>
-                <groupId>xerces</groupId>
-                <artifactId>xercesImpl</artifactId>
-            </exclusion>
-        </exclusions>
-	</dependency>
-	<dependency>
-        <groupId>org.apache.shindig</groupId>
-        <artifactId>shindig-features</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shindig</groupId>
-		<artifactId>shindig-common</artifactId>
-        <exclusions>
-            <exclusion>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>el-api</artifactId>
-            </exclusion>
-        </exclusions>
-	</dependency>
-	<dependency>
-		<groupId>com.google.guava</groupId>
-		<artifactId>guava</artifactId>
-	</dependency>
-  <dependency>
-    <groupId>joda-time</groupId>
-    <artifactId>joda-time</artifactId>
-  </dependency>
-  <dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20070829</version>
-  </dependency>
-  <dependency>
-    <groupId>commons-codec</groupId>
-    <artifactId>commons-codec</artifactId>
-  </dependency>
-  <dependency>
-    <groupId>xerces</groupId>
-    <artifactId>xercesImpl</artifactId>
-  </dependency>
-  <dependency>
-    <groupId>net.sourceforge.nekohtml</groupId>
-    <artifactId>nekohtml</artifactId>
-  </dependency>
-  <dependency>
-    <groupId>org.apache.httpcomponents</groupId>
-    <artifactId>httpcore</artifactId>
-  </dependency>
-	<dependency>
-		<groupId>org.apache.shindig</groupId>
-		<artifactId>shindig-gadgets</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shindig</groupId>
-		<artifactId>shindig-social-api</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shindig</groupId>
-		<artifactId>shindig-extras</artifactId>
-	</dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-server</artifactId>
+      <type>war</type>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-features</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>el-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20070829</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-gadgets</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-social-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-extras</artifactId>
+    </dependency>
 
-   <dependency>
-       <groupId>junit</groupId>
-       <artifactId>junit</artifactId>
-       <scope>test</scope>
-   </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 
   <build>
-      <finalName>gadget-server</finalName>
+    <finalName>gadget-server</finalName>
   </build>
 
 </project>

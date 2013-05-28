@@ -4,15 +4,19 @@
 
   <!-- DEFAULT PROPERTY VALUES -->
   <property name="as7.home" value="/Users/jeffyu/deploy/switchyard-as7-0.8" />
+  <property name="config.dir" value="${as7.home}/standalone/configuration" />
   <property name="deploy.dir" value="${as7.home}/standalone/deployments" />
   <property name="database" value="h2"/>
-  
+
   <target name="deploy" description="Deploys the Gadget Server">
     <echo message="Deploying the Gadget Server" />
-    <copy file="modules/gadget-server.war" toFile="${deploy.dir}/gadget-server.war" overwrite="true" />
     <copy file="modules/gadget-web.war" toFile="${deploy.dir}/gadget-web.war" overwrite="true" />
-    
-    <antcall target="internal.install.gs.db.${database}" />
+
+  	<copy file="config/gadget-server.properties" todir="${config.dir}" overwrite="true" />
+  	<mkdir dir="${config.dir}/overlord-apps"/>
+    <copy file="config/gadget-server-overlordapp.properties" todir="${config.dir}/overlord-apps" overwrite="true" />
+
+    <!--<antcall target="internal.install.gs.db.${database}" />-->
 
     <copy tofile="${deploy.dir}/gs-ds.xml" overwrite="true">
 	     <fileset dir="datasource">
@@ -29,10 +33,8 @@
   <target name="internal.install.gs.db.h2server">  
   </target>
 
-
   <target name="undeploy" description="Undeploys the Gadget Server">
 	<echo message="Undeploying the Gadget Server" />
-    <delete file="${deploy.dir}/gadget-server.war"/>
 	<delete file="${deploy.dir}/gadget-web.war"/>
 	<delete file="${deploy.dir}/gs-ds.xml"/>
   </target>   

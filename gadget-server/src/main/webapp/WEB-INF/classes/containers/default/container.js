@@ -158,17 +158,17 @@
     "views" : {
         "profile" : {
             "isOnlyVisible" : false,
-                "urlTemplate" : "http://localhost${CONTEXT_ROOT}/gadgets/profile?{var}",
+                "urlTemplate" : "http://%host%${CONTEXT_ROOT}/gadgets/profile?{var}",
                 "aliases": ["profile"]
         },
         "canvas" : {
             "isOnlyVisible" : false,
-                "urlTemplate" : "http://localhost${CONTEXT_ROOT}/gadgets/canvas?{var}",
+                "urlTemplate" : "http://%host%${CONTEXT_ROOT}/gadgets/canvas?{var}",
                 "aliases" : ["canvas"]
         },
         "default" : {
             "isOnlyVisible" : false,
-                "urlTemplate" : "http://localhost${CONTEXT_ROOT}/gadgets/default?{var}",
+                "urlTemplate" : "http://%host%${CONTEXT_ROOT}/gadgets/default?{var}",
                 "aliases" : ["home", "default"]
         }
     },
