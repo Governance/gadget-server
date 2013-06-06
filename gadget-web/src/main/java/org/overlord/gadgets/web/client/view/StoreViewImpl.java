@@ -77,7 +77,7 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         headerPanel.add(backToTabs);
 
         headerPanel.setWidgetRightWidth(backToTabs, 5, Style.Unit.PX, 110, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(backToTabs, 45, Style.Unit.PX, 28, Style.Unit.PX);
+        headerPanel.setWidgetTopHeight(backToTabs, 5, Style.Unit.PX, 28, Style.Unit.PX);
 
         footerPanel = new LayoutPanel();
         footerPanel.setStyleName("footer-panel");
@@ -88,7 +88,7 @@ public class StoreViewImpl extends ViewImpl implements StorePresenter.StoreView{
         mainPanel = new LayoutPanel();
         mainPanel.getElement().setId("mainpanel");
 
-        panel.addNorth(headerPanel, 70);
+        panel.addNorth(headerPanel, 25);
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 

@@ -70,7 +70,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         headerPanel = new LayoutPanel();
         headerPanel.setStyleName("header-panel");
 
-        HTML store = new HTML("Widget Store");
+        HTML store = new HTML("Gadget Store");
         store.addStyleName("header-link");
         store.addClickHandler(new ClickHandler() {
             @Override
@@ -88,7 +88,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         headerPanel.add(store);
 
         headerPanel.setWidgetRightWidth(store, 5, Style.Unit.PX, 110, Style.Unit.PX);
-        headerPanel.setWidgetTopHeight(store, 45, Style.Unit.PX, 28, Style.Unit.PX);
+        headerPanel.setWidgetTopHeight(store, 5, Style.Unit.PX, 28, Style.Unit.PX);
 
 
         footerPanel = new LayoutPanel();
@@ -115,7 +115,7 @@ public class IndexViewImpl extends ViewImpl implements IndexPresenter.IndexView 
         mainPanel.add(addTabForm);
         mainPanel.add(mainContentPanel);
 
-        panel.addNorth(headerPanel, 70);
+        panel.addNorth(headerPanel, 25);
         panel.addSouth(footerPanel, 25);
         panel.add(mainPanel);
 
