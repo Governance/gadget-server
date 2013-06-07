@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.overlord.gadgets.server</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.0.0.20130607-M5</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Gadget Server</name>
 	<url>http://www.jboss.org/overlord</url>
