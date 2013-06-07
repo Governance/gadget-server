@@ -3,6 +3,7 @@
     <dependencies>
       <module name="org.picketlink" />
       <module name="org.overlord.commons.overlord-commons-auth" />
+      <module name="org.apache.xerces" />
     </dependencies>
   </deployment>
 </jboss-deployment-structure>

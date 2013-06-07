@@ -8,7 +8,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>org.overlord.gadgets.server</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.20130607-M5</version>
   </parent>
 
   <dependencies>
@@ -55,12 +55,14 @@
       <artifactId>commons-codec</artifactId>
     </dependency>
     <dependency>
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-    </dependency>
-    <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -69,6 +71,12 @@
     <dependency>
       <groupId>org.apache.shindig</groupId>
       <artifactId>shindig-gadgets</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.shindig</groupId>
@@ -89,6 +97,15 @@
 
   <build>
     <finalName>gadget-server</finalName>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <packagingExcludes>WEB-INF/lib/xercesImpl-*.jar</packagingExcludes>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
 </project>

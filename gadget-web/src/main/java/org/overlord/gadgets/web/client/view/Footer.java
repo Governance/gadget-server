@@ -52,7 +52,7 @@ public class Footer {
 
         layout.add(settings);
 
-        HTML version = new HTML("Version: 1.0.0-SNAPSHOT");
+        HTML version = new HTML("Version: 1.0.0.M5");
         version.getElement().setAttribute("style", "color:#ffffff;font-size:10px; align:left");
         layout.add(version);
 
