@@ -31,19 +31,21 @@ import com.google.inject.AbstractModule;
 public abstract class ConfiguredModule extends AbstractModule {
 
     private final static String DEFAULT_PROPERTIES = "gadget-server.properties";
-    protected static Properties properties;
+    public static Properties properties;
+    static {
+        loadConfigurationProperties();
+    }
 
     /**
      * Constructor.
      */
     public ConfiguredModule() {
-        loadConfigurationProperties();
     }
 
     /**
      * Loads the configuration properties.
      */
-    protected void loadConfigurationProperties() {
+    protected static void loadConfigurationProperties() {
         if (properties == null) {
             properties = new Properties();
             loadFromClasspath();
@@ -55,11 +57,11 @@ public abstract class ConfiguredModule extends AbstractModule {
     /**
      * Loads properties from a properties file found on the classpath.
      */
-    private void loadFromClasspath() {
+    private static void loadFromClasspath() {
         InputStream is = null;
         try {
             try {
-                is = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_PROPERTIES);
+                is = ConfiguredModule.class.getClassLoader().getResourceAsStream(DEFAULT_PROPERTIES);
                 Properties props = new Properties();
                 props.load(is);
                 properties.putAll(props);
@@ -75,7 +77,7 @@ public abstract class ConfiguredModule extends AbstractModule {
      * Loads configuration properties from a file on the file system. We look for the file in a variety of
      * places, although users can override the file's location by setting a system property.
      */
-    private void loadFromFile() {
+    private static void loadFromFile() {
         File configFile = null;
 
         String configFileLoc = System.getProperty("gadget-server.config.file.name");
@@ -124,7 +126,7 @@ public abstract class ConfiguredModule extends AbstractModule {
     /**
      * Loads properties from the system properties.
      */
-    private void loadFromSystemProperties() {
+    private static void loadFromSystemProperties() {
         properties.putAll(System.getProperties());
     }
 

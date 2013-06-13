@@ -334,6 +334,23 @@
     <url-pattern>/js/overlord-header-data.js</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ServiceOverviewProxyServlet</servlet-name>
+    <servlet-class>org.overlord.gadgets.web.server.servlets.RestProxyServlet</servlet-class>
+    <init-param>
+      <param-name>proxy-name</param-name>
+      <param-value>service-overview</param-value>
+    </init-param>
+    <init-param>
+      <param-name>proxy-url</param-name>
+      <param-value>SCHEME://HOST:PORT/overlord-rtgov/service/dependency/overview</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServiceOverviewProxyServlet</servlet-name>
+    <url-pattern>/service/dependency/overview</url-pattern>
+  </servlet-mapping>
+
   <!-- Define a Security Constraint on this Application -->
   <security-constraint>
     <web-resource-collection>
