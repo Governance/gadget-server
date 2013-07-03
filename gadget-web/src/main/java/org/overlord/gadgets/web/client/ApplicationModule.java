@@ -22,7 +22,7 @@ import org.overlord.gadgets.web.client.view.Footer;
 import org.overlord.gadgets.web.client.view.IndexViewImpl;
 import org.overlord.gadgets.web.client.view.StoreViewImpl;
 
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.RootPresenter;
