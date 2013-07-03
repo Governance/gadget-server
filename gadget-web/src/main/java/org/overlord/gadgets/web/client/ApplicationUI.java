@@ -20,7 +20,7 @@ import org.overlord.gadgets.web.client.presenter.IndexPresenter;
 import org.overlord.gadgets.web.client.presenter.StorePresenter;
 import org.overlord.gadgets.web.client.view.Footer;
 
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;

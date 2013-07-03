@@ -24,7 +24,7 @@ import org.overlord.gadgets.web.shared.dto.PageResponse;
 import org.overlord.gadgets.web.shared.dto.StoreItemModel;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
