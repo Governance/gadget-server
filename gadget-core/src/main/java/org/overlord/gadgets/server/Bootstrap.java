@@ -40,7 +40,8 @@ public class Bootstrap {
     public static final String JPA_UNITNAME = "gadget-server.jpa.unitname";
     public static final String HIBERNATE_HBM2DDL_AUTO = "gadget-server.hibernate.hbm2ddl.auto";
 
-    private EntityManager entityManager;
+    //private EntityManager entityManager;
+    private java.util.Map<String, EntityManagerFactory> emFactory=new java.util.HashMap<String, EntityManagerFactory>();
 
     private String dbDriver;
     private String dbUrl;
@@ -85,8 +86,8 @@ public class Bootstrap {
             properties.put("hibernate.hbm2ddl.auto", hibernateHbm2DdlAuto);
         }
 
-        EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(unitName, properties);
-        entityManager = emFactory.createEntityManager();
+        emFactory.put(unitName, Persistence.createEntityManagerFactory(unitName, properties));
+        //entityManager = emFactory.createEntityManager();
     }
 
     private boolean isNotEmpty(String value) {
@@ -101,9 +102,10 @@ public class Bootstrap {
      * @return
      */
     public EntityManager getEntityManager(String unitName) {
-        if (entityManager == null) {
+        if (!emFactory.containsKey(unitName)) {
             init(unitName);
         }
-        return entityManager;
+System.out.println("CREATE ENTITY MGR FOR "+unitName);
+        return emFactory.get(unitName).createEntityManager();
     }
 }
