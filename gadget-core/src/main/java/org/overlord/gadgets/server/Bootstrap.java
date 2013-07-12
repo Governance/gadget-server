@@ -107,4 +107,11 @@ public class Bootstrap {
         }
         return emFactory.get(unitName).createEntityManager();
     }
+    
+    public EntityManagerFactory getEntityManagerFactory(String unitName) {
+        if (!emFactory.containsKey(unitName)) {
+            init(unitName);
+        }
+        return emFactory.get(unitName);
+    }
 }

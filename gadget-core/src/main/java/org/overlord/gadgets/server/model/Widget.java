@@ -16,6 +16,7 @@
 package org.overlord.gadgets.server.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -52,7 +53,7 @@ public class Widget implements Serializable{
     private long order;
     
     @OneToMany(mappedBy = "widget", cascade= CascadeType.ALL)
-    private List<WidgetPreference> prefs;
+    private List<WidgetPreference> prefs = new ArrayList<WidgetPreference>();
 
     @ManyToOne
     private Page page;

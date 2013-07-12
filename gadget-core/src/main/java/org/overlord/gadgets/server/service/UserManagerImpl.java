@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.overlord.gadgets.server.model.Page;
@@ -35,14 +36,14 @@ import com.google.inject.Inject;
  */
 public class UserManagerImpl implements UserManager {
 
-    private EntityManager entityManager;
+    private EntityManagerFactory entityManagerFactory;
 
     @Inject
-    public UserManagerImpl(EntityManager manager) {
-        this.entityManager = manager;
+    public UserManagerImpl(EntityManagerFactory manager) {
+        this.entityManagerFactory = manager;
     }
 
-    protected boolean startTxn() {
+    protected boolean startTxn(EntityManager entityManager) {
     	boolean started=false;
 
         if (!entityManager.getTransaction().isActive()) {
@@ -57,7 +58,7 @@ public class UserManagerImpl implements UserManager {
         return (started);
     }
 
-    protected void endTxn(boolean started) {
+    protected void endTxn(boolean started, EntityManager entityManager) {
     	if (started) {
             entityManager.getTransaction().commit();
     	}
@@ -65,152 +66,293 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User createUser(User user) {
-        boolean startedTxn=startTxn();
-        entityManager.persist(user);
-
-        Page page = new Page();
-        page.setName("Home");
-        page.setColumns(2);
-        page.setUser(user);
-        entityManager.persist(page);
-
-        user.setCurrentPageId(page.getId());
-
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            entityManager.persist(user);
+    
+            Page page = new Page();
+            page.setName("Home");
+            page.setColumns(2);
+            page.setUser(user);
+            entityManager.persist(page);
+    
+            user.setCurrentPageId(page.getId());
+    
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
 
         return user;
     }
 
     @Override
     public User getUserById(long userId) {
-        boolean startedTxn=startTxn();
-        User user = entityManager.find(User.class, userId);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        User user=null;
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            user = entityManager.find(User.class, userId);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+        
         return user;
     }
 
     @Override
     public void updateUser(User user) {
-        boolean startedTxn=startTxn();
-        entityManager.merge(user);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            entityManager.merge(user);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public void removeUser(User user) {
-        boolean startedTxn=startTxn();
-        entityManager.remove(user);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            entityManager.remove(user);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<User> getAllUser() {
-        boolean startedTxn=startTxn();
-        Query query = entityManager.createQuery("select user from User user");
-        @SuppressWarnings("unchecked")
-        List<User> users = query.getResultList();
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        List<User> users=null;
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            Query query = entityManager.createQuery("select user from User user");
+            users = query.getResultList();
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+
         return users;
     }
 
     @Override
     public User getUser(String username) {
-        boolean startedTxn=startTxn();
-        Query query = entityManager.createQuery("select user from User user where user.name = :username");
-        query.setParameter("username", username);
-
-        @SuppressWarnings("unchecked")
-        List<User> users = query.getResultList();
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
         User user = null;
-        if (users.size() > 0) {
-            user =  users.get(0);
-        }
-        endTxn(startedTxn);
 
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            Query query = entityManager.createQuery("select user from User user where user.name = :username");
+            query.setParameter("username", username);
+    
+            @SuppressWarnings("unchecked")
+            List<User> users = query.getResultList();
+            if (users.size() > 0) {
+                user =  users.get(0);
+                
+                // Eagarly fetch contains objects
+                for (Page page : user.getPages()) {
+                    fetch(page);
+                }
+            }
+            endTxn(startedTxn, entityManager);
+    
+        } finally {
+            entityManager.close();
+        }
+        
         return user;
     }
+    
+    protected void fetch(Page page) {
+        if (page.getWidgets().size() > 0) {
+            for (Widget w : page.getWidgets()) {
+                fetch(w);
+            }
+        }
+    }
+    
+    protected void fetch(Widget widget) {
+        widget.getPrefs().size();
+    }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Page> getPages(long userId) {
-        Query query = entityManager.createQuery("select page from Page page where page.user.id = :userId order by page.pageOrder asc");
-        query.setParameter("userId", userId);
-        boolean startedTxn=startTxn();
-        @SuppressWarnings("unchecked")
-        List<Page> pages = query.getResultList();
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        List<Page> pages=null;
+        
+        try {
+           Query query = entityManager.createQuery("select page from Page page where page.user.id = :userId order by page.pageOrder asc");
+            query.setParameter("userId", userId);
+            boolean startedTxn=startTxn(entityManager);
+            pages = query.getResultList();
+            
+            // Force eager fetch of pages, widgets and prefs
+            if (pages != null) {
+                for (Page page : pages) {
+                    fetch(page);
+                }
+            }
+
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+
         return pages;
     }
 
     @Override
     public Page addPage(Page page, User user) {
-        boolean startedTxn=startTxn();
-        page.setUser(user);
-        entityManager.persist(page);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            page.setUser(user);
+            entityManager.persist(page);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+
         return page;
     }
 
     @Override
     public Page getPage(long pageId) {
-        boolean startedTxn=startTxn();
-        Page page = entityManager.find(Page.class, pageId);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        Page page = null;
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            page = entityManager.find(Page.class, pageId);
+            
+            // Force eager fetch of widgets and prefs
+            if (page != null) {
+                fetch(page);
+            }
+            
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+        
         return page;
     }
 
     @Override
     public void removePage(long pageId) {
-        boolean startedTxn=startTxn();
-        Page page = entityManager.find(Page.class, pageId);
-        entityManager.remove(page);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            Page page = entityManager.find(Page.class, pageId);
+            entityManager.remove(page);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public void removeWidget(long widgetId) {
-        boolean startedTxn=startTxn();
-        Widget widget = entityManager.find(Widget.class, widgetId);
-        widget.getPage().getWidgets().remove(widget);
-        entityManager.remove(widget);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            Widget widget = entityManager.find(Widget.class, widgetId);
+            widget.getPage().getWidgets().remove(widget);
+            entityManager.remove(widget);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public Widget getWidgetById(long widgetId) {
-        boolean startedTxn=startTxn();
-        Widget widget = entityManager.find(Widget.class, widgetId);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        Widget widget = null;
+        
+        try {
+            boolean startedTxn=startTxn(entityManager);
+            widget = entityManager.find(Widget.class, widgetId);
+            
+            // Access the preferences to eagarly load
+            if (widget != null) {
+                fetch(widget);
+            }
+            
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+        
         return widget;
     }
 
 	@Override
     public void updateWidgetPreference(long widgetId,
 			List<WidgetPreference> prefs) {
-		boolean startedTxn=startTxn();
-		Query query = entityManager.createQuery("delete from WidgetPreference pref where pref.widget.id = :id");
-		query.setParameter("id", widgetId);
-		query.executeUpdate();
-
-		Widget widget = entityManager.find(Widget.class, widgetId);
-		for (WidgetPreference pref : prefs) {
-			pref.setWidget(widget);
-		}
-
-		widget.setPrefs(prefs);
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+    		boolean startedTxn=startTxn(entityManager);
+    		Query query = entityManager.createQuery("delete from WidgetPreference pref where pref.widget.id = :id");
+    		query.setParameter("id", widgetId);
+    		query.executeUpdate();
+    
+    		Widget widget = entityManager.find(Widget.class, widgetId);
+    		for (WidgetPreference pref : prefs) {
+    			pref.setWidget(widget);
+    		}
+    
+    		widget.setPrefs(prefs);
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
     public Map<String, String> getWidgetPreference(long widgetId) {
-		Map<String, String> result = new HashMap<String, String>();
-		boolean startedTxn=startTxn();
-		Widget widget = entityManager.find(Widget.class, widgetId);
-		if (widget.getPrefs() != null) {
-			for (WidgetPreference pref : widget.getPrefs()) {
-				result.put(pref.getName(), pref.getValue());
-			}
-		}
-        endTxn(startedTxn);
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        Map<String, String> result = new HashMap<String, String>();
+
+        try {
+    		boolean startedTxn=startTxn(entityManager);
+    		Widget widget = entityManager.find(Widget.class, widgetId);
+    		if (widget.getPrefs() != null) {
+    			for (WidgetPreference pref : widget.getPrefs()) {
+    				result.put(pref.getName(), pref.getValue());
+    			}
+    		}
+            endTxn(startedTxn, entityManager);
+        } finally {
+            entityManager.close();
+        }
+        
 		return result;
 	}
 

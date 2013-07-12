@@ -62,11 +62,16 @@ public class UserManagerTest {
     @BeforeClass
     public static void setUp() throws Exception{
         Injector injector = Guice.createInjector(new CoreModule());
-        userManager = injector.getInstance(UserManager.class);
-        gadgetService = injector.getInstance(GadgetService.class);
-
-        userManager.createUser(user);
-        userManager.addPage(page, user);
+        try {
+            userManager = injector.getInstance(UserManager.class);
+            gadgetService = injector.getInstance(GadgetService.class);
+    
+            userManager.createUser(user);
+            userManager.addPage(page, user);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Assert.fail("Failed to initialize: "+t);
+        }
     }
 
     @Test

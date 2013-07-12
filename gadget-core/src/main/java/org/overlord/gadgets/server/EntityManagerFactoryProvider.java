@@ -18,6 +18,7 @@
 package org.overlord.gadgets.server;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -26,7 +27,7 @@ import com.google.inject.name.Named;
 /**
  * Creates an Hibernate Entity Manager.
  */
-public class EntityManagerProvider implements Provider<EntityManager> {
+public class EntityManagerFactoryProvider implements Provider<EntityManagerFactory> {
 
     private Bootstrap bootstrap;
     private String unitName;
@@ -37,7 +38,7 @@ public class EntityManagerProvider implements Provider<EntityManager> {
      * @param unitName
      */
     @Inject
-    public EntityManagerProvider(Bootstrap bootstrap, @Named(Bootstrap.JPA_UNITNAME) String unitName) {
+    public EntityManagerFactoryProvider(Bootstrap bootstrap, @Named(Bootstrap.JPA_UNITNAME) String unitName) {
         this.unitName = unitName;
         this.bootstrap = bootstrap;
     }
@@ -48,8 +49,8 @@ public class EntityManagerProvider implements Provider<EntityManager> {
      * @see com.google.inject.Provider#get()
      */
     @Override
-    public EntityManager get() {
-        return bootstrap.getEntityManager(unitName);
+    public EntityManagerFactory get() {
+        return bootstrap.getEntityManagerFactory(unitName);
     }
 
 }

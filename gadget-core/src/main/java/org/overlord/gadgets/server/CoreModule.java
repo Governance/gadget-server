@@ -18,6 +18,7 @@ package org.overlord.gadgets.server;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.overlord.gadgets.server.service.ApplicationDataManager;
 import org.overlord.gadgets.server.service.ApplicationDataManagerImpl;
@@ -68,12 +69,12 @@ public class CoreModule extends ConfiguredModule {
         names.put(Bootstrap.HIBERNATE_HBM2DDL_AUTO, properties.getProperty(Bootstrap.HIBERNATE_HBM2DDL_AUTO, ""));
         Names.bindProperties(this.binder(), names);
 
-        if (entityManager == null) {
-            bind(EntityManager.class).toProvider(EntityManagerProvider.class).in(Scopes.SINGLETON);
-        } else {
-            bind(EntityManager.class).toInstance(this.entityManager);
-        }
-
+        //if (entityManager == null) {
+            bind(EntityManagerFactory.class).toProvider(EntityManagerFactoryProvider.class).in(Scopes.SINGLETON);
+        //} else {
+        //    bind(EntityManager.class).toInstance(this.entityManager);
+        //}
+            
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
         bind(GadgetService.class).to(GadgetServiceImpl.class).in(Scopes.SINGLETON);

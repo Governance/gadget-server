@@ -18,6 +18,7 @@ package org.overlord.gadgets.server.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.overlord.gadgets.server.model.Gadget;
@@ -32,68 +33,100 @@ import com.google.inject.Inject;
  */
 public class GadgetServiceImpl implements GadgetService{
 
-    private EntityManager entityManager;
+    private EntityManagerFactory entityManagerFactory;
 
     @Inject
-    public GadgetServiceImpl(EntityManager em) {
-        this.entityManager = em;
+    public GadgetServiceImpl(EntityManagerFactory emf) {
+        this.entityManagerFactory = emf;
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Gadget> getAllGadgets(int offset, int pageSize) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        List<Gadget> gadgets=null;
+        
+        try {
+            if (!entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().begin();
+            }
+    
+            Query query = entityManager.createQuery("select gadget from Gadget gadget");
+            query.setFirstResult(offset).setMaxResults(pageSize);
+            gadgets = query.getResultList();
+            entityManager.getTransaction().commit();
+        } finally {
+            entityManager.close();
         }
 
-        Query query = entityManager.createQuery("select gadget from Gadget gadget");
-        query.setFirstResult(offset).setMaxResults(pageSize);
-        @SuppressWarnings("unchecked")
-        List<Gadget> gadgets = query.getResultList();
-        entityManager.getTransaction().commit();
         return gadgets;
     }
 
     @Override
     public int getAllGadgetsNum() {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        Long result=null;
+        
+        try {
+            if (!entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().begin();
+            }
+            Query query = entityManager.createQuery("select count(gadget.id) from Gadget gadget");
+    
+            result = (Long)query.getSingleResult();
+            entityManager.getTransaction().commit();
+        } finally {
+            entityManager.close();
         }
-        Query query = entityManager.createQuery("select count(gadget.id) from Gadget gadget");
 
-        Long result = (Long)query.getSingleResult();
-        entityManager.getTransaction().commit();
-        return result.intValue();
+        return result == null ? 0 : result.intValue();
     }
 
     @Override
     public void addGadgetToPage(Gadget gadget, Page page) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        try {
+            if (!entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().begin();
+            }
+            Widget widget = new Widget();
+            widget.setAppUrl(gadget.getUrl());
+            widget.setName(gadget.getTitle());
+            widget.setPage(page);
+            //TODO: hard-coded for testing...
+            widget.setOrder(page.getWidgets().size() + 1);
+    
+            entityManager.persist(widget);
+    
+            page.getWidgets().add(widget);
+            entityManager.merge(page);
+    
+            entityManager.getTransaction().commit();
+        } finally {
+            entityManager.close();
         }
-        Widget widget = new Widget();
-        widget.setAppUrl(gadget.getUrl());
-        widget.setName(gadget.getTitle());
-        widget.setPage(page);
-        //TODO: hard-coded for testing...
-        widget.setOrder(page.getWidgets().size() + 1);
-
-        entityManager.persist(widget);
-
-        page.getWidgets().add(widget);
-        entityManager.merge(page);
-
-        entityManager.getTransaction().commit();
     }
 
     @Override
     public Gadget getGadgetById(long gadgetId) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
+        EntityManager entityManager=entityManagerFactory.createEntityManager();
+        
+        Gadget gadget=null;
+        
+        try {
+            if (!entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().begin();
+            }
+            gadget = entityManager.find(Gadget.class, gadgetId);
+            entityManager.getTransaction().commit();
+        } finally {
+            entityManager.close();
         }
-        Gadget gadget = entityManager.find(Gadget.class, gadgetId);
-        entityManager.getTransaction().commit();
-
+    
         return gadget;
     }
 
