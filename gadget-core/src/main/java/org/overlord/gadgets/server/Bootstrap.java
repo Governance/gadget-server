@@ -105,7 +105,6 @@ public class Bootstrap {
         if (!emFactory.containsKey(unitName)) {
             init(unitName);
         }
-System.out.println("CREATE ENTITY MGR FOR "+unitName);
         return emFactory.get(unitName).createEntityManager();
     }
 }
