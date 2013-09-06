@@ -70,7 +70,7 @@
 		<httpcore.version>4.1.2</httpcore.version>
 		<nekohtml.version>1.9.15</nekohtml.version>
 		<joda-time.version>2.0</joda-time.version>
-		<commons-codec.version>1.5</commons-codec.version>
+		<commons-codec.version>1.4</commons-codec.version>
 		<xerces.version>2.9.1-jbossas-1</xerces.version>
 		<overlord-commons.version>1.0.9</overlord-commons.version>
 	</properties>
