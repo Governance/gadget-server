@@ -65,6 +65,10 @@
       <artifactId>overlord-commons-uiheader</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.overlord</groupId>
+      <artifactId>overlord-commons-auth</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>

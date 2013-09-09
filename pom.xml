@@ -72,7 +72,7 @@
 		<joda-time.version>2.0</joda-time.version>
 		<commons-codec.version>1.4</commons-codec.version>
 		<xerces.version>2.9.1-jbossas-1</xerces.version>
-		<overlord-commons.version>1.0.9</overlord-commons.version>
+		<overlord-commons.version>2.0.0-SNAPSHOT</overlord-commons.version>
 	</properties>
 
 	<modules>
@@ -98,6 +98,11 @@
 			  <artifactId>overlord-commons-uiheader</artifactId>
 			  <version>${overlord-commons.version}</version>
 			</dependency>
+            <dependency>
+              <groupId>org.overlord</groupId>
+              <artifactId>overlord-commons-auth</artifactId>
+              <version>${overlord-commons.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.apache.shindig</groupId>
 				<artifactId>shindig-common</artifactId>
