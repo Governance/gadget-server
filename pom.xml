@@ -11,9 +11,9 @@
 	</description>
 
 	<parent>
-		<groupId>org.jboss</groupId>
-		<artifactId>jboss-parent</artifactId>
-		<version>10</version>
+		<groupId>org.jboss.integration-platform</groupId>
+		<artifactId>jboss-integration-platform-bom</artifactId>
+		<version>6.0.0-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -55,23 +55,12 @@
 
 	<properties>
 		<gin.version>1.5_past22</gin.version>
-		<gson.version>1.2.2</gson.version>
 		<guice.version>3.0</guice.version>
-		<gwt.version>2.5.0</gwt.version>
 		<gwt-log.version>3.1.3</gwt-log.version>
 		<gwtp.version>0.7</gwtp.version>
-		<gwt-vis.version>1.1.1</gwt-vis.version>
-		<jbossas.version>7.1.1.Final</jbossas.version>
-		<json.version>20070829</json.version>
-		<resteasy.version>2.3.6.Final</resteasy.version>
-		<shindig.version>3.0.0-beta4</shindig.version>
-		<slf4j.version>1.6.1</slf4j.version>
-		<guava.version>10.0.1</guava.version>
-		<httpcore.version>4.1.2</httpcore.version>
+		<jbossas.version>7.2.0.Final</jbossas.version>
 		<nekohtml.version>1.9.15</nekohtml.version>
-		<joda-time.version>2.0</joda-time.version>
-		<commons-codec.version>1.4</commons-codec.version>
-		<xerces.version>2.9.1-jbossas-1</xerces.version>
+		<shindig.version>3.0.0-beta4</shindig.version>
 		<overlord-commons.version>2.0.0-SNAPSHOT</overlord-commons.version>
 	</properties>
 
@@ -135,25 +124,12 @@
 				<artifactId>shindig-extras</artifactId>
 				<version>${shindig.version}</version>
 			</dependency>
+
+
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.gwt</groupId>
-				<artifactId>gwt-servlet</artifactId>
-				<version>${gwt.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.gwt</groupId>
-				<artifactId>gwt-user</artifactId>
-				<version>${gwt.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.gwt.inject</groupId>
@@ -161,14 +137,14 @@
 				<version>${gin.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.gwtplatform</groupId>
-				<artifactId>gwtp-mvp-client</artifactId>
-				<version>${gwtp.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.google.inject.extensions</groupId>
 				<artifactId>guice-assistedinject</artifactId>
 				<version>${guice.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.gwtplatform</groupId>
+				<artifactId>gwtp-mvp-client</artifactId>
+				<version>${gwtp.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.code.gwt-log</groupId>
@@ -178,49 +154,14 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-guice</artifactId>
-				<version>${resteasy.version}</version>
+				<version>${version.org.jboss.resteasy}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>${gson.version}</version>
+				<groupId>net.sourceforge.nekohtml</groupId>
+				<artifactId>nekohtml</artifactId>
+				<version>${nekohtml.version}</version>
 			</dependency>
-			<!-- remove duplicated jars in gadget-server.war -->
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
-		  <dependency>
-		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
-		    <version>${joda-time.version}</version>
-		  </dependency>
-		  <dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>${commons-codec.version}</version>
-		  </dependency>
-		  <dependency>
-		    <groupId>xerces</groupId>
-		    <artifactId>xercesImpl</artifactId>
-		    <version>${xerces.version}</version>
-		  </dependency>
-		  <dependency>
-		    <groupId>net.sourceforge.nekohtml</groupId>
-		    <artifactId>nekohtml</artifactId>
-		    <version>${nekohtml.version}</version>
-		  </dependency>
-		  <dependency>
-		    <groupId>org.apache.httpcomponents</groupId>
-		    <artifactId>httpcore</artifactId>
-		    <version>${httpcore.version}</version>
-		  </dependency>
-		    <dependency>
-		      <groupId>org.json</groupId>
-		      <artifactId>json</artifactId>
-		      <version>${json.version}</version>
-		    </dependency>
+
 		</dependencies>
 	</dependencyManagement>
   
