@@ -16,6 +16,8 @@
 package org.overlord.gadgets.web.server.servlets;
 
 import java.net.HttpURLConnection;
+import java.security.KeyPair;
+import java.security.KeyStore;
 import java.util.Properties;
 
 import org.overlord.commons.auth.jboss7.SAMLBearerTokenUtil;
@@ -58,13 +60,21 @@ public class RestProxySAMLBearerTokenAuthProvider implements RestProxyAuthProvid
      * S-RAMP Atom API.
      */
     private String createSAMLBearerTokenAssertion() {
-        String issuer = getIssuer();
-        String service = getService();
-        return SAMLBearerTokenUtil.createSAMLAssertion(issuer, service);
+        String samlAssertion = SAMLBearerTokenUtil.createSAMLAssertion(getIssuer(), getService());
+        if (isSignAssertions()) {
+            try {
+                KeyStore keystore = SAMLBearerTokenUtil.loadKeystore(getKeystorePath(), getKeystorePassword());
+                KeyPair keyPair = SAMLBearerTokenUtil.getKeyPair(keystore, getAlias(), getAliasPassword());
+                samlAssertion = SAMLBearerTokenUtil.signSAMLAssertion(samlAssertion, keyPair);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return samlAssertion;
     }
 
     /**
-     * @return the configured basic auth username
+     * @return the configured saml issuer
      */
     private String getIssuer() {
         String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.issuer";
@@ -72,10 +82,50 @@ public class RestProxySAMLBearerTokenAuthProvider implements RestProxyAuthProvid
     }
 
     /**
-     * @return the configured basic auth password
+     * @return the configured saml service
      */
     private String getService() {
         String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.service";
+        return this.configProperties.getProperty(propKey);
+    }
+
+    /**
+     * @return whether saml assertions should be digitally signed
+     */
+    private boolean isSignAssertions() {
+        String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.sign-assertions";
+        return "true".equals(this.configProperties.getProperty(propKey));
+    }
+
+    /**
+     * @return the configured digital signature keystore
+     */
+    private String getKeystorePath() {
+        String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.keystore";
+        return this.configProperties.getProperty(propKey);
+    }
+
+    /**
+     * @return the configured keystore password
+     */
+    private String getKeystorePassword() {
+        String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.keystore-password";
+        return this.configProperties.getProperty(propKey);
+    }
+
+    /**
+     * @return the configured keystore alias
+     */
+    private String getAlias() {
+        String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.key-alias";
+        return this.configProperties.getProperty(propKey);
+    }
+
+    /**
+     * @return the configured keystore alias password
+     */
+    private String getAliasPassword() {
+        String propKey = "gadget-server.rest-proxy." + this.proxyName + ".authentication.saml.key-password";
         return this.configProperties.getProperty(propKey);
     }
 
