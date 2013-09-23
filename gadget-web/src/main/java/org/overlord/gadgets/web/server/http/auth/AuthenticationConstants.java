@@ -27,5 +27,10 @@ public class AuthenticationConstants {
     public static final String CONFIG_BASIC_AUTH_PASS          = "gadget-server.config.auth.basic.password";
     public static final String CONFIG_SAML_AUTH_ISSUER         = "gadget-server.config.auth.saml.issuer";
     public static final String CONFIG_SAML_AUTH_SERVICE        = "gadget-server.config.auth.saml.service";
+    public static final String CONFIG_SAML_AUTH_SIGN_ASSERTIONS   = "gadget-server.config.auth.saml.sign-assertions"; //$NON-NLS-1$
+    public static final String CONFIG_SAML_AUTH_KEYSTORE          = "gadget-server.config.auth.saml.keystore"; //$NON-NLS-1$
+    public static final String CONFIG_SAML_AUTH_KEYSTORE_PASSWORD = "gadget-server.config.auth.saml.keystore-password"; //$NON-NLS-1$
+    public static final String CONFIG_SAML_AUTH_KEY_ALIAS         = "gadget-server.config.auth.saml.key-alias"; //$NON-NLS-1$
+    public static final String CONFIG_SAML_AUTH_KEY_PASSWORD      = "gadget-server.config.auth.saml.key-password"; //$NON-NLS-1$
 
 }
