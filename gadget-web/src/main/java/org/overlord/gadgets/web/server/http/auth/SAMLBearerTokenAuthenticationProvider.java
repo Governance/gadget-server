@@ -15,6 +15,9 @@
  */
 package org.overlord.gadgets.web.server.http.auth;
 
+import java.security.KeyPair;
+import java.security.KeyStore;
+
 import org.apache.shindig.gadgets.http.HttpRequest;
 import org.overlord.commons.auth.jboss7.SAMLBearerTokenUtil;
 
@@ -32,6 +35,11 @@ public class SAMLBearerTokenAuthenticationProvider implements AuthenticationProv
 
     private String issuer;
     private String service;
+    private boolean signAssertions;
+    private String keystorePath;
+    private String keystorePassword;
+    private String alias;
+    private String aliasPassword;
 
     /**
      * Constructor.
@@ -41,9 +49,19 @@ public class SAMLBearerTokenAuthenticationProvider implements AuthenticationProv
     @Inject
     public SAMLBearerTokenAuthenticationProvider(
             @Named(AuthenticationConstants.CONFIG_SAML_AUTH_ISSUER) String issuer,
-            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_SERVICE) String service) {
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_SERVICE) String service,
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_SIGN_ASSERTIONS) String signAssertions,
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_KEYSTORE) String keystorePath,
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_KEYSTORE_PASSWORD) String keystorePassword,
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_KEY_ALIAS) String alias,
+            @Named(AuthenticationConstants.CONFIG_SAML_AUTH_KEY_PASSWORD) String aliasPassword) {
         this.issuer = issuer;
         this.service = service;
+        this.signAssertions = "true".equals(signAssertions);
+        this.keystorePath = keystorePath;
+        this.keystorePassword = keystorePassword;
+        this.alias = alias;
+        this.aliasPassword = aliasPassword;
     }
 
     /**
@@ -60,7 +78,17 @@ public class SAMLBearerTokenAuthenticationProvider implements AuthenticationProv
      * S-RAMP Atom API.
      */
     private String createSAMLBearerTokenAssertion() {
-        return SAMLBearerTokenUtil.createSAMLAssertion(issuer, service);
+        String samlAssertion = SAMLBearerTokenUtil.createSAMLAssertion(issuer, service);
+        if (signAssertions) {
+            try {
+                KeyStore keystore = SAMLBearerTokenUtil.loadKeystore(keystorePath, keystorePassword);
+                KeyPair keyPair = SAMLBearerTokenUtil.getKeyPair(keystore, alias, aliasPassword);
+                samlAssertion = SAMLBearerTokenUtil.signSAMLAssertion(samlAssertion, keyPair);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return samlAssertion;
     }
 
 }

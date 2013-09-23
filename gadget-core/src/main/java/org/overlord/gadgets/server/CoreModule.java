@@ -8,7 +8,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,  
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -36,6 +36,7 @@ import com.google.inject.name.Names;
  */
 public class CoreModule extends ConfiguredModule {
 
+    @SuppressWarnings("unused")
     private EntityManager entityManager;
 
     /**
@@ -74,7 +75,7 @@ public class CoreModule extends ConfiguredModule {
         //} else {
         //    bind(EntityManager.class).toInstance(this.entityManager);
         //}
-            
+
         bind(UserManager.class).to(UserManagerImpl.class).in(Scopes.SINGLETON);
         bind(ApplicationDataManager.class).to(ApplicationDataManagerImpl.class).in(Scopes.SINGLETON);
         bind(GadgetService.class).to(GadgetServiceImpl.class).in(Scopes.SINGLETON);
