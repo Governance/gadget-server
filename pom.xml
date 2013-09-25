@@ -62,6 +62,7 @@
 		<jbossas.version>7.2.0.Final</jbossas.version>
 		<nekohtml.version>1.9.15</nekohtml.version>
 		<shindig.version>3.0.0-beta4</shindig.version>
+        <commons-logging.version>1.1.1</commons-logging.version>
 		<overlord-commons.version>2.0.0-SNAPSHOT</overlord-commons.version>
 	</properties>
 

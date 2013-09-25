@@ -15,11 +15,13 @@
  */
 package org.overlord.gadgets.server;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Properties;
+
+import org.apache.commons.configuration.Configuration;
+import org.overlord.commons.config.ConfigurationFactory;
 
 import com.google.inject.AbstractModule;
 
@@ -78,48 +80,20 @@ public abstract class ConfiguredModule extends AbstractModule {
      * places, although users can override the file's location by setting a system property.
      */
     private static void loadFromFile() {
-        File configFile = null;
+        String configFile = System.getProperty("gadget-server.config.file.name");
+        Long refreshDelay = 60000l;
+        Configuration config = ConfigurationFactory.createConfig(
+                configFile,
+                "gadget-server.properties",
+                refreshDelay,
+                "/META-INF/config/org.overlord.gadgets.properties",
+                ConfiguredModule.class);
 
-        String configFileLoc = System.getProperty("gadget-server.config.file.name");
-        if (configFileLoc != null) {
-            File file = new File(configFileLoc);
-            if (file.isFile())
-                configFile = file;
-        } else {
-            String userHomeDir = System.getProperty("user.home");
-            if (userHomeDir != null) {
-                File dirFile = new File(userHomeDir);
-                if (dirFile.isDirectory()) {
-                    File cfile = new File(dirFile, DEFAULT_PROPERTIES);
-                    if (cfile.isFile())
-                        configFile = cfile;
-                }
-            }
-            String jbossConfigDir = System.getProperty("jboss.server.config.dir");
-            if (configFile == null && jbossConfigDir != null) {
-                File dirFile = new File(jbossConfigDir);
-                if (dirFile.isDirectory()) {
-                    File cfile = new File(dirFile, DEFAULT_PROPERTIES);
-                    if (cfile.isFile())
-                        configFile = cfile;
-                }
-            }
-        }
-
-        if (configFile != null) {
-            try {
-                FileReader reader = null;
-                try {
-                    reader = new FileReader(configFile);
-                    Properties props = new Properties();
-                    props.load(reader);
-                    properties.putAll(props);
-                } finally {
-                    reader.close();
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        Iterator<?> keys = config.getKeys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = config.getString(key);
+            properties.put(key, value);
         }
     }
 
