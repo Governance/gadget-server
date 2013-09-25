@@ -62,8 +62,20 @@
               </exclusion>
           </exclusions>
       </dependency>
+      
+    <dependency>
+      <groupId>org.overlord</groupId>
+      <artifactId>overlord-commons-config</artifactId>
+      <version>${overlord-commons.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>${commons-logging.version}</version>
+    </dependency>
 
-     <dependency>
+    <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
          <scope>test</scope>
