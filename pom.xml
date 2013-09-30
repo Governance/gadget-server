@@ -11,9 +11,9 @@
 	</description>
 
 	<parent>
-		<groupId>org.jboss.integration-platform</groupId>
-		<artifactId>jboss-integration-platform-bom</artifactId>
-		<version>6.0.0-SNAPSHOT</version>
+		<groupId>org.jboss</groupId>
+		<artifactId>jboss-parent</artifactId>
+		<version>10</version>
 	</parent>
 
 	<scm>
@@ -54,15 +54,19 @@
 	</developers>
 
 	<properties>
+		<commons-logging.version>1.1.1</commons-logging.version>
 		<gin.version>1.5_past22</gin.version>
 		<guice.version>3.0</guice.version>
 		<gwt-log.version>3.1.3</gwt-log.version>
 		<gwtp.version>0.7</gwtp.version>
-		<guava.version>10.0.1</guava.version>		<!-- This version required by shindig 3.x -->
-		<jbossas.version>7.2.0.Final</jbossas.version>
-		<nekohtml.version>1.9.15</nekohtml.version>
+		<gwt-vis.version>1.1.1</gwt-vis.version>
+		<jbossip.version>6.0.0-SNAPSHOT</jbossip.version>
+		<json.version>20070829</json.version>
+		<resteasy.version>2.3.6.Final</resteasy.version>
 		<shindig.version>3.0.0-beta4</shindig.version>
-        <commons-logging.version>1.1.1</commons-logging.version>
+		<shiro.version>1.1.0</shiro.version>
+		<guava.version>10.0.1</guava.version>
+		<nekohtml.version>1.9.15</nekohtml.version>
 		<overlord-commons.version>2.0.0-SNAPSHOT</overlord-commons.version>
 	</properties>
 
@@ -77,23 +81,23 @@
 		<dependencies>
 			<!-- Imported dependencies -->
 			<dependency>
-				<groupId>org.jboss.as</groupId>
-				<artifactId>jboss-as-parent</artifactId>
-				<version>${jbossas.version}</version>
+				<groupId>org.jboss.integration-platform</groupId>
+				<artifactId>jboss-integration-platform-bom</artifactId>
+				<version>${jbossip.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 
 			<dependency>
-			  <groupId>org.overlord</groupId>
-			  <artifactId>overlord-commons-uiheader</artifactId>
-			  <version>${overlord-commons.version}</version>
+				<groupId>org.overlord</groupId>
+				<artifactId>overlord-commons-uiheader</artifactId>
+				<version>${overlord-commons.version}</version>
 			</dependency>
-            <dependency>
-              <groupId>org.overlord</groupId>
-              <artifactId>overlord-commons-auth</artifactId>
-              <version>${overlord-commons.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>org.overlord</groupId>
+				<artifactId>overlord-commons-auth</artifactId>
+				<version>${overlord-commons.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.shindig</groupId>
 				<artifactId>shindig-common</artifactId>
@@ -126,14 +130,18 @@
 				<artifactId>shindig-extras</artifactId>
 				<version>${shindig.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
 
 			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
- 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
@@ -144,14 +152,14 @@
 				<version>${gin.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-assistedinject</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.gwtplatform</groupId>
 				<artifactId>gwtp-mvp-client</artifactId>
 				<version>${gwtp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.inject.extensions</groupId>
+				<artifactId>guice-assistedinject</artifactId>
+				<version>${guice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.code.gwt-log</groupId>
@@ -161,14 +169,32 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-guice</artifactId>
-				<version>${version.org.jboss.resteasy}</version>
+				<version>${resteasy.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sourceforge.nekohtml</groupId>
 				<artifactId>nekohtml</artifactId>
 				<version>${nekohtml.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>${commons-logging.version}</version>
+			</dependency>
 
+			<!-- Older version currently required by shindig 3.M4 -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<!-- Required to override more recent version that causes parsing errors -->
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>${json.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
   
@@ -322,3 +348,4 @@
 	</distributionManagement>
   
 </project>
+
