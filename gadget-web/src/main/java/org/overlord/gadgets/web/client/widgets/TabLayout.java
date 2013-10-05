@@ -8,7 +8,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,  
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -46,25 +46,25 @@ public class TabLayout extends Composite {
     private static TabLayoutUiBinder uiBinder = GWT.create(TabLayoutUiBinder.class);
 
     private String id;
-    
+
     private String promptId;
 
     @UiField UnorderedList tabsBar;
-    
+
     @UiField FlowPanel tabsContent;
 
     @UiField DivElement tabs;
-    
+
     @UiField DivElement promptDiv;
-    
+
     private ListItem addTabAnchorItem;
-    
+
     private CurrentUser currentUser;
-    
+
     private Map<String, String> tabNames = new HashMap<String, String>();
-    
+
     private Map<String, String> indexIdMap = new HashMap<String, String>();
-    
+
     private static int index = 0;
 
     public TabLayout(CurrentUser user) {
@@ -77,18 +77,21 @@ public class TabLayout extends Composite {
     }
 
     public void addTab(String pageId, String tabTitle, PortalLayout widget){
+        if (tabTitle == null || tabTitle.trim().length()==0) {
+            tabTitle = "Tab-" + pageId;
+        }
         String tabContentId = getTabContentId(pageId);
         tabNames.put(tabContentId, tabTitle);
 
         addTabTitle(tabTitle, tabContentId);
-        
+
         widget.addClosingDiv();
-        
+
         FlowPanel theContent = new FlowPanel();
         theContent.getElement().setId(tabContentId);
         theContent.add(widget);
         tabsContent.add(theContent);
-        
+
         indexIdMap.put(String.valueOf(index), pageId);
         index ++;
     }
@@ -115,12 +118,15 @@ public class TabLayout extends Composite {
         removeBtn.setText("remove");
         removeBtn.setStyleName("ui-icon ui-icon-close");
         li.add(removeBtn);
-        
+
         tabsBar.add(li);
 
     }
-    
+
     public void insertTab(String pageId, String tabTitle, Widget widget) {
+        if (tabTitle == null || tabTitle.trim().length()==0) {
+            tabTitle = "Tab-" + pageId;
+        }
         String tabContentId = getTabContentId(pageId);
 
         FlowPanel theContent = new FlowPanel();
@@ -139,17 +145,18 @@ public class TabLayout extends Composite {
         addNewTab(id, tabContentId, tabTitle, theIndex);
 
         tabsBar.add(addTabAnchorItem);
-        
+
         updateUserCurrentPageId(Long.valueOf(pageId));
-        
+
         hidePrompt(promptId);
 
     }
-    
+
     private String getTabContentId(String pageId) {
         return "tab-content-" + pageId;
     }
 
+    @Override
     public void onAttach() {
         super.onAttach();
         if (currentUser.getCurrentPage() == 0) {
@@ -172,22 +179,25 @@ public class TabLayout extends Composite {
         destroyTab(id);
         index = 0;
     }
-    
+
     private void setCurrentPage(Long indexId) {
         String theIndexId = String.valueOf(indexId);
         String pageId = indexIdMap.get(theIndexId);
         long thePageId = Long.valueOf(pageId).longValue();
         updateUserCurrentPageId(thePageId);
     }
-    
+
     private void removePage(Long indexId) {
         final String theIndexId = String.valueOf(indexId);
         String pageId = indexIdMap.get(theIndexId);
-        
+
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRemovePageURL(Long.valueOf(pageId).longValue()),
                 null, new RestfulInvoker.Response() {
+                    @Override
                     public void onResponseReceived(Request request, Response response) {
                     	indexIdMap.remove(theIndexId);
+                    	decrementIndexes(Integer.valueOf(theIndexId));
+                        index--;
                     	if (indexIdMap.size() == 0) {
                     		updateUserCurrentPageId(0);
                     		showPrompt(promptId);
@@ -195,16 +205,30 @@ public class TabLayout extends Composite {
                     }
         });
     }
-    
+
+    /**
+     * @param indexId
+     */
+    protected void decrementIndexes(int indexId) {
+        for (long idx = indexId; idx < index; idx++) {
+            String theIdx = String.valueOf(idx);
+            if (indexIdMap.containsKey(theIdx)) {
+                String value = indexIdMap.remove(theIdx);
+                indexIdMap.put(String.valueOf(idx - 1), value);
+            }
+        }
+    }
+
     public void selectCurrentActiveTab() {
         String tabContentId = getTabContentId(String.valueOf(currentUser.getCurrentPage()));
         selectTab(id, tabContentId);
     }
-    
+
     private void updateUserCurrentPageId(final long pageId) {
     	RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.updateCurrentPageId(currentUser.getUserId(), pageId), null,
-    			new RestfulInvoker.Response() {					
-					public void onResponseReceived(Request arg0, Response arg1) {
+    			new RestfulInvoker.Response() {
+					@Override
+                    public void onResponseReceived(Request arg0, Response arg1) {
 						currentUser.setCurrentPage(pageId);
 					}
 				});
@@ -230,7 +254,7 @@ public class TabLayout extends Composite {
 
     private static native void addNewTab(String id, String tabContentId, String tabTitle, int index) /*-{
         var theTabs = $wnd.$('#'+id).tabs();
-        $wnd.$('#'+id).tabs("add", "#"+tabContentId, tabTitle, index);
+        theTabs.tabs("add", "#"+tabContentId, tabTitle, index);
         theTabs.tabs("select","#"+tabContentId);
     }-*/;
 
@@ -243,11 +267,11 @@ public class TabLayout extends Composite {
         var theTabs = $wnd.$('#'+id).tabs();
         theTabs.tabs("destroy");
     }-*/;
-    
+
     private static native void hidePrompt(String promptId) /*-{
 	    $wnd.$('#'+promptId).hide();
 	}-*/;
-    
+
     private static native void showPrompt(String promptId) /*-{
     	$wnd.$('#'+promptId).show();
 	}-*/;
@@ -257,10 +281,10 @@ public class TabLayout extends Composite {
      *  if (confirm('Are you sure to delete the page?')) not working properly, it will trigger confirm window multiple times.
      **/
     private static native void registerCloseEvent(final TabLayout layout, String id) /*-{
-        $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){     	
+        $wnd.$('#'+id + ' span.ui-icon-close').live('click', function(){
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$(this).parent().index();
-            if (index > -1 && confirm('Are you sure to delete the page?')) {
+            if (index > -1 && confirm('Are you sure you want to delete this page?')) {
                 layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
                 theTabs.tabs('remove', index);
             }
