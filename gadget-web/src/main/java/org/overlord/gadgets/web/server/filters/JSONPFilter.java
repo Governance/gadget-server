@@ -21,10 +21,11 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  *
@@ -47,15 +48,29 @@ public class JSONPFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (isJSONPRequest(httpRequest)) {
-            ServletOutputStream out = response.getOutputStream();
             String varName = getVariableNameParameter(httpRequest);
             if (varName == null) {
                 varName = "jsonpobj";
             }
-            out.print("var " + varName + " = (");
-            chain.doFilter(request, response);
-            out.println(");");
-            response.setContentType("text/javascript");
+            String preamble = "var " + varName + " = (";
+            String postamble = ");";
+            final int cl_add = preamble.length() + postamble.length();
+
+            // Wrap the response so we can override the content length!
+            HttpServletResponseWrapper wrappedResponse = new HttpServletResponseWrapper((HttpServletResponse) response) {
+                @Override
+                public void setContentLength(int len) {
+                    len += cl_add;
+                    super.setContentLength(len);
+                }
+            };
+            try {
+                response.getOutputStream().print(preamble);
+                chain.doFilter(httpRequest, wrappedResponse);
+                response.getOutputStream().print(postamble);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             chain.doFilter(request, response);
         }
