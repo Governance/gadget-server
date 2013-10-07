@@ -5,6 +5,11 @@
 
   <display-name>Gadget Web</display-name>
 
+  <error-page>
+    <error-code>403</error-code>
+    <location>/403.html</location>
+  </error-page>
+
   <context-param>
     <param-name>guice-modules</param-name>
     <param-value>
