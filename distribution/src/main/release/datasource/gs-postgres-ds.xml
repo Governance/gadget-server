@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <datasources>  
-<datasource jndi-name="java:jboss/GadgetServer" pool-name="GadgetServer" enabled="true" use-java-context="true">
+<datasource jndi-name="java:jboss/datasources/GadgetServer" pool-name="GadgetServer" enabled="true" use-java-context="true">
     <connection-url>jdbc:postgresql://localhost/gs</connection-url>
     <driver>postgres</driver>
     <security>

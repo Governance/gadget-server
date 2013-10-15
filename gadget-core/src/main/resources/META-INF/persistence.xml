@@ -7,7 +7,7 @@
   <persistence-unit name="gadget-core" transaction-type="RESOURCE_LOCAL">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-      <jta-data-source>java:jboss/GadgetServer</jta-data-source>
+      <jta-data-source>java:jboss/datasources/GadgetServer</jta-data-source>
 
       <class>org.overlord.gadgets.server.model.User</class>
       <class>org.overlord.gadgets.server.model.Group</class>
