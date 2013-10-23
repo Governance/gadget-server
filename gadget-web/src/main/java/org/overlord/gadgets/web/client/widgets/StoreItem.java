@@ -28,6 +28,7 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -62,11 +63,21 @@ public class StoreItem extends Composite {
         
         addBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent clickEvent) {
+                addBtn.setText("Adding...");
+                addBtn.setEnabled(false);
                 RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getAddGadgetToPageURL(user.getCurrentPage(), model.getId()),
                         null, new RestfulInvoker.Response(){
-
-                        public void onResponseReceived(Request request, Response response) {
-                             messageBar.setText("The Gadget [" + model.getName() + "] has been added successfully.");
+                    @Override
+                    public void onResponseReceived(Request request, Response response) {
+                        Window.alert("The Gadget [" + model.getName() + "] has been added successfully.");
+                        addBtn.setText("Add To Page");
+                        addBtn.setEnabled(true);
+                    }
+                    @Override
+                    public void onError(Request request, Throwable throwable) {
+                        super.onError(request, throwable);
+                        addBtn.setText("Add To Page");
+                        addBtn.setEnabled(true);
                     }
                 });
             }

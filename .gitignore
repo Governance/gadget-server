@@ -11,3 +11,4 @@ target
 *.ipr
 *.iws
 rebel.xml
+gwt-unitCache
