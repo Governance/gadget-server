@@ -180,15 +180,14 @@ public class TabLayout extends Composite {
         index = 0;
     }
 
-    private void setCurrentPage(Long indexId) {
-        String theIndexId = String.valueOf(indexId);
-        String pageId = indexIdMap.get(theIndexId);
+    private void setCurrentPage(String indexId) {
+        String pageId = indexIdMap.get(indexId);
         long thePageId = Long.valueOf(pageId).longValue();
         updateUserCurrentPageId(thePageId);
     }
 
-    private void removePage(Long indexId) {
-        final String theIndexId = String.valueOf(indexId);
+    private void removePage(String indexId) {
+        final String theIndexId = indexId;
         String pageId = indexIdMap.get(theIndexId);
 
         RestfulInvoker.invoke(RequestBuilder.POST, URLBuilder.getRemovePageURL(Long.valueOf(pageId).longValue()),
@@ -242,7 +241,7 @@ public class TabLayout extends Composite {
         $wnd.$('#'+id).tabs({
             tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>remove</span></li>",
             select: function(event, ui) {
-                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::setCurrentPage(Ljava/lang/Long;)(ui.index);
+                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::setCurrentPage(Ljava/lang/String;)(ui.index.toString());
             }
         });
     }-*/;
@@ -285,7 +284,7 @@ public class TabLayout extends Composite {
             var theTabs = $wnd.$('#'+id).tabs();
             var index = $wnd.$(this).parent().index();
             if (index > -1 && confirm('Are you sure you want to delete this page?')) {
-                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/Long;)(index);
+                layout.@org.overlord.gadgets.web.client.widgets.TabLayout::removePage(Ljava/lang/String;)(index.toString());
                 theTabs.tabs('remove', index);
             }
         });

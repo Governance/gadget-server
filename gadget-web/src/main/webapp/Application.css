@@ -111,8 +111,10 @@ li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 
 .gadget-item {
     width: 90%;
-    padding: 0 0 25px 25px;
-    margin-bottom: 5px;
+    padding-left: 25px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 0px;
     margin-left:25px;
     border-bottom: 1px solid #2E6E9E;
 }
@@ -122,19 +124,32 @@ li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 }
 
 .gadget img {
-    border: 1px solid #2E6E9E;
+    border: 1px solid #456;
 }
 
 .gadget-name {
-    color: #15c;
+    color: #456;
     font-weight: bold;
     font-size: 110%;
 }
 
 .gadget-add-btn {
-    border: 1px solid #2E6E9E;
+	color: #456;
+    border: 1px solid #456;
     background: white;
     cursor: pointer;
+    width: 122px;
+}
+.gadget-add-btn:hover {
+    background: rgb(43, 93, 136);
+    color: white;
+    cursor: pointer;
+}
+.gadget-add-btn:disabled {
+    color: #999;
+    border: 1px solid #89A;
+    background: white;
+    cursor: default;
 }
 
 .gadget {
@@ -144,6 +159,9 @@ li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 
 .gadget-info {
     margin-left:132px;
+    margin-top: 0px;
+    display: table;
+    height: 85px;
 }
 
 .gadget-info p {
