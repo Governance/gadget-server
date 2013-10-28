@@ -19,9 +19,9 @@
     <!-- Set the SAML keystore and alias password in the gadget server config -->
     <property file="${config.dir}/overlord-vault-keys.properties" />
     <propertyfile file="${config.dir}/gadget-server.properties">
-      <entry key="gadget-server.config.auth.saml.keystore-password" value="$${vault:${overlord-commons.vault.password.hash}}" />
+      <entry key="gadget-server.config.auth.saml.keystore-password" value="$${vault:${overlord-commons.saml-keystore.password.hash}}" />
       <entry key="gadget-server.config.auth.saml.key-password" value="$${vault:${overlord-commons.overlord-alias.password.hash}}" />
-      <entry key="gadget-server.rest-proxy.service-overview.authentication.saml.keystore-password" value="$${vault:${overlord-commons.vault.password.hash}}" />
+      <entry key="gadget-server.rest-proxy.service-overview.authentication.saml.keystore-password" value="$${vault:${overlord-commons.saml-keystore.password.hash}}" />
       <entry key="gadget-server.rest-proxy.service-overview.authentication.saml.key-password" value="$${vault:${overlord-commons.overlord-alias.password.hash}}" />
     </propertyfile>
 
