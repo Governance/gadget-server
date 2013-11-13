@@ -206,13 +206,15 @@ public class Portlet extends Composite {
     	UserPreference pref = model.getUserPreference();
     	int row = 0;
     	for (UserPreferenceSetting prefSet : pref.getData()) {
-    		if (UserPreference.Type.STRING.equals(prefSet.getType())) {
-    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    		Label label = new Label(prefSet.getDisplayName());
+    		label.setStyleName("pref-label");
+            if (UserPreference.Type.STRING.equals(prefSet.getType())) {
+    			prefTable.setWidget(row, 0, label);
     			Widget textBox = createTextBox(prefSet.getName(), getDefaultValue(values, prefSet.getName(),prefSet.getDefaultValue()));
     			prefs.add(textBox);
     			prefTable.setWidget(row, 1, textBox);
     		} else if (UserPreference.Type.ENUM.equals(prefSet.getType())) {
-    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    			prefTable.setWidget(row, 0, label);
     			List<String> options = new ArrayList<String>();
     			for (Option option : prefSet.getEnumOptions()) {
     				options.add(option.getValue());
@@ -221,7 +223,7 @@ public class Portlet extends Composite {
     			prefs.add(listBox);
     			prefTable.setWidget(row, 1, listBox);
     		} else if (UserPreference.Type.LIST.equals(prefSet.getType())) {
-    			prefTable.setWidget(row, 0, new Label(prefSet.getDisplayName()));
+    			prefTable.setWidget(row, 0, label);
     			Widget listBox = createSelectBox(prefSet.getName(), getDefaultValue(values, prefSet.getName(),prefSet.getDefaultValue()), prefSet.getListOptions());
     			prefs.add(listBox);
     			prefTable.setWidget(row, 1, listBox);
@@ -241,8 +243,16 @@ public class Portlet extends Composite {
 
     private Widget createTextBox(String name, String defaultVal) {
     	TextBox textBox = new TextBox();
-    	//hack, set the name to id as well for jquery retrieval.
-    	textBox.getElement().setId(name);
+    	// Removed the ID hack - if multiple copies of the same gadget were added to 
+    	// the page, then we would have multiple elements on the page with the same
+    	// ID, which is a big no-no in html5.  It also meant that it would break the
+    	// reason for the hack in the first place, which was to access/manipulate the
+    	// values of user preferences from within the child gadget iframe content.
+    	// This is now accomplished by using jquery to get the iframe's containing
+    	// portlet div.  It then uses that as a base to find the element via a classname
+    	// instead of an ID.
+        textBox.setStyleName("pref-value");
+        textBox.addStyleName(name);
     	textBox.setName(name);
     	textBox.setValue(defaultVal);
     	return textBox;
@@ -251,7 +261,8 @@ public class Portlet extends Composite {
     private Widget createSelectBox(String name, String defaultVal, List<String> options) {
     	ListBox listBox = new ListBox(false);
     	listBox.setName(name);
-    	listBox.getElement().setId(name);
+    	listBox.setStyleName("pref-value");
+    	listBox.addStyleName(name);
     	for (String option : options) {
     		listBox.addItem(option);
     	}

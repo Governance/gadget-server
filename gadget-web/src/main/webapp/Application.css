@@ -104,6 +104,14 @@ a {
 
 .portlet-preference {border-bottom: 1px solid grey}
 
+.portlet-preference .pref-label {
+  white-space: none;
+}
+
+.portlet-preference .pref-value {
+  max-width: 80%;
+}
+
 /** css for the Tab */
 li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 
