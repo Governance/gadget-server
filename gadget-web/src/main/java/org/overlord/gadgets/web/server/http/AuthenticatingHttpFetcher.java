@@ -39,19 +39,26 @@ import com.google.inject.name.Named;
 @Singleton
 public class AuthenticatingHttpFetcher extends BasicHttpFetcher {
 
+    private static final int DEFAULT_MAX_OBJECT_SIZE = 0;  // no limit
+
     @Inject
     private AuthenticationProvider authenticationProvider;
     private final Set<String> authEndpoints = new HashSet<String>();
-
+    
     /**
      * Constructor.
      * @param basicHttpFetcherProxy
+     * @param connectionTimeout
+     * @param readTimeout
+     * @param endpoints
      */
     @Inject
     public AuthenticatingHttpFetcher(
             @Nullable @Named("org.apache.shindig.gadgets.http.basicHttpFetcherProxy") String basicHttpFetcherProxy,
+            @Named(AuthenticationConstants.CONFIG_CONNECTION_TIMEOUT) String connectionTimeout,
+            @Named(AuthenticationConstants.CONFIG_READ_TIMEOUT) String readTimeout,
             @Named(AuthenticationConstants.CONFIG_AUTHENTICATION_ENDPOINTS) String endpoints) {
-        super(basicHttpFetcherProxy);
+        super(DEFAULT_MAX_OBJECT_SIZE, Integer.parseInt(connectionTimeout), Integer.parseInt(readTimeout), basicHttpFetcherProxy);
         parseEndpoints(endpoints);
     }
 
