@@ -21,6 +21,9 @@ package org.overlord.gadgets.web.server.http.auth;
  */
 public class AuthenticationConstants {
 
+    public static final String CONFIG_CONNECTION_TIMEOUT  = "gadget-server.config.auth.connection-timeout";
+    public static final String CONFIG_READ_TIMEOUT        = "gadget-server.config.auth.read-timeout";
+
     public static final String CONFIG_AUTHENTICATION_PROVIDER  = "gadget-server.config.auth.provider";
     public static final String CONFIG_AUTHENTICATION_ENDPOINTS = "gadget-server.config.auth.endpoints";
     public static final String CONFIG_BASIC_AUTH_USER          = "gadget-server.config.auth.basic.username";
