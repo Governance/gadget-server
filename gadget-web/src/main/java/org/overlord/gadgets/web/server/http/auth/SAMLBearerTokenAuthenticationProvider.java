@@ -19,7 +19,8 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 
 import org.apache.shindig.gadgets.http.HttpRequest;
-import org.overlord.commons.auth.jboss7.SAMLBearerTokenUtil;
+import org.overlord.commons.auth.util.SAMLAssertionUtil;
+import org.overlord.commons.auth.util.SAMLBearerTokenUtil;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -78,7 +79,7 @@ public class SAMLBearerTokenAuthenticationProvider implements AuthenticationProv
      * S-RAMP Atom API.
      */
     private String createSAMLBearerTokenAssertion() {
-        String samlAssertion = SAMLBearerTokenUtil.createSAMLAssertion(issuer, service);
+        String samlAssertion = SAMLAssertionUtil.createSAMLAssertion(issuer, service);
         if (signAssertions) {
             try {
                 KeyStore keystore = SAMLBearerTokenUtil.loadKeystore(keystorePath, keystorePassword);
